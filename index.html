@@ -177,8 +177,44 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tx{margin-left:auto;background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:.8rem;padding:0 0 0 .35rem;flex-shrink:0}
 .tx:hover{color:var(--text)}
 
-/* ─── FOOTER ─── */
-footer{text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+/* ─── CLOUD SYNC ─── */
+.sync-section{margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--border)}
+.sync-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:.5rem}
+.sync-title h4{font-size:.82rem;font-weight:600;color:var(--text-bright);display:flex;align-items:center;gap:.45rem}
+.sync-status{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.63rem}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sync-dot.on{background:var(--green);box-shadow:0 0 6px rgba(0,229,160,.5)}
+.sync-dot.off{background:var(--text-dim)}
+.sync-dot.pulse{animation:sdpulse 1.5s ease infinite}
+@keyframes sdpulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-setup{display:flex;flex-direction:column;gap:.6rem}
+.sync-setup p{font-size:.75rem;color:var(--text-dim);line-height:1.55}
+.sync-setup a{color:var(--blue);text-decoration:none;font-size:.75rem}
+.sync-setup a:hover{text-decoration:underline}
+.sync-input-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.sync-token-input{flex:1;min-width:180px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .9rem;font-family:var(--mono);font-size:.78rem;color:var(--text-bright);outline:none;transition:border-color .2s}
+.sync-token-input:focus{border-color:var(--blue)}
+.sync-token-input::placeholder{color:var(--text-dim)}
+.sync-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.6rem 1rem;border-radius:8px;font-family:var(--sans);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
+.sc-connect{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(0,200,255,.25)}
+.sc-connect:hover{background:rgba(0,200,255,.2)}
+.sc-push{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.25)}
+.sc-push:hover{background:rgba(0,229,160,.2)}
+.sc-pull{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(181,123,238,.25)}
+.sc-pull:hover{background:rgba(181,123,238,.2)}
+.sc-find{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(255,209,102,.25)}
+.sc-find:hover{background:rgba(255,209,102,.2)}
+.sc-disc{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+.sc-disc:hover{border-color:var(--red);color:var(--red)}
+.sc-btn:disabled,.sync-btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+.sync-controls{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.sync-info{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);display:flex;align-items:center;gap:.4rem;margin-top:.6rem}
+.sync-autosync{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--text);cursor:pointer;user-select:none;margin-left:auto}
+.sync-autosync input{display:none}
+.auto-toggle{width:32px;height:18px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;position:relative;transition:all .2s;flex-shrink:0}
+.auto-toggle::after{content:'';position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--text-dim);transition:all .2s}
+.sync-autosync input:checked+.auto-toggle{background:var(--green-dim);border-color:var(--green)}
+.sync-autosync input:checked+.auto-toggle::after{left:16px;background:var(--green)}
 footer p{font-family:var(--mono);font-size:.6rem;color:var(--text-dim)}
 
 /* ─── ANIMS ─── */
@@ -311,6 +347,47 @@ footer p{font-family:var(--mono);font-size:.6rem;color:var(--text-dim)}
     <span><span class="dot" style="background:var(--blue)"></span>Import → fusion intelligente sans doublons</span>
     <span><span class="dot" style="background:var(--yellow)"></span>Scores auto-sauvegardés dans le navigateur</span>
   </div>
+
+  <!-- ── CLOUD SYNC ── -->
+  <div class="sync-section">
+    <div class="sync-title">
+      <h4>☁️ Sync GitHub Gist <span style="font-family:var(--mono);font-size:.6rem;background:var(--surface2);border:1px solid var(--border);padding:.15rem .5rem;border-radius:4px;color:var(--text-dim);font-weight:400">CLOUD</span></h4>
+      <div class="sync-status">
+        <span class="sync-dot off" id="sync-dot"></span>
+        <span id="sync-status-txt" style="color:var(--text-dim)">Non connecté</span>
+      </div>
+    </div>
+
+    <!-- Setup (no token) -->
+    <div class="sync-setup" id="sync-setup">
+      <p>Sauvegarde automatiquement tes scores dans un <strong style="color:var(--text)">Gist privé GitHub</strong> — accessible depuis n'importe quel appareil avec ton token.<br>
+      <a href="https://github.com/settings/tokens/new?scopes=gist&description=Quiz+FGE2+Scores" target="_blank" rel="noopener">→ Créer un token GitHub (scope : gist)</a></p>
+      <div class="sync-input-row">
+        <input class="sync-token-input" id="gh-token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+        <button class="sync-btn sc-connect" onclick="connectGitHub()">Connecter</button>
+      </div>
+    </div>
+
+    <!-- Controls (token set) -->
+    <div id="sync-controls" style="display:none">
+      <div class="sync-controls">
+        <button class="sync-btn sc-push" id="btn-push" onclick="syncUp()">⬆ Push vers cloud</button>
+        <button class="sync-btn sc-pull" id="btn-pull" onclick="syncDown()">⬇ Pull depuis cloud</button>
+        <button class="sync-btn sc-find" id="btn-find" onclick="findGist()">🔍 Trouver mon Gist</button>
+        <button class="sync-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border)" onclick="copyShareLink()">🔗 Lien de partage</button>
+        <button class="sync-btn sc-disc" onclick="disconnectGitHub()">Déconnecter</button>
+        <label class="sync-autosync">
+          <input type="checkbox" id="auto-sync-toggle" onchange="toggleAutoSync(this.checked)">
+          <div class="auto-toggle"></div>
+          Auto-sync après chaque quiz
+        </label>
+      </div>
+      <div class="sync-info" id="sync-info">
+        <span id="sync-gist-link"></span>
+        <span id="sync-last-time"></span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <footer><p>FGE2-S4 · Révisions Physique · EPF Engineering</p></footer>
@@ -415,6 +492,7 @@ function loadApp(){
   // Save panel
   document.getElementById('sp-uname').textContent=u;
   updateBadge(u);
+  updateSyncUI(u);
   // Data
   renderDash(u);
   renderDrop(u);
@@ -607,9 +685,260 @@ function toast(msg,cls='tinf',dur=4000){
 }
 
 // ══════════════════════════════════════════
+// GITHUB GIST SYNC
+// ══════════════════════════════════════════
+const TK  = 'pq_gh_token';
+const gk  = u => `pq_gist_${u}`;
+const lsk = u => `pq_sync_${u}`;
+const ask = 'pq_auto_sync';
+
+const getToken  = () => localStorage.getItem(TK) || '';
+const setToken  = t  => t ? localStorage.setItem(TK,t) : localStorage.removeItem(TK);
+const getGistId = u  => localStorage.getItem(gk(u)) || '';
+const setGistId = (u,id) => localStorage.setItem(gk(u), id);
+const getAutoSync = () => localStorage.getItem(ask) === '1';
+
+function connectGitHub() {
+  const t = document.getElementById('gh-token-input').value.trim();
+  if (!t || !t.startsWith('gh')) {
+    toast('Token invalide — il doit commencer par "ghp_" ou "github_pat_".', 'terr'); return;
+  }
+  setToken(t);
+  document.getElementById('gh-token-input').value = '';
+  updateSyncUI(getCur());
+  toast('Token GitHub enregistré ✓', 'tok');
+}
+
+function disconnectGitHub() {
+  if (!confirm('Déconnecter GitHub ? Le token sera supprimé de ce navigateur.\nTes scores locaux restent intacts.')) return;
+  setToken('');
+  updateSyncUI(getCur());
+  toast('Déconnecté de GitHub.', 'tinf');
+}
+
+function toggleAutoSync(on) {
+  localStorage.setItem(ask, on ? '1' : '0');
+}
+
+function updateSyncUI(user) {
+  const hasToken = !!getToken();
+  const hasGist  = !!getGistId(user);
+  document.getElementById('sync-setup').style.display    = hasToken ? 'none'  : '';
+  document.getElementById('sync-controls').style.display = hasToken ? ''      : 'none';
+
+  // Dot + status text
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-status-txt');
+  if (!hasToken) {
+    dot.className = 'sync-dot off'; txt.textContent = 'Non connecté'; txt.style.color = 'var(--text-dim)';
+  } else if (hasGist) {
+    dot.className = 'sync-dot on'; txt.textContent = 'Connecté · Gist actif'; txt.style.color = 'var(--green)';
+  } else {
+    dot.className = 'sync-dot off'; txt.textContent = 'Connecté · Pas encore synchronisé'; txt.style.color = 'var(--yellow)';
+  }
+
+  // Pull button only if gist exists
+  const btnPull = document.getElementById('btn-pull');
+  if (btnPull) btnPull.disabled = !hasGist;
+
+  // Auto-sync checkbox
+  const asc = document.getElementById('auto-sync-toggle');
+  if (asc) asc.checked = getAutoSync();
+
+  // Gist link + last sync
+  const gistLink = document.getElementById('sync-gist-link');
+  const lastTime = document.getElementById('sync-last-time');
+  if (hasGist && gistLink) {
+    gistLink.innerHTML = `<a href="https://gist.github.com/${getGistId(user)}" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none">→ Voir le Gist</a>`;
+  } else if (gistLink) {
+    gistLink.innerHTML = '';
+  }
+  const ls = localStorage.getItem(lsk(user));
+  if (ls && lastTime) {
+    const d = new Date(ls);
+    lastTime.textContent = 'Dernier sync : ' + d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  } else if (lastTime) {
+    lastTime.textContent = '';
+  }
+}
+
+async function syncUp(silent = false) {
+  const user  = getCur();
+  const token = getToken();
+  if (!token) { toast('Configure un token GitHub d\'abord.', 'terr'); return; }
+
+  const scores  = loadSc(user);
+  const content = JSON.stringify({version:1, user, synced:new Date().toISOString(), app:'quiz-physique-fge2', scores}, null, 2);
+  const filename = `scores_${user.replace(/\s+/g,'_')}.json`;
+
+  setBtnLoading('btn-push', true);
+  try {
+    let gistId = getGistId(user);
+    if (gistId) {
+      const r = await fetch(`https://api.github.com/gists/${gistId}`, {
+        method: 'PATCH',
+        headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
+        body: JSON.stringify({files:{[filename]:{content}}})
+      });
+      if (r.status === 404) {
+        // Gist was deleted — create a new one
+        setGistId(user, '');
+        gistId = '';
+      } else if (!r.ok) {
+        const err = await r.json();
+        throw new Error(err.message || r.status);
+      }
+    }
+    if (!gistId) {
+      const r = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: {'Authorization':`Bearer ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github+json'},
+        body: JSON.stringify({description:`Quiz FGE2-S4 — Scores de ${user}`, public:false, files:{[filename]:{content}}})
+      });
+      if (!r.ok) { const e=await r.json(); throw new Error(e.message||r.status); }
+      const g = await r.json();
+      setGistId(user, g.id);
+    }
+    localStorage.setItem(lsk(user), new Date().toISOString());
+    updateSyncUI(user);
+    if (!silent) toast('Scores pushés vers le cloud ☁️ ✓', 'tok');
+  } catch(e) {
+    toast(`Push échoué : ${e.message}`, 'terr');
+  }
+  setBtnLoading('btn-push', false);
+}
+
+async function syncDown() {
+  const user  = getCur();
+  const token = getToken();
+  const gistId = getGistId(user);
+  if (!token) { toast('Configure un token GitHub d\'abord.', 'terr'); return; }
+  if (!gistId) { toast('Aucun Gist trouvé. Fais d\'abord un Push ou utilise "Trouver".', 'terr'); return; }
+
+  setBtnLoading('btn-pull', true);
+  try {
+    const r = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: {'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'}
+    });
+    if (!r.ok) { const e=await r.json(); throw new Error(e.message||r.status); }
+    const g = await r.json();
+
+    // Find the scores file (any filename match)
+    const file = Object.values(g.files).find(f => f.filename.startsWith('scores_') && f.filename.endsWith('.json'));
+    if (!file?.content) throw new Error('Fichier introuvable dans le Gist');
+
+    const p = JSON.parse(file.content);
+    const existing = loadSc(user);
+    const merged = {...existing};
+    let added = 0;
+    Object.entries(p.scores||{}).forEach(([k,d])=>{
+      if(!d?.sessions)return;
+      if(!merged[k]){merged[k]=d;added+=d.sessions.length;return;}
+      const xk=new Set((merged[k].sessions||[]).map(s=>`${s.date}-${s.pct}-${s.total}`));
+      const ns=d.sessions.filter(s=>!xk.has(`${s.date}-${s.pct}-${s.total}`));
+      merged[k].sessions=[...(merged[k].sessions||[]),...ns].slice(-30);
+      merged[k].best=Math.max(merged[k].best||0,d.best||0);
+      if(d.last&&(!merged[k].last||d.last>merged[k].last))merged[k].last=d.last;
+      added+=ns.length;
+    });
+    saveSc(user, merged);
+    localStorage.setItem(lsk(user), new Date().toISOString());
+    updateSyncUI(user);
+    renderDash(user);
+    toast(`${added ? added+` session${added>1?'s':''} récupérée${added>1?'s':''}` : 'Déjà à jour'} ✓`, 'tok');
+  } catch(e) {
+    toast(`Pull échoué : ${e.message}`, 'terr');
+  }
+  setBtnLoading('btn-pull', false);
+}
+
+async function findGist() {
+  const user  = getCur();
+  const token = getToken();
+  if (!token) { toast('Configure un token GitHub d\'abord.', 'terr'); return; }
+
+  setBtnLoading('btn-find', true);
+  try {
+    // Fetch user's gists (up to 100)
+    const r = await fetch('https://api.github.com/gists?per_page=100', {
+      headers: {'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'}
+    });
+    if (!r.ok) { const e=await r.json(); throw new Error(e.message||r.status); }
+    const gists = await r.json();
+
+    // Look for a gist with our app description or a matching filename
+    const safeName = user.replace(/\s+/g,'_');
+    const match = gists.find(g =>
+      g.description?.includes('Quiz FGE2-S4') ||
+      Object.keys(g.files).some(f => f === `scores_${safeName}.json` || f.startsWith('scores_'))
+    );
+
+    if (match) {
+      setGistId(user, match.id);
+      localStorage.setItem(lsk(user), new Date().toISOString());
+      updateSyncUI(user);
+      toast(`Gist trouvé ! (${match.description || match.id.slice(0,8)+'…'}) — Pull pour récupérer tes scores.`, 'tok', 6000);
+    } else {
+      toast('Aucun Gist trouvé pour ce profil. Fais un Push pour en créer un.', 'tinf', 5000);
+    }
+  } catch(e) {
+    toast(`Recherche échouée : ${e.message}`, 'terr');
+  }
+  setBtnLoading('btn-find', false);
+}
+
+// Called by quiz_physique.html after each quiz if auto-sync enabled
+async function autoSyncIfEnabled() {
+  if (getAutoSync() && getToken()) await syncUp(true);
+}
+
+function setBtnLoading(id, on) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.disabled = on;
+  if (on) { btn.dataset.orig = btn.textContent; btn.innerHTML = '<span class="sync-dot pulse" style="display:inline-block;margin-right:.3rem"></span>…'; }
+  else { btn.textContent = btn.dataset.orig || btn.textContent; }
+}
+
+function copyShareLink() {
+  const token = getToken();
+  if (!token) return;
+  // Encode token in base64 to avoid it being too obvious in the URL
+  const encoded = btoa(token);
+  const base = window.location.href.split('?')[0];
+  const link = `${base}?setup=${encoded}`;
+  navigator.clipboard.writeText(link).then(() => {
+    toast('Lien copié ! Envoie-le à tes amis — ils n\'auront qu\'à entrer leur prénom.', 'tok', 6000);
+  }).catch(() => {
+    // Fallback: show in prompt
+    prompt('Copie ce lien et envoie-le à tes amis :', link);
+  });
+}
+
+// ══════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════
-(()=>{const u=getCur();if(u&&getUsers().includes(u))loadApp();else showOB();})();
+(()=>{
+  // Auto-configure token from share link ?setup=BASE64TOKEN
+  const params = new URLSearchParams(window.location.search);
+  const setup = params.get('setup');
+  if (setup && !getToken()) {
+    try {
+      const token = atob(setup);
+      if (token.startsWith('gh')) {
+        setToken(token);
+        // Clean URL so token doesn't stay in browser history
+        window.history.replaceState({}, '', window.location.pathname);
+        // Show onboarding with a welcome message
+        setTimeout(() => toast('Token configuré automatiquement ✓ — entre ton prénom pour commencer !', 'tok', 7000), 600);
+      }
+    } catch(e) {}
+  }
+
+  const u=getCur();
+  if(u&&getUsers().includes(u))loadApp();
+  else showOB();
+})();
 </script>
 </body>
 </html>
