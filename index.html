@@ -105,10 +105,38 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .coming-soon-card h3{font-size:.9rem;font-weight:600;color:var(--text-bright);margin-bottom:.3rem}
 .coming-soon-card p{font-size:.75rem;color:var(--text-dim)}
 
-/* ── RESET BTN ── */
-.footer-row{display:flex;justify-content:flex-end;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
-.btn-ghost-sm{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--sans);font-size:.72rem;padding:.4rem .9rem;border-radius:6px;cursor:pointer;transition:all .2s}
-.btn-ghost-sm:hover{border-color:var(--red);color:var(--red)}
+/* ── SAVE PANEL ── */
+.save-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.8rem;margin-top:2rem}
+.save-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;flex-wrap:wrap;gap:.5rem}
+.save-panel-header h3{font-size:.9rem;font-weight:600;color:var(--text-bright);display:flex;align-items:center;gap:.5rem}
+.last-save-info{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);background:var(--surface2);padding:.3rem .7rem;border-radius:6px;border:1px solid var(--border)}
+.save-actions{display:flex;gap:.65rem;flex-wrap:wrap}
+.save-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.65rem 1.15rem;border-radius:8px;font-family:var(--sans);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none;white-space:nowrap}
+.save-btn.export{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.25)}
+.save-btn.export:hover{background:rgba(0,229,160,.2);box-shadow:0 4px 16px rgba(0,229,160,.15);transform:translateY(-1px)}
+.save-btn.import{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(0,200,255,.25)}
+.save-btn.import:hover{background:rgba(0,200,255,.2);box-shadow:0 4px 16px var(--blue-glow);transform:translateY(-1px)}
+.save-btn.reset{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+.save-btn.reset:hover{border-color:var(--red);color:var(--red)}
+.save-info{margin-top:.9rem;font-size:.72rem;color:var(--text-dim);line-height:1.7;padding-top:.9rem;border-top:1px solid var(--border);display:flex;gap:1.5rem;flex-wrap:wrap}
+.save-info span{display:flex;align-items:center;gap:.4rem}
+.save-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── TOAST ── */
+#toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;flex-direction:column;gap:.5rem;z-index:1000;pointer-events:none}
+.toast{display:flex;align-items:center;gap:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.1rem;font-size:.82rem;color:var(--text-bright);box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:all;animation:toastIn .3s ease;max-width:320px}
+.toast.success{border-color:rgba(0,229,160,.4);background:rgba(0,10,8,.95)}
+.toast.error{border-color:rgba(255,79,107,.4);background:rgba(10,0,3,.95)}
+.toast.info{border-color:rgba(0,200,255,.4);background:rgba(0,5,10,.95)}
+.toast-icon{font-size:1rem;flex-shrink:0}
+.toast-msg{flex:1}
+.toast-close{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:.85rem;padding:0 0 0 .4rem;flex-shrink:0;line-height:1}
+.toast-close:hover{color:var(--text)}
+@keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── FOOTER ── */
+.footer-row{display:flex;justify-content:center;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.footer-row p{font-family:var(--mono);font-size:.62rem;color:var(--text-dim)}
 
 /* ── EMPTY STATE ── */
 .empty-state{text-align:center;padding:2rem 1rem}
@@ -214,12 +242,35 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <div class="history-grid" id="history-grid"></div>
 </div>
 
+<!-- ── SAVE & SYNC ── -->
+<div class="section-title" style="margin-top:2.5rem">Sauvegarde</div>
+<div class="save-panel">
+  <div class="save-panel-header">
+    <h3>💾 Gérer mes scores</h3>
+    <div class="last-save-info" id="last-save-info">Aucune sauvegarde exportée</div>
+  </div>
+  <div class="save-actions">
+    <button class="save-btn export" onclick="exportScores()">⬇ Exporter (.json)</button>
+    <button class="save-btn import" onclick="document.getElementById('file-import').click()">⬆ Importer</button>
+    <button class="save-btn reset" onclick="confirmReset()">🗑 Réinitialiser</button>
+  </div>
+  <input type="file" id="file-import" accept=".json" style="display:none" onchange="importScores(event)">
+  <div class="save-info">
+    <span><span class="save-dot" style="background:var(--green)"></span>Export : télécharge un fichier <code>.json</code> sur ton appareil</span>
+    <span><span class="save-dot" style="background:var(--blue)"></span>Import : charge un fichier exporté — fusionne avec tes scores existants</span>
+    <span><span class="save-dot" style="background:var(--yellow)"></span>Les scores sont aussi sauvegardés automatiquement dans ce navigateur</span>
+  </div>
+</div>
+
 <!-- ── FOOTER ── -->
 <div class="footer-row">
-  <button class="btn-ghost-sm" onclick="confirmReset()">🗑 Réinitialiser les scores</button>
+  <p>FGE2-S4 · Révisions Physique · Benji</p>
 </div>
 
 </div><!-- /wrap -->
+
+<!-- Toast container -->
+<div id="toast-wrap"></div>
 
 <script>
 // ════════════════════════════════════════════
@@ -412,25 +463,176 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'});
 }
 
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+function showToast(msg, type = 'info', duration = 4000) {
+  const icons = { success:'✅', error:'❌', info:'💡' };
+  const wrap = document.getElementById('toast-wrap');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-msg">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">✕</button>`;
+  wrap.appendChild(toast);
+  if (duration > 0) setTimeout(() => {
+    toast.style.animation = 'toastIn .3s ease reverse';
+    setTimeout(() => toast.remove(), 280);
+  }, duration);
+  return toast;
+}
+
+// ════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════
+function exportScores() {
+  const scores = loadScores();
+  const hasData = Object.keys(scores).length > 0;
+  if (!hasData) { showToast('Aucun score à exporter — joue d\'abord un quiz !', 'error'); return; }
+
+  const payload = {
+    version: 1,
+    exported: new Date().toISOString(),
+    app: 'quiz-physique-fge2',
+    scores
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `scores_physique_${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Save export date to localStorage
+  localStorage.setItem('pq_last_export', new Date().toISOString());
+  updateLastSaveInfo();
+  showToast('Scores exportés avec succès !', 'success');
+}
+
+// ════════════════════════════════════════════
+// IMPORT
+// ════════════════════════════════════════════
+function importScores(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = ''; // reset so same file can be re-imported
+
+  const loading = showToast('Lecture du fichier…', 'info', 0);
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    loading.remove();
+    try {
+      const payload = JSON.parse(e.target.result);
+
+      // Validate format
+      if (!payload.scores || typeof payload.scores !== 'object') {
+        showToast('Fichier invalide — format non reconnu.', 'error'); return;
+      }
+
+      // Check it's for the right app
+      if (payload.app && payload.app !== 'quiz-physique-fge2') {
+        if (!confirm('Ce fichier provient d\'une autre application. Continuer quand même ?')) return;
+      }
+
+      // Merge strategy: keep best scores, combine session history
+      const existing = loadScores();
+      const imported = payload.scores;
+      const merged = { ...existing };
+
+      let chaptersImported = 0;
+      let sessionsImported = 0;
+
+      Object.entries(imported).forEach(([k, d]) => {
+        if (!d || typeof d !== 'object') return;
+        chaptersImported++;
+        if (!merged[k]) {
+          merged[k] = d;
+          sessionsImported += (d.sessions?.length || 0);
+        } else {
+          // Merge sessions (avoid duplicates by date+pct)
+          const existingKeys = new Set((merged[k].sessions || []).map(s => `${s.date}-${s.pct}-${s.total}`));
+          const newSessions = (d.sessions || []).filter(s => !existingKeys.has(`${s.date}-${s.pct}-${s.total}`));
+          merged[k].sessions = [...(merged[k].sessions || []), ...newSessions].slice(-30);
+          sessionsImported += newSessions.length;
+          // Keep best score
+          merged[k].best = Math.max(merged[k].best || 0, d.best || 0);
+          // Keep most recent date
+          if (d.last && (!merged[k].last || d.last > merged[k].last)) merged[k].last = d.last;
+        }
+      });
+
+      localStorage.setItem('pq_scores', JSON.stringify(merged));
+      localStorage.setItem('pq_last_import', new Date().toISOString());
+      updateLastSaveInfo();
+      render();
+
+      const exportDate = payload.exported ? new Date(payload.exported).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}) : 'date inconnue';
+      showToast(`Import réussi ! ${sessionsImported} nouvelle${sessionsImported>1?'s':''} session${sessionsImported>1?'s':''} ajoutée${sessionsImported>1?'s':''} (export du ${exportDate})`, 'success', 6000);
+
+    } catch(err) {
+      showToast('Erreur de lecture — le fichier JSON est corrompu.', 'error');
+    }
+  };
+  reader.onerror = () => { loading.remove(); showToast('Impossible de lire le fichier.', 'error'); };
+  reader.readAsText(file);
+}
+
+// ════════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════════
 function confirmReset() {
-  if (confirm('Réinitialiser tous tes scores ? Cette action est irréversible.')) {
+  if (confirm('Réinitialiser tous tes scores ? Cette action est irréversible.\n\nConseil : exporte d\'abord une sauvegarde.')) {
     localStorage.removeItem('pq_scores');
+    updateLastSaveInfo();
     render();
+    showToast('Scores réinitialisés.', 'info');
   }
+}
+
+// ════════════════════════════════════════════
+// LAST SAVE INFO
+// ════════════════════════════════════════════
+function updateLastSaveInfo() {
+  const el = document.getElementById('last-save-info');
+  if (!el) return;
+  const lastExport = localStorage.getItem('pq_last_export');
+  const lastImport = localStorage.getItem('pq_last_import');
+
+  if (!lastExport && !lastImport) {
+    el.textContent = 'Aucune sauvegarde exportée';
+    el.style.color = 'var(--text-dim)';
+    return;
+  }
+
+  const dates = [];
+  if (lastExport) {
+    const d = new Date(lastExport);
+    dates.push({ type:'Export', date:d });
+  }
+  if (lastImport) {
+    const d = new Date(lastImport);
+    dates.push({ type:'Import', date:d });
+  }
+  dates.sort((a,b) => b.date - a.date);
+  const last = dates[0];
+  const formatted = last.date.toLocaleDateString('fr-FR', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  el.textContent = `Dernier ${last.type.toLowerCase()} : ${formatted}`;
+  el.style.color = 'var(--green)';
 }
 
 // ════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════
 render();
+updateLastSaveInfo();
 
-// Auto-refresh rings after short delay (CSS transition needs DOM to settle)
-setTimeout(() => {
-  ['em','pm'].forEach(sub => {
-    const ring = document.getElementById(`ring-${sub}`);
-    if (ring) { const cur = ring.style.strokeDashoffset; ring.style.strokeDashoffset = cur; }
-  });
-}, 200);
+// Animate rings on load
+setTimeout(() => ['em','pm'].forEach(sub => {
+  const ring = document.getElementById(`ring-${sub}`);
+  if (ring) ring.style.strokeDashoffset = ring.style.strokeDashoffset;
+}), 150);
 </script>
 </body>
 </html>
