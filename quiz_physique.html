@@ -904,12 +904,23 @@ function reviewWrong() {
 }
 
 // ═══════════════════════════════════════════
-// LOCALSTORAGE — SAVE SCORES
+// LOCALSTORAGE — SAVE SCORES (namespaced by user)
 // ═══════════════════════════════════════════
+function getCurrentUser() {
+  // Priority: URL param > localStorage current user
+  const params = new URLSearchParams(window.location.search);
+  const urlUser = params.get('user');
+  if (urlUser) return urlUser;
+  return localStorage.getItem('pq_current') || null;
+}
+
 function saveResults() {
   try {
+    const user = getCurrentUser();
+    if (!user) return; // no user → skip save (shouldn't happen in normal flow)
+    const storageKey = `pq_sc_${user}`;
     const sess = appState.session;
-    const scores = JSON.parse(localStorage.getItem('pq_scores') || '{}');
+    const scores = JSON.parse(localStorage.getItem(storageKey) || '{}');
     const date = new Date().toISOString().split('T')[0];
     Object.entries(sess.chapterStats).forEach(([k, data]) => {
       if (data.total === 0) return;
@@ -920,7 +931,7 @@ function saveResults() {
       scores[k].best = Math.max(scores[k].best, pct);
       scores[k].last = date;
     });
-    localStorage.setItem('pq_scores', JSON.stringify(scores));
+    localStorage.setItem(storageKey, JSON.stringify(scores));
   } catch(e) { /* silently fail if localStorage unavailable */ }
 }
 
@@ -951,10 +962,35 @@ function spawnConfetti(n) {
 
 // ═══════════════════════════════════════════
 // AUTO-SELECT SUBJECT FROM URL ?subject=em|pm
+// Also display current user in header
 // ═══════════════════════════════════════════
 (function() {
   const params = new URLSearchParams(window.location.search);
-  const sub = params.get('subject');
+  const sub  = params.get('subject');
+  const user = params.get('user') || localStorage.getItem('pq_current');
+
+  // Show user name in a small pill if available
+  if (user) {
+    const COLORS = ['#00c8ff','#00e5a0','#b57bee','#ff9f43','#ff4f6b','#ffd166','#54a0ff','#ff6b81'];
+    const col = (n => { let h=0; for(let c of n) h=(h*31+c.charCodeAt(0))&0xffffffff; return COLORS[Math.abs(h)%COLORS.length]; })(user);
+    const pill = document.createElement('div');
+    pill.style.cssText = 'display:inline-flex;align-items:center;gap:.45rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem .3rem .35rem;font-family:var(--sans);font-size:.75rem;color:var(--text-bright)';
+    const av = document.createElement('div');
+    av.style.cssText = `width:22px;height:22px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#000;flex-shrink:0`;
+    av.textContent = user.slice(0,2).toUpperCase();
+    pill.appendChild(av);
+    pill.appendChild(document.createTextNode(user));
+
+    // Insert after the back link in home header
+    const homeHeader = document.querySelector('.home-header');
+    if (homeHeader) {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:center;margin-bottom:.5rem';
+      row.appendChild(pill);
+      homeHeader.insertBefore(row, homeHeader.querySelector('.tag'));
+    }
+  }
+
   if (sub === 'em' || sub === 'pm') {
     goSubject(sub);
   }
