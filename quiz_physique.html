@@ -26,7 +26,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .screen{display:none}.screen.active{display:block}
 
 /* ── HOME ── */
-.home-header{text-align:center;padding:3rem 0 2.5rem}
+.home-header{text-align:center;padding:2.5rem 0 2rem}
+.home-back{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.68rem;color:var(--text-dim);text-decoration:none;border:1px solid var(--border);padding:.35rem .85rem;border-radius:6px;margin-bottom:1.5rem;transition:all .2s}
+.home-back:hover{color:var(--text);border-color:var(--text-dim)}
 .home-header .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue-dim);background:var(--blue-dim);padding:.3rem .9rem;border-radius:20px;display:inline-block;margin-bottom:1rem}
 .home-header h1{font-size:2.6rem;font-weight:700;color:var(--text-bright);letter-spacing:-.04em;line-height:1.1}
 .home-header h1 span{color:var(--blue)}
@@ -189,6 +191,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- ═══ HOME ═══ -->
 <div id="screen-home" class="screen active">
   <div class="home-header">
+    <div><a href="index.html" class="home-back">← Tableau de bord</a></div>
     <div class="tag">FGE2-S4 · EPF Engineering School</div>
     <h1>Quiz <span>Physique</span></h1>
     <p>Choisissez une matière pour commencer à réviser</p>
@@ -289,7 +292,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="chapter-breakdown"><h3>Résultats par chapitre</h3><div id="ch-breakdown"></div></div>
   <div class="result-actions">
     <button class="btn btn-secondary" onclick="reviewWrong()">Revoir les erreurs</button>
-    <button class="btn btn-primary" onclick="goHome()">Accueil ✦</button>
+    <button class="btn btn-secondary" onclick="goHome()">Nouveau quiz</button>
+    <a href="index.html" class="btn btn-primary" style="justify-content:center;text-decoration:none">🏠 Tableau de bord</a>
   </div>
 </div>
 
@@ -869,6 +873,7 @@ function showResults() {
   });
 
   if (pct >= 80) spawnConfetti(25);
+  saveResults();
 }
 
 function reviewWrong() {
@@ -899,6 +904,27 @@ function reviewWrong() {
 }
 
 // ═══════════════════════════════════════════
+// LOCALSTORAGE — SAVE SCORES
+// ═══════════════════════════════════════════
+function saveResults() {
+  try {
+    const sess = appState.session;
+    const scores = JSON.parse(localStorage.getItem('pq_scores') || '{}');
+    const date = new Date().toISOString().split('T')[0];
+    Object.entries(sess.chapterStats).forEach(([k, data]) => {
+      if (data.total === 0) return;
+      const pct = Math.round((data.correct / data.total) * 100);
+      if (!scores[k]) scores[k] = { best: 0, sessions: [], last: '' };
+      scores[k].sessions.push({ date, correct: data.correct, total: data.total, pct });
+      if (scores[k].sessions.length > 30) scores[k].sessions.shift();
+      scores[k].best = Math.max(scores[k].best, pct);
+      scores[k].last = date;
+    });
+    localStorage.setItem('pq_scores', JSON.stringify(scores));
+  } catch(e) { /* silently fail if localStorage unavailable */ }
+}
+
+// ═══════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════
 function shuffleArr(arr) {
@@ -922,6 +948,17 @@ function spawnConfetti(n) {
     }, i * 40);
   }
 }
+
+// ═══════════════════════════════════════════
+// AUTO-SELECT SUBJECT FROM URL ?subject=em|pm
+// ═══════════════════════════════════════════
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const sub = params.get('subject');
+  if (sub === 'em' || sub === 'pm') {
+    goSubject(sub);
+  }
+})();
 </script>
 </body>
 </html>
