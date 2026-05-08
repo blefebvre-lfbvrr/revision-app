@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz Physique — FGE2-S4</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- KaTeX for math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
 :root {
   --bg:#080b10;--bg2:#0d1117;--surface:#111620;--surface2:#182030;
@@ -22,159 +26,149 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.2;pointer-events:none;z-index:0}
 .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem;position:relative;z-index:1}
 
+/* ── KaTeX overrides for dark theme ── */
+.katex{font-size:1.05em!important;color:var(--text-bright)}
+.katex-display{margin:.8em 0!important;overflow-x:auto;overflow-y:hidden;padding:.4em 0}
+.katex-display>.katex{font-size:1.15em!important}
+.answer-btn .katex{font-size:.95em!important}
+.explanation .katex{color:#dde6ff}
+
 /* ── SCREENS ── */
 .screen{display:none}.screen.active{display:block}
 
 /* ── HOME ── */
-.home-header{text-align:center;padding:2.5rem 0 2rem}
-.home-back{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.68rem;color:var(--text-dim);text-decoration:none;border:1px solid var(--border);padding:.35rem .85rem;border-radius:6px;margin-bottom:1.5rem;transition:all .2s}
-.home-back:hover{color:var(--text);border-color:var(--text-dim)}
+.home-header{text-align:center;padding:3rem 0 2.5rem}
 .home-header .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue-dim);background:var(--blue-dim);padding:.3rem .9rem;border-radius:20px;display:inline-block;margin-bottom:1rem}
 .home-header h1{font-size:2.6rem;font-weight:700;color:var(--text-bright);letter-spacing:-.04em;line-height:1.1}
 .home-header h1 span{color:var(--blue)}
-.home-header p{color:var(--text-dim);font-size:.85rem;margin-top:.5rem}
-.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.5rem}
-.subject-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem 1.8rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
-.subject-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:14px 0 0 14px}
-.subject-card.em::before{background:var(--blue)}
+.home-header p{margin-top:.8rem;color:var(--text-dim);font-size:.92rem}
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin:2rem 0}
+.subject-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.8rem 1.5rem;cursor:pointer;transition:.25s;position:relative;overflow:hidden}
+.subject-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
 .subject-card.pm::before{background:var(--purple)}
-.subject-card:hover{transform:translateY(-3px);border-color:var(--border)}
-.subject-card.em:hover{border-color:rgba(0,200,255,.35);box-shadow:0 8px 32px rgba(0,200,255,.1)}
-.subject-card.pm:hover{border-color:rgba(181,123,238,.35);box-shadow:0 8px 32px rgba(181,123,238,.1)}
-.subject-card .s-icon{font-size:2.2rem;margin-bottom:1rem}
-.subject-card h2{font-size:1.1rem;font-weight:700;color:var(--text-bright);letter-spacing:-.02em;margin-bottom:.4rem}
-.subject-card p{font-size:.78rem;color:var(--text-dim);line-height:1.5}
-.subject-card .s-chapters{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem}
-.s-chip{font-family:var(--mono);font-size:.62rem;padding:.2rem .6rem;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim)}
-.subject-card.em .s-chip{border-color:rgba(0,200,255,.2);color:rgba(0,200,255,.7)}
-.subject-card.pm .s-chip{border-color:rgba(181,123,238,.2);color:rgba(181,123,238,.7)}
+.subject-card:hover{transform:translateY(-4px);border-color:var(--blue);box-shadow:0 8px 32px rgba(0,200,255,.15)}
+.subject-card.pm:hover{border-color:var(--purple);box-shadow:0 8px 32px rgba(181,123,238,.15)}
+.s-icon{font-size:2.2rem;margin-bottom:.8rem}
+.subject-card h2{color:var(--text-bright);font-size:1.4rem;margin-bottom:.4rem}
+.subject-card p{color:var(--text-dim);font-size:.85rem;margin-bottom:1rem}
+.s-chapters{display:flex;gap:.4rem;flex-wrap:wrap}
+.s-chip{font-family:var(--mono);font-size:.65rem;background:var(--surface2);color:var(--text);padding:.25rem .6rem;border-radius:4px}
 
 /* ── CHAPTER SELECT ── */
 .back-row{margin-bottom:1.5rem}
-.btn-back{display:inline-flex;align-items:center;gap:.5rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--sans);font-size:.8rem;padding:.45rem 1rem;border-radius:8px;cursor:pointer;transition:all .2s}
-.btn-back:hover{border-color:var(--text-dim);color:var(--text)}
-.chapter-select-header{margin-bottom:2rem}
-.chapter-select-header h2{font-size:1.6rem;font-weight:700;color:var(--text-bright);letter-spacing:-.03em}
-.chapter-select-header p{color:var(--text-dim);font-size:.82rem;margin-top:.3rem}
-.chapter-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
-.chapter-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:1.6rem 1.5rem;cursor:pointer;transition:all .2s;position:relative}
-.chapter-card .c-num{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.6rem}
-.chapter-card h3{font-size:1rem;font-weight:600;color:var(--text-bright);margin-bottom:.4rem}
-.chapter-card p{font-size:.75rem;color:var(--text-dim);line-height:1.5}
-.chapter-card .c-count{font-family:var(--mono);font-size:.68rem;color:var(--text-dim);margin-top:.8rem}
-.chapter-card .c-count span{font-weight:600}
-.chapter-card.selected{border-width:2px}
-.chapter-card.ch-em{border-color:transparent}.chapter-card.ch-em:hover,.chapter-card.ch-em.selected{border-color:var(--blue);background:var(--blue-dim)}
-.chapter-card.ch-em.selected .c-num,.chapter-card.ch-em.selected h3{color:var(--blue)}
-.chapter-card.ch-pm{border-color:transparent}.chapter-card.ch-pm:hover,.chapter-card.ch-pm.selected{border-color:var(--purple);background:var(--purple-dim)}
-.chapter-card.ch-pm.selected .c-num,.chapter-card.ch-pm.selected h3{color:var(--purple)}
-.chapter-card .c-check{position:absolute;top:.8rem;right:.8rem;width:22px;height:22px;border-radius:50%;background:transparent;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .2s}
-.chapter-card.ch-em.selected .c-check{background:var(--blue);border-color:var(--blue);color:#000}
-.chapter-card.ch-pm.selected .c-check{background:var(--purple);border-color:var(--purple);color:#000}
-.all-card{background:var(--surface2);border:1px dashed var(--border);border-radius:12px;padding:1.2rem 1.5rem;cursor:pointer;display:flex;align-items:center;gap:1rem;transition:all .2s;margin-bottom:1rem}
-.all-card:hover{border-color:var(--yellow);color:var(--yellow)}
-.all-card .all-icon{font-size:1.4rem}
-.all-card .all-text{flex:1}.all-card .all-text h4{font-size:.9rem;font-weight:600;color:var(--text-bright)}.all-card .all-text p{font-size:.73rem;color:var(--text-dim);margin-top:.2rem}
-
-/* ── OPTIONS ── */
-.options-section{margin:1.5rem 0}
-.options-section h4{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.75rem}
-.options-row{display:flex;gap:1rem;flex-wrap:wrap}
-.option-toggle{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.8rem;color:var(--text);user-select:none}
+.btn-back{background:none;border:1px solid var(--border);color:var(--text-dim);padding:.5rem .9rem;border-radius:8px;cursor:pointer;font-family:var(--mono);font-size:.72rem;transition:.2s}
+.btn-back:hover{color:var(--blue);border-color:var(--blue)}
+.chapter-select-header{margin-bottom:1.5rem}
+.chapter-select-header h2{color:var(--text-bright);font-size:1.6rem;margin-bottom:.3rem}
+.chapter-select-header p{color:var(--text-dim);font-size:.85rem}
+.all-card{background:linear-gradient(135deg,var(--blue-dim),var(--purple-dim));border:1px solid var(--blue);border-radius:12px;padding:1rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;transition:.2s}
+.all-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,200,255,.2)}
+.all-icon{font-size:1.6rem}
+.all-text h4{color:var(--text-bright);font-size:1rem;margin-bottom:.15rem}
+.all-text p{color:var(--text);font-size:.78rem}
+.all-text{flex:1}
+.chapter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:2rem}
+.chapter-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;cursor:pointer;position:relative;transition:.2s}
+.chapter-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+.chapter-card.selected{border-color:var(--blue);background:var(--blue-dim);box-shadow:0 0 0 1px var(--blue) inset}
+.chapter-card.ch-pm.selected{border-color:var(--purple);background:var(--purple-dim);box-shadow:0 0 0 1px var(--purple) inset}
+.c-check{position:absolute;top:.7rem;right:.7rem;width:18px;height:18px;border:1.5px solid var(--text-dim);border-radius:4px;transition:.2s}
+.chapter-card.selected .c-check{background:var(--blue);border-color:var(--blue);position:absolute}
+.chapter-card.selected .c-check::after{content:'✓';color:var(--bg);font-size:.75rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700}
+.chapter-card.ch-pm.selected .c-check{background:var(--purple);border-color:var(--purple)}
+.c-num{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);margin-bottom:.4rem}
+.c-name{color:var(--text-bright);font-size:1rem;font-weight:600;margin-bottom:.25rem;padding-right:1.5rem}
+.c-desc{color:var(--text-dim);font-size:.74rem;line-height:1.4}
+.c-count{font-family:var(--mono);font-size:.7rem;color:var(--blue);margin-top:.6rem}
+.ch-pm .c-count{color:var(--purple)}
+.options-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem}
+.options-section h4{color:var(--text-bright);font-size:.85rem;margin-bottom:.7rem}
+.options-row{display:flex;gap:1.2rem;flex-wrap:wrap}
+.option-toggle{display:flex;align-items:center;gap:.5rem;cursor:pointer;color:var(--text);font-size:.82rem;user-select:none}
 .option-toggle input{display:none}
-.toggle-dot{width:36px;height:20px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;position:relative;transition:all .2s}
-.toggle-dot::after{content:'';position:absolute;left:3px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--text-dim);transition:all .2s}
-.option-toggle input:checked+.toggle-dot{background:var(--blue-dim);border-color:var(--blue)}
-.option-toggle input:checked+.toggle-dot::after{left:19px;background:var(--blue)}
-
-/* ── BTN ── */
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:8px;font-family:var(--sans);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;letter-spacing:.01em}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;box-shadow:none!important}
-.btn-primary{background:var(--blue);color:#000;width:100%;justify-content:center;font-size:1rem;padding:1rem}
-.btn-primary:hover:not(:disabled){background:#33d4ff;transform:translateY(-1px);box-shadow:0 8px 24px var(--blue-glow)}
-.btn-primary.pm-btn{background:var(--purple)}
-.btn-primary.pm-btn:hover:not(:disabled){background:#c89df0;box-shadow:0 8px 24px rgba(181,123,238,.3)}
-.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
-.btn-secondary:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:.8rem;padding:.5rem 1rem}
-.btn-ghost:hover:not(:disabled){color:var(--text);border-color:var(--text-dim)}
+.toggle-dot{width:36px;height:20px;background:var(--surface2);border-radius:10px;position:relative;transition:.2s}
+.toggle-dot::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--text-dim);border-radius:50%;transition:.2s}
+.option-toggle input:checked+.toggle-dot{background:var(--blue-dim)}
+.option-toggle input:checked+.toggle-dot::after{transform:translateX(16px);background:var(--blue)}
 
 /* ── QUIZ ── */
-.quiz-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:1rem}
-.quiz-counter{font-family:var(--mono);font-size:.75rem;color:var(--text-dim);white-space:nowrap}
-.quiz-counter span{color:var(--blue);font-weight:600}
-.progress-bar-outer{flex:1;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1)}
-.score-pill{font-family:var(--mono);font-size:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;white-space:nowrap}
-.score-pill .score-v{color:var(--green);font-weight:700}
-.score-pill .score-x{color:var(--red)}
-.chapter-tag-quiz{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem;display:block}
-.question-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:1.2rem;position:relative;transition:border-color .3s}
-.question-card.answered-correct{border-color:rgba(0,229,160,.4)}
-.question-card.answered-wrong{border-color:rgba(255,79,107,.4)}
-.question-card.review-mode{border-color:rgba(255,209,102,.25);background:rgba(255,209,102,.02)}
-.question-num{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);margin-bottom:.9rem}
-.question-text{font-size:1.05rem;font-weight:400;color:var(--text-bright);line-height:1.6;letter-spacing:-.01em}
-.question-text .math{font-family:var(--mono);font-size:.92rem;color:var(--yellow);background:rgba(255,209,102,.08);padding:.1rem .4rem;border-radius:4px}
-.review-banner{display:none;background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.2);border-radius:8px;padding:.6rem 1rem;margin-bottom:.8rem;font-size:.78rem;color:var(--yellow);align-items:center;gap:.5rem}
-.review-banner.show{display:flex}
-.answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:1.2rem}
-.answer-btn{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;text-align:left;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:.75rem;font-family:var(--sans);color:var(--text);font-size:.85rem;line-height:1.5;position:relative;overflow:hidden}
-.answer-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-dim);color:var(--text-bright);transform:translateY(-1px)}
+.quiz-topbar{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.quiz-counter{font-family:var(--mono);font-size:.78rem;color:var(--text);background:var(--surface);padding:.4rem .8rem;border-radius:6px;border:1px solid var(--border)}
+.quiz-counter span{color:var(--blue)}
+.progress-bar-outer{flex:1;min-width:120px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:3px;transition:width .4s ease}
+.score-pill{font-family:var(--mono);font-size:.78rem;background:var(--surface);padding:.4rem .8rem;border-radius:6px;border:1px solid var(--border)}
+.score-v{color:var(--green);font-weight:700}
+.score-x{color:var(--red);font-weight:700}
+.review-banner{display:none;background:var(--yellow);color:var(--bg);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;margin-bottom:1rem;text-align:center}
+.review-banner.show{display:block}
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.6rem;margin-bottom:1rem;animation:pop .25s ease}
+.question-card.review-mode{border-color:var(--yellow)}
+.chapter-tag-quiz{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;display:inline-block;margin-bottom:.7rem}
+.question-num{font-family:var(--mono);font-size:.7rem;color:var(--text-dim);margin-bottom:.5rem}
+.question-text{color:var(--text-bright);font-size:1.05rem;line-height:1.55;margin-bottom:1.3rem;font-weight:500}
+.answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.answer-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.9rem 1rem;border-radius:10px;cursor:pointer;font-family:var(--sans);font-size:.92rem;text-align:left;transition:.2s;display:flex;align-items:flex-start;gap:.7rem;position:relative;line-height:1.4}
+.answer-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-dim);transform:translateY(-1px)}
 .answer-btn:disabled{cursor:default}
-.answer-btn.correct{border-color:var(--green);background:var(--green-dim);color:var(--green)}
-.answer-btn.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red)}
-.answer-btn.reveal{border-color:rgba(0,229,160,.3);opacity:.6}
-.answer-letter{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--text-dim);background:var(--surface);border:1px solid var(--border);border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem;transition:all .2s}
-.answer-btn.correct .answer-letter{background:var(--green);color:#000;border-color:var(--green)}
-.answer-btn.wrong .answer-letter{background:var(--red);color:#fff;border-color:var(--red)}
-.answer-btn:hover:not(:disabled) .answer-letter{color:var(--blue);border-color:var(--blue)}
-.answer-icon{margin-left:auto;font-size:1rem;flex-shrink:0;align-self:center}
-.explanation{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin-top:.75rem;font-size:.83rem;line-height:1.65;color:var(--text);display:none}
-.explanation.show{display:block;animation:fadeSlide .3s ease}
-.explanation .expl-header{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem}
-.explanation .math{font-family:var(--mono);font-size:.85rem;color:var(--yellow);background:rgba(255,209,102,.08);padding:.15rem .5rem;border-radius:4px;display:inline-block}
-.nav-row{display:flex;gap:.75rem;margin-top:1rem;justify-content:space-between;align-items:center}
-.nav-left{display:flex;gap:.5rem}
-.nav-right{display:flex;gap:.5rem}
+.answer-letter{font-family:var(--mono);font-size:.78rem;color:var(--text-dim);font-weight:700;flex-shrink:0;width:18px}
+.answer-btn.correct{border-color:var(--green);background:var(--green-dim);color:var(--text-bright)}
+.answer-btn.correct .answer-letter{color:var(--green)}
+.answer-btn.wrong{border-color:var(--red);background:var(--red-dim);color:var(--text-bright)}
+.answer-btn.wrong .answer-letter{color:var(--red)}
+.answer-btn.reveal{opacity:.5}
+.answer-icon{position:absolute;top:.6rem;right:.7rem;font-size:.95rem;font-weight:700}
+.answer-btn.correct .answer-icon{color:var(--green)}
+.answer-btn.wrong .answer-icon{color:var(--red)}
+.explanation{display:none;background:var(--surface2);border-left:3px solid var(--yellow);border-radius:8px;padding:1rem 1.2rem;margin-bottom:1rem;animation:fadeSlide .3s ease}
+.explanation.show{display:block}
+.expl-header{font-family:var(--mono);font-size:.7rem;color:var(--yellow);letter-spacing:.1em;margin-bottom:.5rem}
+.explanation>div:last-child{color:#dde6ff;font-size:.88rem;line-height:1.6}
+.nav-row{display:flex;gap:.6rem;margin-top:.6rem}
+.btn{padding:.7rem 1.2rem;border-radius:8px;font-family:var(--sans);font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary{background:var(--blue);color:var(--bg)}
+.btn-primary:hover{background:var(--green);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.btn-secondary:disabled{opacity:.35;cursor:not-allowed}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid var(--red)}
+.btn-danger:hover{background:var(--red);color:var(--bg)}
 
 /* ── RESULTS ── */
-.result-hero{text-align:center;padding:2rem 0 1.5rem}
-.result-score-ring{width:140px;height:140px;margin:0 auto 1.5rem;position:relative}
-.result-score-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring-bg{stroke:var(--surface2);stroke-width:8;fill:none}
-.ring-fill{stroke-width:8;fill:none;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)}
-.ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-percent{font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--text-bright)}
-.ring-label{font-size:.68rem;color:var(--text-dim)}
-.result-title{font-size:1.6rem;font-weight:700;color:var(--text-bright);letter-spacing:-.03em;margin-bottom:.4rem}
-.result-sub{font-size:.85rem;color:var(--text-dim)}
-.result-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin:2rem 0 1.5rem}
-.result-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center}
-.result-stat .num{font-family:var(--mono);font-size:1.6rem;font-weight:700}
-.result-stat .lbl{font-size:.68rem;color:var(--text-dim);margin-top:.3rem}
-.c-green{color:var(--green)}.c-red{color:var(--red)}.c-blue{color:var(--blue)}.c-yellow{color:var(--yellow)}
-.chapter-breakdown{margin-bottom:2rem}
-.chapter-breakdown h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.75rem}
-.ch-result-row{display:flex;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.results-wrap{text-align:center}
+.results-circle{width:160px;height:160px;margin:1.5rem auto;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:6px solid var(--blue);position:relative}
+.results-circle.good{border-color:var(--green)}
+.results-circle.bad{border-color:var(--red)}
+.results-pct{font-family:var(--mono);font-size:2.4rem;font-weight:700;color:var(--text-bright)}
+.results-label{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.15em;margin-top:.2rem}
+.result-msg{font-size:1.1rem;color:var(--text-bright);margin-bottom:1.5rem}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1.5rem}
+.r-stat{background:var(--surface);border:1px solid var(--border);padding:.9rem .6rem;border-radius:10px}
+.r-stat-v{font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--blue)}
+.r-stat-l{font-size:.7rem;color:var(--text-dim);margin-top:.2rem;text-transform:uppercase;letter-spacing:.05em}
+.chapter-results{margin:1.5rem 0;text-align:left}
+.chapter-results h4{color:var(--text-bright);font-size:.85rem;margin-bottom:.7rem}
+.ch-result-row{display:flex;align-items:center;gap:.7rem;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
 .ch-result-row:last-child{border-bottom:none}
 .ch-name{width:220px;flex-shrink:0;color:var(--text-dim);font-size:.78rem}
 .ch-bar-outer{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
 .ch-bar-fill{height:100%;border-radius:3px;transition:width .8s ease}
 .ch-score-txt{font-family:var(--mono);font-size:.72rem;width:45px;text-align:right}
-.result-actions{display:flex;gap:.75rem}
-.result-actions .btn{flex:1;justify-content:center}
+.result-actions{display:flex;gap:.75rem;flex-wrap:wrap}
+.result-actions .btn{flex:1;justify-content:center;min-width:110px}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(.95);opacity:0}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
-.question-card{animation:pop .25s ease}
+@keyframes pulseGreen{0%{box-shadow:0 0 0 0 rgba(0,229,160,.5)}70%{box-shadow:0 0 0 18px rgba(0,229,160,0)}100%{box-shadow:0 0 0 0 rgba(0,229,160,0)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-.shake{animation:shake .35s ease}
-@keyframes glow-pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,0)}50%{box-shadow:0 0 20px 4px rgba(0,229,160,.3)}}
-.pulse-green{animation:glow-pulse .6s ease}
+.pulse-green{animation:pulseGreen .6s ease}
+.shake{animation:shake .5s}
 .particle{position:fixed;width:6px;height:6px;border-radius:2px;pointer-events:none;z-index:9999;animation:fall 2.5s ease-in forwards}
 @keyframes fall{0%{opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.confetti{position:fixed;width:8px;height:14px;pointer-events:none;z-index:9999;border-radius:2px;animation:confettiFly 1.1s ease-out forwards}
+@keyframes confettiFly{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))}}
 
 @media(max-width:600px){
   .answers-grid{grid-template-columns:1fr}
@@ -191,7 +185,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <!-- ═══ HOME ═══ -->
 <div id="screen-home" class="screen active">
   <div class="home-header">
-    <div><a href="index.html" class="home-back">← Tableau de bord</a></div>
     <div class="tag">FGE2-S4 · EPF Engineering School</div>
     <h1>Quiz <span>Physique</span></h1>
     <p>Choisissez une matière pour commencer à réviser</p>
@@ -263,683 +256,441 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div id="expl-text"></div>
   </div>
   <div class="nav-row">
-    <div class="nav-left">
-      <button class="btn btn-ghost" id="btn-prev" onclick="prevQuestion()" disabled>← Précédente</button>
-    </div>
-    <div class="nav-right">
-      <button class="btn btn-ghost" id="btn-skip" onclick="skipQuestion()">Passer →</button>
-      <button class="btn btn-secondary" id="btn-next" onclick="nextQuestion()" style="display:none">Suivante →</button>
-    </div>
+    <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()">← Précédente</button>
+    <button class="btn btn-secondary" id="btn-skip" onclick="skipQuestion()">Passer →</button>
+    <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" style="display:none">Suivant →</button>
+    <button class="btn btn-danger" id="btn-quit" onclick="confirmQuit()" style="margin-left:auto">Quitter</button>
   </div>
 </div>
 
 <!-- ═══ RESULTS ═══ -->
 <div id="screen-results" class="screen">
-  <div class="result-hero">
-    <div class="result-score-ring">
-      <svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52"/></svg>
-      <div class="ring-text"><div class="ring-percent" id="ring-pct">0%</div><div class="ring-label">Score</div></div>
+  <div class="results-wrap">
+    <h2 style="color:var(--text-bright);font-size:1.6rem">Quiz terminé</h2>
+    <div class="results-circle" id="results-circle">
+      <div class="results-pct" id="r-pct">0%</div>
+      <div class="results-label">Réussite</div>
     </div>
-    <div class="result-title" id="res-title">Bien joué !</div>
-    <div class="result-sub" id="res-sub"></div>
-  </div>
-  <div class="result-stats">
-    <div class="result-stat"><div class="num c-green" id="res-v">0</div><div class="lbl">Correctes</div></div>
-    <div class="result-stat"><div class="num c-red" id="res-x">0</div><div class="lbl">Incorrectes</div></div>
-    <div class="result-stat"><div class="num c-yellow" id="res-s">0</div><div class="lbl">Passées</div></div>
-    <div class="result-stat"><div class="num c-blue" id="res-t">0</div><div class="lbl">Jouées</div></div>
-  </div>
-  <div class="chapter-breakdown"><h3>Résultats par chapitre</h3><div id="ch-breakdown"></div></div>
-  <div class="result-actions">
-    <button class="btn btn-secondary" onclick="reviewWrong()">Revoir les erreurs</button>
-    <button class="btn btn-secondary" onclick="goHome()">Nouveau quiz</button>
-    <a href="index.html" class="btn btn-primary" style="justify-content:center;text-decoration:none">🏠 Tableau de bord</a>
+    <div class="result-msg" id="r-msg">Bien joué !</div>
+    <div class="result-stats">
+      <div class="r-stat"><div class="r-stat-v" style="color:var(--green)" id="r-correct">0</div><div class="r-stat-l">Correctes</div></div>
+      <div class="r-stat"><div class="r-stat-v" style="color:var(--red)" id="r-wrong">0</div><div class="r-stat-l">Erreurs</div></div>
+      <div class="r-stat"><div class="r-stat-v" id="r-total">0</div><div class="r-stat-l">Total</div></div>
+    </div>
+    <div class="chapter-results" id="chapter-results-section">
+      <h4>Score par chapitre</h4>
+      <div id="chapter-results-list"></div>
+    </div>
+    <div class="result-actions">
+      <button class="btn btn-secondary" onclick="reviewWrong()">Revoir les erreurs</button>
+      <button class="btn btn-primary" onclick="goHome()">Accueil ✦</button>
+    </div>
   </div>
 </div>
 
 </div><!-- /container -->
-
 <script>
 // ═══════════════════════════════════════════
-// QUESTION DATABASE
+// QUESTIONS DATABASE — 200 questions, LaTeX-ready
 // ═══════════════════════════════════════════
 const DB = {
 
-// ───────────────────────────────────────────
-// EM — ONDES ÉLECTROMAGNÉTIQUES
-// ───────────────────────────────────────────
+// ════════════════════════════════════
+// ONDES ÉLECTROMAGNÉTIQUES — 50 questions
+// ════════════════════════════════════
 em_ondes: {
-  label:"Ondes EM", subject:"em", color:"var(--blue)",
+  subject:'em', label:'Ondes EM', color:'var(--blue)',
   questions:[
-  {q:"L'équation de propagation du champ E⃗ dans le vide s'écrit :",
-   a:["ΔE⃗ + ε₀μ₀ ∂²E⃗/∂t² = 0","ΔE⃗ − ε₀μ₀ ∂²E⃗/∂t² = 0","ΔE⃗ = −ε₀μ₀ E⃗","ΔE⃗ = 0"],r:1,
-   e:"D'après les équations de Maxwell dans le vide, on dérive l'équation de D'Alembert : <span class='math'>ΔE⃗ − ε₀μ₀ ∂²E⃗/∂t² = 0</span>. Les solutions sont des ondes se propageant à la vitesse <span class='math'>c = 1/√(ε₀μ₀)</span>."},
-  {q:"La vitesse de la lumière dans le vide est :",
-   a:["c = √(ε₀μ₀)","c = ε₀μ₀","c = 1/√(ε₀μ₀)","c = μ₀/ε₀"],r:2,
-   e:"En combinant les équations de Maxwell, on obtient <span class='math'>c = 1/√(ε₀μ₀) ≈ 3×10⁸ m/s</span>. C'est une conséquence directe des constantes fondamentales de l'électromagnétisme."},
-  {q:"Pour une OPPH se propageant dans la direction e⃗_z, les champs E⃗ et B⃗ sont :",
-   a:["Parallèles à e⃗_z (onde longitudinale)","Perpendiculaires à e⃗_z (onde transverse TEM)","E⃗ parallèle et B⃗ perpendiculaire à e⃗_z","Sans contrainte particulière"],r:1,
-   e:"Une OPPH dans le vide est une onde TEM (transverse électromagnétique) : <span class='math'>E⃗ ⊥ e⃗_z</span> et <span class='math'>B⃗ ⊥ e⃗_z</span>. Les deux champs sont aussi perpendiculaires entre eux : E⃗ ⊥ B⃗."},
-  {q:"La relation de dispersion dans le vide pour une OPPH est :",
-   a:["k = ω²/c","k = ω/c","k² = ω/c","k = c/ω"],r:1,
-   e:"Dans le vide : <span class='math'>k = ω/c</span>. On dit que la dispersion est linéaire. La vitesse de phase <span class='math'>vφ = ω/k = c</span> est constante, indépendante de la fréquence."},
-  {q:"La vitesse de phase d'une onde est définie par :",
-   a:["vφ = ∂ω/∂k","vφ = ω × k","vφ = ω/k","vφ = 1/(ωk)"],r:2,
-   e:"La vitesse de phase est <span class='math'>vφ = ω/k</span>. C'est la vitesse à laquelle se déplace une surface d'onde (une phase constante). Dans le vide, vφ = c. Dans un milieu dispersif, vφ ≠ c."},
-  {q:"La vitesse de groupe est définie par :",
-   a:["vg = ω/k","vg = ∂k/∂ω","vg = ∂ω/∂k","vg = c²/vφ"],r:2,
-   e:"La vitesse de groupe <span class='math'>vg = dω/dk</span> est la vitesse à laquelle se propagent l'énergie et l'information. Dans le vide, vg = c. Dans un guide d'onde, vg < c."},
-  {q:"La relation entre les amplitudes E₀ et B₀ d'une OPPH dans le vide est :",
-   a:["B₀ = E₀ × c","B₀ = E₀/c","B₀ = E₀ × √(ε₀/μ₀)","B₀ = E₀"],r:1,
-   e:"Pour une OPPH dans le vide : <span class='math'>B₀ = E₀/c</span>. Les champs E⃗ et B⃗ sont en phase et leurs amplitudes sont liées par la vitesse de la lumière."},
-  {q:"Le vecteur de Poynting Π⃗ est défini par :",
-   a:["Π⃗ = E⃗ · B⃗","Π⃗ = (E⃗ × B⃗)/μ₀","Π⃗ = ε₀(E⃗ × B⃗)","Π⃗ = E⃗ × B⃗"],r:1,
-   e:"<span class='math'>Π⃗ = (E⃗ × B⃗)/μ₀</span> (W/m²). Il représente la densité de flux d'énergie électromagnétique : la puissance traversant une surface unité perpendiculaire à la direction de propagation."},
-  {q:"Pour une OPPH dans le vide, les champs E⃗ et B⃗ sont :",
-   a:["En quadrature de phase (déphasage π/2)","En opposition de phase","En phase","Pas de relation de phase fixe"],r:2,
-   e:"Pour une OPPH dans le vide, E⃗ et B⃗ sont <strong>en phase</strong> : ils atteignent leurs maxima et minima simultanément. C'est différent d'une onde dans un conducteur où ils sont déphasés."},
-  {q:"Dans le guide d'onde plan (2 conducteurs parfaits en y=0 et y=a), la condition aux limites sur E⃗ impose :",
-   a:["E_z = 0 à la surface (composante normale nulle)","E_t = 0 à la surface (composante tangentielle nulle)","∂E/∂y = 0 à la surface","Aucune condition sur E⃗"],r:1,
-   e:"À la surface d'un conducteur parfait, la composante tangentielle du champ électrique est nulle : <span class='math'>E_t = 0</span>. C'est pourquoi dans le guide, E_z ∝ sin(πy/a) et non cos(πy/a) — pour s'annuler en y=0 et y=a."},
-  {q:"Pour le guide d'onde plan étudié (Séance 19), la relation de dispersion est :",
-   a:["k² = ω²/c²","k² = ω²/c² − (π/a)²","k² = ω²/c² + (π/a)²","k = (ω²−ωc²)/c"],r:1,
-   e:"En injectant le champ E_z ∝ sin(πy/a) dans l'équation de propagation, on obtient : <span class='math'>k² = ω²/c² − (π/a)²</span>. Pour propager (k réel), il faut ω > πc/a = ωc."},
-  {q:"La pulsation de coupure ωc du guide d'onde plan (séparation a) est :",
-   a:["ωc = c/a","ωc = πc/a","ωc = 2πc/a","ωc = πc/(2a)"],r:1,
-   e:"<span class='math'>ωc = πc/a</span>. En dessous de cette fréquence, k² < 0, k devient imaginaire pur et l'onde est évanescente : la propagation est impossible. Au-dessus, l'onde se propage."},
-  {q:"Dans le guide d'onde, la vitesse de phase vφ vérifie :",
-   a:["vφ < c","vφ = c","vφ > c","vφ peut être > ou < c selon la fréquence"],r:2,
-   e:"<span class='math'>vφ = ω/k = c/√(1−(ωc/ω)²) > c</span>. La vitesse de phase dépasse c dans le guide ! Mais cela ne viole pas la relativité car vφ ne transporte pas d'information — c'est vg < c qui le fait."},
-  {q:"Dans le guide d'onde, la relation entre vitesse de groupe vg et vitesse de phase vφ est :",
-   a:["vg × vφ = c²","vg + vφ = 2c","vg = vφ","vg × vφ = c"],r:0,
-   e:"<span class='math'>vg × vφ = c²</span>. Puisque vφ > c, on a nécessairement vg < c (cohérent avec la relativité). C'est une propriété générale des guides d'onde."},
-  {q:"La puissance rayonnée ⟨P⟩ dans le guide d'onde plan est nulle pour :",
-   a:["ω = 2ωc","ω = ωc/2","ω < ωc","ω > ωc"],r:2,
-   e:"Pour ω < ωc, le vecteur d'onde k est imaginaire pur : l'onde est évanescente et la puissance moyenne ⟨P⟩ = 0. Aucune énergie n'est transportée dans le guide en dessous de la coupure."},
-  {q:"La densité d'énergie électromagnétique dans le vide est :",
-   a:["u = ε₀E² + B²/μ₀","u = ε₀E²/2 + B²/(2μ₀)","u = (ε₀E² + B²/μ₀)/2","u = ε₀E²"],r:1,
-   e:"La densité d'énergie totale (électrique + magnétique) : <span class='math'>u = ε₀E²/2 + B²/(2μ₀)</span>. Pour une OPPH dans le vide, les deux contributions sont égales en moyenne."},
-  {q:"Une onde TEM (onde transverse électromagnétique) se caractérise par :",
-   a:["E⃗ et B⃗ ont une composante selon la direction de propagation","E⃗ et B⃗ sont tous deux perpendiculaires à la direction de propagation","Seul E⃗ est perpendiculaire à la propagation","Seul B⃗ est perpendiculaire à la propagation"],r:1,
-   e:"Une TEM a E⃗ ⊥ k⃗ ET B⃗ ⊥ k⃗. L'onde dans le vide est TEM. Dans le guide d'onde plan étudié, l'onde n'est pas TEM : B⃗ a une composante selon x (direction de propagation)."},
-  {q:"Le champ E⃗ dans le guide d'onde plan vaut :",
-   a:["E⃗ = E₀ cos(πy/a) sin(ωt−kx) e⃗_z","E⃗ = E₀ sin(πy/a) sin(ωt−kx) e⃗_z","E⃗ = E₀ sin(πy/a) cos(ωt−kx) e⃗_x","E⃗ = E₀ cos(πy/a) cos(ωt−kx) e⃗_x"],r:1,
-   e:"E⃗ = E₀ sin(πy/a) sin(ωt−kx) e⃗_z. Le terme sin(πy/a) assure l'annulation en y=0 et y=a (condition sur les conducteurs parfaits). La propagation se fait selon x."},
-  {q:"Pour la Séance 19, le champ magnétique B⃗ dans le guide a pour composantes Bx et By. Laquelle est vraie ?",
-   a:["Bx ∝ cos(πy/a)cos(ωt−kx), By ∝ sin(πy/a)sin(ωt−kx)","Bx ∝ sin(πy/a)sin(ωt−kx), By ∝ cos(πy/a)cos(ωt−kx)","Bx = By = 0 (onde TEM)","Bx ∝ cos(πy/a)sin(ωt−kx), By ∝ sin(πy/a)cos(ωt−kx)"],r:0,
-   e:"D'après Maxwell-Faraday appliqué au champ E⃗ donné : <span class='math'>Bx ∝ cos(πy/a)cos(ωt−kx)</span> et <span class='math'>By ∝ sin(πy/a)sin(ωt−kx)</span>. Le champ magnétique a une composante Bx selon la direction de propagation → l'onde n'est pas TEM."},
-  {q:"La puissance moyenne ⟨P⟩ rayonnée dans une section de longueur ℓ du guide vaut 0 lorsque :",
-   a:["ω → +∞","ω = ωc","ω = 2ωc","La puissance est toujours non nulle pour ω > ωc"],r:1,
-   e:"D'après le calcul du vecteur de Poynting moyen, <span class='math'>⟨P⟩ ∝ √(1−(ωc/ω)²)</span>. Pour ω = ωc, la racine s'annule : ⟨P⟩ = 0. C'est le seuil de propagation."},
-  {q:"Dans le guide d'onde plan, la ligne d'univers du champ peut s'interpréter comme :",
-   a:["La superposition de deux OPPH se propageant dans des directions symétriques","Une seule onde plane progressive","Une onde sphérique confinée","Un mode évanescent uniquement"],r:0,
-   e:"Le champ dans le guide résulte de la superposition de deux OPPH se propageant de manière oblique (à ±θ par rapport à l'axe du guide). Les réflexions multiples sur les parois créent le mode guidé. C'est pourquoi la vitesse de phase est > c mais la vitesse de groupe < c."},
-  {q:"La condition div B⃗ = 0 (Maxwell-Thomson) implique physiquement :",
-   a:["Il existe des charges magnétiques (monopôles magnétiques)","Les lignes de champ magnétique sont toujours fermées","B⃗ est uniforme dans tout l'espace","B⃗ est nul dans le vide"],r:1,
-   e:"<span class='math'>div B⃗ = 0</span> signifie qu'il n'existe pas de monopôles magnétiques : les lignes de champ magnétique sont toujours fermées sur elles-mêmes (elles n'ont pas de 'source' ni de 'puits')."},
-  {q:"La valeur moyenne temporelle du vecteur de Poynting pour une OPPH dans le vide vaut :",
-   a:["⟨Π⃗⟩ = E₀²/(μ₀c) e⃗_k","⟨Π⃗⟩ = E₀²/(2μ₀c) e⃗_k","⟨Π⃗⟩ = 0","⟨Π⃗⟩ = E₀B₀ e⃗_k"],r:1,
-   e:"Pour une OPPH, le vecteur de Poynting moyen est <span class='math'>⟨Π⟩ = E₀²/(2μ₀c)</span> en utilisant B₀ = E₀/c et ⟨cos²⟩ = 1/2. Ce résultat est fondamental pour le calcul de l'intensité lumineuse."},
-  {q:"Le module de la vitesse de groupe dans le guide d'onde vaut :",
-   a:["vg = c","vg = c/√(1−(ωc/ω)²)","vg = c√(1−(ωc/ω)²)","vg = c(1−ωc/ω)"],r:2,
-   e:"<span class='math'>vg = dω/dk = c√(1−(ωc/ω)²)</span>. C'est bien < c pour tout ω, et → 0 quand ω → ωc. On vérifie : vg × vφ = c²·√(1−(ωc/ω)²)/√(1−(ωc/ω)²) = c². ✓"},
-  {q:"Que se passe-t-il si on envoie une onde dans un guide en dessous de la pulsation de coupure ?",
-   a:["L'onde se propage mais avec vφ < c","L'onde est amplifiée","L'onde est évanescente : elle s'atténue exponentiellement sans transporter d'énergie","L'onde rebondit et revient en sens inverse"],r:2,
-   e:"Pour ω < ωc, k est imaginaire pur (<span class='math'>k = iα</span>). La fonction d'onde varie en <span class='math'>e^{−αx}</span> : c'est une onde évanescente qui décroît exponentiellement. La puissance moyenne transportée est nulle."}
+  {q:"Dans le vide, l'équation de propagation de $\\vec{E}$ est :",a:["$\\Delta \\vec{E} - \\mu_0\\varepsilon_0\\dfrac{\\partial^2 \\vec{E}}{\\partial t^2}=\\vec{0}$","$\\Delta \\vec{E} + \\mu_0\\varepsilon_0\\dfrac{\\partial \\vec{E}}{\\partial t}=\\vec{0}$","$\\nabla \\cdot \\vec{E} = 0$","$\\vec{E} = -\\nabla V$"],r:0,e:"En combinant rot(rot $\\vec{E}$) et les équations de Maxwell dans le vide, on obtient $\\Delta \\vec{E} = \\mu_0\\varepsilon_0\\dfrac{\\partial^2 \\vec{E}}{\\partial t^2}$. C'est l'équation de d'Alembert avec $c^2 = \\dfrac{1}{\\mu_0\\varepsilon_0}$."},
+  {q:"La célérité $c$ de la lumière dans le vide vaut :",a:["$c = \\sqrt{\\mu_0 \\varepsilon_0}$","$c = \\dfrac{1}{\\sqrt{\\mu_0 \\varepsilon_0}}$","$c = \\dfrac{\\mu_0}{\\varepsilon_0}$","$c = \\mu_0 \\varepsilon_0$"],r:1,e:"$c = \\dfrac{1}{\\sqrt{\\mu_0 \\varepsilon_0}} \\approx 3{,}0 \\times 10^8$ m/s. C'est l'une des plus belles synthèses de Maxwell : la lumière est une onde électromagnétique."},
+  {q:"Pour une onde plane progressive monochromatique se propageant selon $+\\vec{u}_z$ : $\\vec{E}(z,t) = \\vec{E}_0\\cos(\\omega t - kz)$. La relation de dispersion dans le vide est :",a:["$\\omega = ck$","$\\omega = c k^2$","$\\omega = \\dfrac{c}{k}$","$\\omega^2 = c^2/k^2$"],r:0,e:"En injectant l'onde plane dans l'équation de d'Alembert, on obtient $-k^2 + \\dfrac{\\omega^2}{c^2}=0$, soit $\\omega = ck$ (vitesse de phase $v_\\varphi = \\omega/k = c$)."},
+  {q:"Pour une OPPM dans le vide se propageant selon $\\vec{u}_z$, le champ magnétique vaut :",a:["$\\vec{B} = \\vec{E}/c$","$\\vec{B} = \\dfrac{\\vec{u}_z \\times \\vec{E}}{c}$","$\\vec{B} = c\\,\\vec{E}$","$\\vec{B} = \\vec{u}_z \\cdot \\vec{E}$"],r:1,e:"D'après l'équation de Maxwell-Faraday, $\\vec{B} = \\dfrac{\\vec{k}\\times\\vec{E}}{\\omega}=\\dfrac{\\vec{u}_z\\times\\vec{E}}{c}$. Le trièdre $(\\vec{E},\\vec{B},\\vec{k})$ est direct."},
+  {q:"Une onde EM dans le vide est :",a:["Longitudinale","Transverse électrique uniquement","Transverse électromagnétique : $\\vec{E}\\perp\\vec{B}\\perp\\vec{k}$","Indéterminée"],r:2,e:"Dans le vide, $\\nabla\\cdot\\vec{E}=0$ impose $\\vec{k}\\cdot\\vec{E}=0$ ; idem pour $\\vec{B}$. Et $\\vec{B}\\propto\\vec{k}\\times\\vec{E}$ donne $\\vec{B}\\perp\\vec{E}$. C'est une onde TEM."},
+  {q:"Le rapport des amplitudes $\\dfrac{\\|\\vec{E}\\|}{\\|\\vec{B}\\|}$ d'une OPPM dans le vide vaut :",a:["$1$","$c$","$1/c$","$\\mu_0\\varepsilon_0$"],r:1,e:"$\\|\\vec{B}\\|=\\|\\vec{E}\\|/c$ donc $\\dfrac{\\|\\vec{E}\\|}{\\|\\vec{B}\\|}=c$. À retenir : $E$ et $B$ sont du même ordre de grandeur en SI seulement après division par $c$."},
+  {q:"Le vecteur de Poynting est défini par :",a:["$\\vec{\\Pi}=\\vec{E}\\cdot\\vec{B}$","$\\vec{\\Pi}=\\dfrac{\\vec{E}\\times\\vec{B}}{\\mu_0}$","$\\vec{\\Pi}=\\mu_0\\vec{E}\\times\\vec{B}$","$\\vec{\\Pi}=\\varepsilon_0\\vec{E}\\times\\vec{H}$"],r:1,e:"$\\vec{\\Pi}=\\dfrac{\\vec{E}\\times\\vec{B}}{\\mu_0}=\\vec{E}\\times\\vec{H}$. Il représente la densité de puissance EM (W/m²) et sa direction donne celle de la propagation de l'énergie."},
+  {q:"L'éclairement énergétique (intensité moyenne) d'une OPPM est :",a:["$I=\\dfrac{E_0^2}{2\\mu_0 c}$","$I=\\dfrac{E_0^2}{\\mu_0 c}$","$I=\\dfrac{1}{2}\\varepsilon_0 c E_0^2$","$I=c E_0^2$"],r:0,e:"$\\langle\\Pi\\rangle=\\dfrac{1}{2}\\varepsilon_0 c E_0^2 = \\dfrac{E_0^2}{2\\mu_0 c}$. Les deux écritures sont équivalentes via $c=1/\\sqrt{\\mu_0\\varepsilon_0}$."},
+  {q:"La densité d'énergie volumique d'une onde EM dans le vide vaut :",a:["$u=\\varepsilon_0 E^2$","$u=\\dfrac{1}{2}\\varepsilon_0 E^2$","$u=\\varepsilon_0 E^2 + \\dfrac{B^2}{\\mu_0}$","$u=\\dfrac{1}{2}\\varepsilon_0 E^2 + \\dfrac{B^2}{2\\mu_0}$"],r:3,e:"$u=u_E + u_B$ avec $u_E = \\dfrac{\\varepsilon_0 E^2}{2}$ et $u_B = \\dfrac{B^2}{2\\mu_0}$. Pour une OPPM, $u_E=u_B$ : équipartition."},
+  {q:"La pression de radiation d'une onde plane absorbée totalement par une surface est :",a:["$P=I/c$","$P=I/c^2$","$P=Ic$","$P=2I/c$"],r:0,e:"Pour absorption totale : $P=I/c$. Pour réflexion totale (miroir) : $P=2I/c$. Cette pression sous-tend les voiles solaires."},
+  {q:"Pour une polarisation rectiligne, $\\vec{E}$ :",a:["Tourne dans le plan d'onde","Garde une direction fixe","A une amplitude variable mais une direction tournante","S'annule périodiquement en module et direction"],r:1,e:"En polarisation rectiligne (linéaire), $\\vec{E}$ oscille selon une direction fixe. L'extrémité de $\\vec{E}$ décrit un segment dans le plan d'onde."},
+  {q:"Pour une polarisation circulaire droite, on a $E_x=E_0\\cos(\\omega t-kz)$ et :",a:["$E_y=E_0\\cos(\\omega t-kz)$","$E_y=E_0\\sin(\\omega t-kz)$","$E_y=-E_0\\sin(\\omega t-kz)$","$E_y=2E_0\\cos(\\omega t-kz)$"],r:2,e:"Polarisation circulaire : déphasage $\\pm\\pi/2$ et même amplitude. Le sens (droite/gauche) dépend de la convention. La superposition donne un vecteur tournant dans le plan d'onde."},
+  {q:"Quelle est la longueur d'onde dans le vide d'une lumière de fréquence $\\nu = 5 \\times 10^{14}$ Hz ?",a:["600 nm","6 μm","60 nm","0,6 mm"],r:0,e:"$\\lambda = c/\\nu = \\dfrac{3\\times 10^8}{5\\times 10^{14}} = 6\\times 10^{-7}$ m = 600 nm. C'est dans le visible (orange)."},
+  {q:"Dans un milieu LHI non magnétique d'indice $n$, la célérité de l'onde vaut :",a:["$v=cn$","$v=c/n$","$v=c\\sqrt{n}$","$v=c$"],r:1,e:"$v=c/n$ avec $n=\\sqrt{\\varepsilon_r}$ pour un milieu non magnétique ($\\mu_r=1$). L'indice $n>1$ ralentit la lumière dans la matière."},
+  {q:"L'indice de réfraction d'un milieu LHI s'exprime :",a:["$n=\\sqrt{\\varepsilon_r\\mu_r}$","$n=\\varepsilon_r$","$n=\\mu_r$","$n=\\dfrac{1}{\\sqrt{\\varepsilon_r}}$"],r:0,e:"$n=\\sqrt{\\varepsilon_r\\mu_r}\\approx\\sqrt{\\varepsilon_r}$ pour les milieux non magnétiques (verre, eau, etc., où $\\mu_r\\approx 1$)."},
+  {q:"Quel phénomène est responsable de la dispersion de la lumière par un prisme ?",a:["L'intensité dépend de la fréquence","L'indice $n$ dépend de la fréquence","$c$ dépend du milieu","La pression de radiation"],r:1,e:"L'indice $n(\\omega)$ varie avec la fréquence (relation de Cauchy par exemple), donc l'angle de réfraction aussi : c'est la dispersion. Les couleurs se séparent."},
+  {q:"Loi de Snell-Descartes pour la réfraction :",a:["$n_1\\sin i_1 = n_2\\sin i_2$","$n_1\\cos i_1 = n_2\\cos i_2$","$\\dfrac{\\sin i_1}{n_1}=\\dfrac{\\sin i_2}{n_2}$","$n_1+n_2=\\sin i_1+\\sin i_2$"],r:0,e:"$n_1\\sin i_1 = n_2\\sin i_2$. Les angles sont mesurés par rapport à la normale à l'interface."},
+  {q:"Réflexion totale : la lumière passe d'un milieu d'indice $n_1$ à un milieu $n_2 < n_1$. L'angle limite vaut :",a:["$\\sin i_\\ell = n_1/n_2$","$\\sin i_\\ell = n_2/n_1$","$\\tan i_\\ell = n_2/n_1$","$\\cos i_\\ell = n_2/n_1$"],r:1,e:"Pour $i_2=\\pi/2$, on a $n_1\\sin i_\\ell = n_2$, donc $\\sin i_\\ell = n_2/n_1$. Au-delà : réflexion totale interne (fibres optiques)."},
+  {q:"Une onde EM dans un conducteur ohmique satisfait l'équation :",a:["$\\Delta\\vec{E} - \\mu_0\\varepsilon_0\\dfrac{\\partial^2\\vec{E}}{\\partial t^2}=\\vec{0}$","$\\Delta\\vec{E} - \\mu_0\\sigma\\dfrac{\\partial\\vec{E}}{\\partial t}=\\vec{0}$","$\\Delta\\vec{E}=\\sigma\\vec{E}$","$\\nabla\\times\\vec{E}=\\sigma\\vec{E}$"],r:1,e:"Dans un bon conducteur (ARQS), on néglige $\\partial\\vec{D}/\\partial t$ devant $\\vec{j}=\\sigma\\vec{E}$, ce qui donne l'équation de diffusion $\\Delta\\vec{E}=\\mu_0\\sigma\\dfrac{\\partial\\vec{E}}{\\partial t}$."},
+  {q:"L'épaisseur de peau $\\delta$ d'un conducteur vaut :",a:["$\\delta=\\sqrt{\\dfrac{2}{\\mu_0\\sigma\\omega}}$","$\\delta=\\sqrt{\\mu_0\\sigma\\omega}$","$\\delta=\\dfrac{1}{\\mu_0\\sigma\\omega}$","$\\delta=\\dfrac{c}{\\omega}$"],r:0,e:"$\\delta=\\sqrt{\\dfrac{2}{\\mu_0\\sigma\\omega}}$. À haute fréquence, $\\delta$ tend vers 0 : effet de peau (le courant ne circule qu'en surface)."},
+  {q:"Pour le cuivre à 50 Hz, $\\delta\\sim 9$ mm. À 1 GHz, $\\delta$ est :",a:["Plus grande","Inchangée","De l'ordre de 2 μm","De l'ordre de 0,1 m"],r:2,e:"$\\delta\\propto 1/\\sqrt{\\omega}$. En passant de 50 Hz à $10^9$ Hz, $\\omega$ est multiplié par $2\\times 10^7$, $\\delta$ divisé par $\\sim 4500$ : $\\delta\\approx 2$ μm."},
+  {q:"Dans un guide d'onde rectangulaire (parois conductrices), une onde se propage seulement si :",a:["$\\omega < \\omega_c$","$\\omega > \\omega_c$ (fréquence de coupure)","$\\omega = \\omega_c$","Quelle que soit $\\omega$"],r:1,e:"Le guide impose des conditions aux limites discrétisant $k_\\perp$. La pulsation de coupure $\\omega_c$ correspond à $k_\\parallel=0$. Pour $\\omega<\\omega_c$, $k_\\parallel$ devient imaginaire pur : onde évanescente."},
+  {q:"Dans un guide rectangulaire $a\\times b$ (avec $a>b$), la fréquence de coupure du mode TE$_{10}$ est :",a:["$f_c = c/(2a)$","$f_c=c/a$","$f_c=c/b$","$f_c=c/(2b)$"],r:0,e:"Pour TE$_{mn}$ : $f_{c,mn}=\\dfrac{c}{2}\\sqrt{(m/a)^2+(n/b)^2}$. Le mode dominant TE$_{10}$ donne $f_{c,10}=c/(2a)$, le plus bas."},
+  {q:"La relation de dispersion dans un guide d'onde est :",a:["$k_\\parallel^2 = (\\omega/c)^2$","$k_\\parallel^2 = (\\omega/c)^2 - k_\\perp^2$","$k_\\parallel = k_\\perp$","$k_\\parallel = \\omega \\cdot c$"],r:1,e:"$k_\\parallel^2 = (\\omega/c)^2 - k_\\perp^2$ avec $k_\\perp$ fixé par les conditions aux limites. La vitesse de phase $v_\\varphi=\\omega/k_\\parallel > c$ (mais pas la vitesse de groupe)."},
+  {q:"Dans un guide d'onde, la vitesse de groupe $v_g$ et la vitesse de phase $v_\\varphi$ vérifient :",a:["$v_g = v_\\varphi$","$v_g v_\\varphi = c^2$","$v_g + v_\\varphi = 2c$","$v_g = c, v_\\varphi = 0$"],r:1,e:"$v_\\varphi v_g = c^2$. Comme $v_\\varphi > c$ pour un guide, on a $v_g < c$ : c'est $v_g$ qui transporte l'énergie."},
+  {q:"Le mode TEM (transverse électromagnétique) :",a:["N'existe pas dans un guide rectangulaire creux","Existe dans tout guide","A une fréquence de coupure non nulle","Est seulement un mode théorique"],r:0,e:"Le mode TEM (où $\\vec{E}$ et $\\vec{B}$ sont tous deux transverses) n'existe pas dans un guide creux à parois conductrices. Il existe dans des structures à conducteurs multiples (câble coaxial)."},
+  {q:"Une onde plane électromagnétique transporte de l'énergie. La densité de quantité de mouvement vaut :",a:["$\\vec{g}=\\vec{\\Pi}/c$","$\\vec{g}=\\vec{\\Pi}/c^2$","$\\vec{g}=c\\vec{\\Pi}$","$\\vec{g}=\\mu_0\\vec{\\Pi}$"],r:1,e:"$\\vec{g}=\\vec{\\Pi}/c^2$. C'est analogue à $E=mc^2$ : un champ EM transporte de l'impulsion (effet Compton, voiles solaires)."},
+  {q:"Dans un plasma, la pulsation plasma est $\\omega_p$. Une onde EM s'y propage si :",a:["$\\omega < \\omega_p$","$\\omega > \\omega_p$","$\\omega = 0$","Tout $\\omega$"],r:1,e:"Pour $\\omega<\\omega_p$, $k$ devient imaginaire pur : onde évanescente (réflexion totale par l'ionosphère pour les ondes radio HF)."},
+  {q:"L'identité de Bilan d'énergie EM (équation locale) s'écrit :",a:["$\\dfrac{\\partial u}{\\partial t}+\\nabla\\cdot\\vec{\\Pi}=-\\vec{j}\\cdot\\vec{E}$","$\\dfrac{\\partial u}{\\partial t}=\\nabla\\cdot\\vec{\\Pi}$","$\\nabla\\cdot\\vec{\\Pi}=0$","$\\vec{\\Pi}=\\nabla u$"],r:0,e:"C'est l'identité de Poynting locale. $-\\vec{j}\\cdot\\vec{E}$ est la puissance volumique cédée par le champ aux charges (effet Joule)."},
+  {q:"Une OPPM polarisée rectilignement selon $\\vec{u}_x$, se propage selon $\\vec{u}_z$. Alors $\\vec{B}$ est colinéaire à :",a:["$\\vec{u}_x$","$\\vec{u}_y$","$\\vec{u}_z$","Un mélange des trois"],r:1,e:"$\\vec{B}=\\dfrac{\\vec{u}_z\\times\\vec{E}}{c}=\\dfrac{\\vec{u}_z\\times E\\vec{u}_x}{c}=\\dfrac{E}{c}\\vec{u}_y$. Le trièdre $(\\vec{E},\\vec{B},\\vec{k})$ est direct."},
+  {q:"À 600 nm (lumière jaune), la pulsation $\\omega$ vaut environ :",a:["$3\\times 10^9$ rad/s","$3\\times 10^{15}$ rad/s","$3\\times 10^{12}$ rad/s","$\\omega = 600$ rad/s"],r:1,e:"$\\omega = 2\\pi c/\\lambda = \\dfrac{2\\pi\\cdot 3\\times 10^8}{6\\times 10^{-7}}\\approx 3{,}1\\times 10^{15}$ rad/s. Le visible se situe autour de $10^{15}$ rad/s."},
+  {q:"L'équation de Maxwell-Ampère en présence de courants vaut :",a:["$\\nabla\\times\\vec{B}=\\mu_0\\vec{j}$","$\\nabla\\times\\vec{B}=\\mu_0\\vec{j}+\\mu_0\\varepsilon_0\\dfrac{\\partial\\vec{E}}{\\partial t}$","$\\nabla\\times\\vec{B}=\\dfrac{\\partial\\vec{E}}{\\partial t}$","$\\nabla\\times\\vec{B}=-\\dfrac{\\partial\\vec{E}}{\\partial t}$"],r:1,e:"Le terme $\\mu_0\\varepsilon_0\\dfrac{\\partial\\vec{E}}{\\partial t}$ est le courant de déplacement de Maxwell, indispensable pour assurer la conservation de la charge et permettre la propagation EM."},
+  {q:"L'équation de Maxwell-Faraday s'écrit :",a:["$\\nabla\\times\\vec{E}=-\\dfrac{\\partial\\vec{B}}{\\partial t}$","$\\nabla\\times\\vec{E}=\\dfrac{\\partial\\vec{B}}{\\partial t}$","$\\nabla\\cdot\\vec{E}=\\rho/\\varepsilon_0$","$\\nabla\\times\\vec{E}=\\mu_0\\vec{j}$"],r:0,e:"$\\nabla\\times\\vec{E}=-\\dfrac{\\partial\\vec{B}}{\\partial t}$ : un champ magnétique variable engendre un champ électrique à circulation non nulle (loi de Faraday locale)."},
+  {q:"Dans un câble coaxial idéal, le mode propagatif principal est :",a:["TE$_{10}$","TM$_{01}$","TEM","Hybride"],r:2,e:"Une structure à deux conducteurs (coax) supporte le mode TEM, sans fréquence de coupure : $v=c/\\sqrt{\\varepsilon_r}$, idéal pour transporter des signaux large bande."},
+  {q:"L'effet de peau : à haute fréquence, dans un fil conducteur :",a:["Le courant se concentre au centre","Le courant se répartit uniformément","Le courant se concentre près de la surface (épaisseur $\\delta$)","Le courant disparaît"],r:2,e:"$\\delta\\propto 1/\\sqrt{\\omega}$ devient très petit. C'est pourquoi à haute fréquence on utilise des fils de Litz (multi-brins isolés) ou des conducteurs creux."},
+  {q:"Le théorème de Poynting global pour un volume $V$ s'écrit :",a:["$\\dfrac{dU}{dt}=-\\oiint\\vec{\\Pi}\\cdot d\\vec{S}-P_J$","$\\dfrac{dU}{dt}=\\oiint\\vec{\\Pi}\\cdot d\\vec{S}$","$\\dfrac{dU}{dt}=-P_J$","$U=\\oiiint u\\,dV$"],r:0,e:"L'énergie EM stockée diminue par flux sortant de $\\vec{\\Pi}$ (rayonnement) et par dissipation Joule $P_J=\\iiint\\vec{j}\\cdot\\vec{E}\\,dV$."},
+  {q:"La densité de courant de déplacement vaut :",a:["$\\vec{j}_D=\\sigma\\vec{E}$","$\\vec{j}_D=\\varepsilon_0\\dfrac{\\partial\\vec{E}}{\\partial t}$","$\\vec{j}_D=\\mu_0\\vec{B}$","$\\vec{j}_D=\\nabla\\times\\vec{B}$"],r:1,e:"$\\vec{j}_D = \\varepsilon_0\\dfrac{\\partial\\vec{E}}{\\partial t}$. Sans ce terme, l'équation $\\nabla\\cdot\\vec{j}=0$ contredirait la conservation de la charge en régime variable."},
+  {q:"Pour une onde plane progressive monochromatique, $\\vec{E}=\\vec{E}_0 e^{i(\\omega t-\\vec{k}\\cdot\\vec{r})}$. L'opérateur $\\nabla$ équivaut à :",a:["$+i\\vec{k}$","$-i\\vec{k}$","$i\\omega$","$\\dfrac{\\partial}{\\partial t}$"],r:1,e:"En notation complexe avec convention $e^{i(\\omega t-\\vec{k}\\cdot\\vec{r})}$ : $\\nabla\\to-i\\vec{k}$ et $\\partial_t\\to i\\omega$. Très utile pour passer aux équations algébriques."},
+  {q:"Une onde évanescente :",a:["Se propage à $v>c$","Est atténuée exponentiellement avec la distance, sans transport d'énergie sur grande distance","Transporte de l'énergie à $v=c$","A une fréquence imaginaire"],r:1,e:"Une onde évanescente a $k$ imaginaire : amplitude $\\propto e^{-\\kappa z}$. Localement présente, mais aucun transport d'énergie en moyenne sur $z$. Cas du guide sous coupure, réflexion totale."},
+  {q:"À l'interface entre deux diélectriques, à incidence normale, le coefficient de réflexion en amplitude vaut :",a:["$r=\\dfrac{n_1-n_2}{n_1+n_2}$","$r=\\dfrac{n_2-n_1}{n_1+n_2}$","$r=n_1/n_2$","$r=1$"],r:0,e:"À incidence normale : $r=\\dfrac{n_1-n_2}{n_1+n_2}$. Pour verre ($n_2=1{,}5$)/air ($n_1=1$) : $r\\approx -0{,}2$, soit $R=r^2\\approx 4\\%$ d'intensité réfléchie."},
+  {q:"L'angle de Brewster $i_B$ est défini par :",a:["$\\tan i_B = n_2/n_1$","$\\sin i_B = n_2/n_1$","$\\cos i_B = n_2/n_1$","$\\tan i_B = n_1/n_2$"],r:0,e:"À l'angle de Brewster $\\tan i_B=n_2/n_1$, l'onde réfléchie est totalement polarisée perpendiculairement au plan d'incidence. Utilisé en optique (lunettes Polaroid)."},
+  {q:"Une onde EM dans le vide est-elle dispersive ?",a:["Oui, $v_\\varphi$ dépend de $\\omega$","Non, $v_\\varphi=c$ pour toute fréquence","Seulement aux hautes fréquences","Seulement pour $\\omega<\\omega_p$"],r:1,e:"Dans le vide, $\\omega=ck$ donne $v_\\varphi=c$ indépendant de $\\omega$ : non dispersif. La dispersion apparaît dans les milieux ($n(\\omega)$), guides, plasmas."},
+  {q:"Le rayonnement du corps noir suit la loi de Planck. Le maximum de $u_\\nu$ se déplace selon la loi de Wien :",a:["$\\lambda_{\\max}T=$ cste","$\\lambda_{\\max}/T=$ cste","$\\lambda_{\\max}+T=$ cste","$T=$ cste"],r:0,e:"Loi du déplacement de Wien : $\\lambda_{\\max}T\\approx 2{,}9\\times 10^{-3}$ m·K. Le Soleil ($T\\approx 5800$ K) émet vers $\\lambda\\approx 500$ nm (vert)."},
+  {q:"La puissance totale rayonnée par un corps noir est donnée par la loi de Stefan-Boltzmann :",a:["$P/S=\\sigma T$","$P/S=\\sigma T^2$","$P/S=\\sigma T^4$","$P/S=\\sigma T^{1/2}$"],r:2,e:"$P/S=\\sigma T^4$ avec $\\sigma\\approx 5{,}67\\times 10^{-8}$ W·m$^{-2}$·K$^{-4}$. La dépendance en $T^4$ est très sensible à la température."},
+  {q:"Une cavité résonnante 3D (boîte conductrice) admet des modes :",a:["$f_{mnp}=\\dfrac{c}{2}\\sqrt{(m/a)^2+(n/b)^2+(p/c)^2}$","$f=c/L$","$f$ est continu","$f=\\omega_p$"],r:0,e:"Modes discrets : la cavité quantifie les fréquences. Utilisé en RMN, fours micro-ondes, lasers."},
+  {q:"Vitesse de phase et vitesse de groupe : laquelle est la vitesse réelle de transport de l'énergie ?",a:["$v_\\varphi$","$v_g$","Ni l'une ni l'autre","Toujours $c$"],r:1,e:"$v_g=\\dfrac{d\\omega}{dk}$ est la vitesse de transport de l'énergie et de l'information. $v_\\varphi=\\omega/k$ peut excéder $c$ sans violer la causalité (cas des guides, milieux dispersifs)."},
+  {q:"Pour un signal modulé $E(t)=A(t)\\cos(\\omega_0 t)$, l'enveloppe $A(t)$ se propage à :",a:["$v_\\varphi$","$v_g$","$c$","Aucune des trois"],r:1,e:"Dans un milieu dispersif, le porteur ($\\omega_0$) se propage à $v_\\varphi$ mais l'information codée dans $A(t)$ se propage à $v_g$. C'est $v_g$ qui ne peut excéder $c$."},
+  {q:"À l'interface entre deux diélectriques, le champ tangentiel $\\vec{E}_t$ :",a:["Est continu","Subit un saut $\\sigma/\\varepsilon_0$","Est nul","Est doublé"],r:0,e:"$[\\vec{E}_t]=0$ : continuité de la composante tangentielle de $\\vec{E}$. La composante normale $D_n=\\varepsilon E_n$ est continue (en absence de charge surfacique)."},
+  {q:"Le champ rayonné par un dipôle oscillant à grande distance est :",a:["En $1/r$ et $\\propto\\sin\\theta$","En $1/r^2$","En $1/r^3$","Constant"],r:0,e:"$E_\\theta\\propto \\dfrac{p_0\\omega^2\\sin\\theta}{4\\pi\\varepsilon_0 c^2 r}$. La puissance rayonnée varie en $\\omega^4$ : c'est l'origine de la diffusion de Rayleigh (ciel bleu)."},
+  {q:"Une polarisation elliptique correspond à :",a:["$E_x$ et $E_y$ en phase","$E_x$ et $E_y$ déphasés de $\\pi/2$ avec amplitudes différentes","Amplitudes égales et même phase","$E_x=0$"],r:1,e:"Polarisation elliptique : déphasage quelconque $\\neq 0,\\pi$ et amplitudes différentes. La polarisation circulaire est un cas particulier (déphasage $\\pi/2$, amplitudes égales)."}
   ]
 },
-
-// ───────────────────────────────────────────
-// EM — INDUCTION
-// ───────────────────────────────────────────
-em_induction:{
-  label:"Induction", subject:"em", color:"var(--blue)",
+// ════════════════════════════════════
+// INDUCTION ÉLECTROMAGNÉTIQUE — 50 questions
+// ════════════════════════════════════
+em_induction: {
+  subject:'em', label:'Induction', color:'var(--blue)',
   questions:[
-  {q:"L'induction de Neumann concerne :",a:["Un circuit immobile dans un champ magnétique variable","Un circuit en mouvement dans un champ statique","Un circuit déformable dans un champ uniforme","Deux circuits en mouvement simultanés"],r:0,e:"L'induction de Neumann (Def. 7.1) : circuit <strong>immobile et indéformable</strong> dans un champ magnétique <strong>variable dans le temps</strong>. L'induction de Lorentz concerne les circuits mobiles dans un champ statique."},
-  {q:"L'induction de Lorentz concerne :",a:["Un circuit fixe dans un champ variable","Un circuit mobile dans un champ magnétostatique","Un circuit fixe dans un champ uniforme","Un aimant en mouvement à l'extérieur du circuit"],r:1,e:"L'induction de Lorentz (Def. 7.7) : le circuit (ou une partie) est <strong>en mouvement</strong> dans un champ magnétique <strong>stationnaire</strong>. La cause est la force de Lorentz sur les porteurs de charge mobiles."},
-  {q:"La loi de Faraday exprime la fem comme :",a:["e = +dΦ/dt","e = −dΦ/dt","e = −d²Φ/dt²","e = Φ/t"],r:1,e:"Loi 7.1 : <span class='math'>e = −dΦ_B/dt</span>. Le signe négatif traduit la loi de modération de Lenz. La fem est orientée dans le sens du courant (convention générateur)."},
-  {q:"La loi de modération de Lenz stipule que :",a:["La fem amplifie les variations de flux","Les effets de l'induction s'opposent à leurs causes","Le courant induit est toujours dans le sens horaire","La fem est proportionnelle à l'inductance"],r:1,e:"Loi 7.2 : <em>« Les effets de la fem induite s'opposent toujours aux causes qui lui ont donné naissance. »</em> Si Φ augmente, le courant induit crée un champ opposé. Permet de trouver le sens du courant sans calcul."},
-  {q:"Le champ électromoteur en induction de Neumann est :",a:["E⃗ₘ = v⃗ ∧ B⃗","E⃗ₘ = −∂A⃗/∂t","E⃗ₘ = −∇V","E⃗ₘ = ρ/ε₀"],r:1,e:"En induction de Neumann (Def. 7.2) : <span class='math'>E⃗ₘ = −∂A⃗/∂t</span> où A⃗ est le potentiel vecteur. En induction de Lorentz, c'est <span class='math'>E⃗ₘ = v⃗ ∧ B⃗</span>."},
-  {q:"Le champ électromoteur en induction de Lorentz est :",a:["E⃗ₘ = −∂A⃗/∂t","E⃗ₘ = −∇V","E⃗ₘ = v⃗ ∧ B⃗","E⃗ₘ = j⃗/σ"],r:2,e:"En induction de Lorentz (Def. 7.8) : <span class='math'>E⃗ₘ = v⃗ ∧ B⃗</span> où v⃗ est la vitesse du conducteur. C'est la composante magnétique de la force de Lorentz sur les porteurs de charge."},
-  {q:"La fem est une grandeur homogène à :",a:["Une force [N]","Une tension [V]","Un flux [Wb]","Une puissance [W]"],r:1,e:"La fem (force électromotrice) est une <strong>tension</strong>, exprimée en Volts [V]. Le terme « force » est historique et ne désigne pas une force mécanique en Newtons."},
-  {q:"Dans quel sens fléche-t-on la fem dans le circuit équivalent ?",a:["Dans le sens contraire au courant (convention récepteur)","Dans le sens du courant (convention générateur)","Perpendiculairement au circuit","Dans le sens du champ magnétique"],r:1,e:"La fem est fléchée dans le <strong>sens du courant</strong> (convention générateur), car elle joue le rôle d'un générateur de tension. Cohérent avec <span class='math'>e = Ri</span> pour un circuit résistif."},
-  {q:"L'inductance propre L est définie par :",a:["Φ_propre = L × i²","Φ_propre = L × i","e = L × Φ","L = Φ × R"],r:1,e:"Def. 7.4 : <span class='math'>Φ_pr = Li</span>. La constante L est l'inductance propre (auto-inductance), en Henry [H]. L ne dépend que de la <strong>géométrie</strong> du circuit."},
-  {q:"L'inductance propre d'un solénoïde (N spires, section S, longueur ℓ) vaut :",a:["L = μ₀ N S / ℓ","L = μ₀ N² S / ℓ","L = μ₀ N² / (Sℓ)","L = μ₀ N² ℓ / S"],r:1,e:"Loi 7.3 : <span class='math'>L = μ₀N²S/ℓ</span>. On le trouve en calculant Φ_pr = N × (μ₀Ni/ℓ) × S = (μ₀N²S/ℓ)×i. L augmente avec N² d'où l'intérêt d'un grand nombre de spires."},
-  {q:"L'énergie magnétique stockée dans une bobine d'inductance L est :",a:["E_mag = L i","E_mag = L i²","E_mag = ½ L i²","E_mag = ½ L² i"],r:2,e:"<span class='math'>E_mag = ½Li²</span>. Analogue à E_élec = ½Cu² pour un condensateur. La puissance reçue P = ui = Li(di/dt) = d(½Li²)/dt."},
-  {q:"La force de Laplace élémentaire sur un élément dM⃗ parcouru par i vaut :",a:["dF⃗_L = i B⃗ × dM⃗","dF⃗_L = i dM⃗ ∧ B⃗","dF⃗_L = i dM⃗ · B⃗","dF⃗_L = i² dM⃗ ∧ B⃗"],r:1,e:"Def. 7.10 : <span class='math'>dF⃗_L = i dM⃗ ∧ B⃗</span> où dM⃗ est orienté dans le sens de l'intensité. C'est la force de Lorentz réexprimée en termes de courant."},
-  {q:"Selon la loi de Lenz, les efforts de Laplace sur la partie mobile s'opposent à :",a:["La direction du champ magnétique","Le mouvement qui est à l'origine de l'induction","La variation de l'intensité","La gravité uniquement"],r:1,e:"Les efforts de Laplace sont les effets mécaniques de l'induction de Lorentz. Par Lenz, ils s'opposent à la <strong>cause</strong>, c'est-à-dire au mouvement de la partie mobile. C'est le principe du freinage électromagnétique."},
-  {q:"Pour le galvanomètre (cadre a×2b, champ radial B₀), le moment des efforts de Laplace vaut :",a:["Γ_L = aB₀i","Γ_L = 2abB₀i","Γ_L = 4abB₀i","Γ_L = ab²B₀i"],r:1,e:"Séance 26 : <span class='math'>Φ = 2abB₀</span> donc <span class='math'>Γ_L = Φi = 2abB₀i</span>. Le champ radial assure un moment constant indépendant de θ."},
-  {q:"Pour deux tiges sur rails (Séance 22), la fem totale est :",a:["e = B₀ℓv₁","e = B₀ℓ(v₁ + v₂)","e = B₀ℓ(v₁ − v₂)","e = B₀ℓ(v₁ × v₂)"],r:2,e:"T1 génère e₁ = B₀ℓv₁ et T2 génère e₂ = −B₀ℓv₂ (sens opposé). La fem résultante : <span class='math'>e = B₀ℓ(v₁ − v₂)</span>."},
-  {q:"Pour deux tiges identiques de masse m (Séance 22), leur vitesse finale commune est :",a:["v_f = v₀/2","v_f = v₀","v_f = 2v₀/3","v_f = v₀/√2"],r:0,e:"Conservation de la QdM : F_L1 = −F_L2, donc d(v₁+v₂)/dt = 0. Ainsi v₁+v₂ = v₀ pour tout t. À l'équilibre v₁ = v₂ = v₀/2. L'énergie cinétique finale est moitié moindre — le reste est dissipé par Joule."},
-  {q:"La vitesse limite d'une tige de masse m soumise à F (rails R, champ B₀, longueur ℓ) est :",a:["v∞ = mF/(B₀ℓ)²","v∞ = FR/(B₀ℓ)²","v∞ = F(B₀ℓ)²/R","v∞ = FR/(mB₀ℓ)"],r:1,e:"À v∞, dv/dt = 0. L'équation mécanique donne : <span class='math'>F = (v∞B₀ℓ/R)·B₀ℓ</span>, soit <span class='math'>v∞ = FR/(B₀ℓ)²</span>. La constante de temps est τ = mR/(B₀ℓ)²."},
-  {q:"La constante de temps τ du système tige+rails vaut :",a:["τ = mR/(B₀ℓ)²","τ = (B₀ℓ)²/(mR)","τ = mB₀ℓ/R","τ = R/(mB₀ℓ)²"],r:0,e:"<span class='math'>τ = mR/(B₀ℓ)²</span>. Unités : [kg·Ω/(T·m)²] = [s]. Cette constante de temps gouverne la convergence vers la vitesse limite."},
-  {q:"Pour la roue de Barlow (Séance 25), avec Φ = B₀a²/2, la fem est :",a:["e = B₀ωa","e = ωΦ = B₀ωa²/2","e = B₀ω²a²/2","e = B₀a²/ω"],r:1,e:"En intégrant le long du rayon : <span class='math'>e = ∫₀ᵃ ωr·B₀ dr = B₀ωa²/2 = ωΦ</span> avec <span class='math'>Φ = B₀a²/2</span>."},
-  {q:"Dans le galvanomètre (Séance 26), à l'équilibre, θ∞ vérifie :",a:["θ∞ = Φ/(Ci)","θ∞ = Φi/C","θ∞ = Ci/Φ","θ∞ = i/(CΦ)"],r:1,e:"À l'équilibre statique : couple de Laplace = couple de rappel → <span class='math'>Φi = Cθ∞</span>, soit <span class='math'>θ∞ = Φi/C</span>. C'est le principe de mesure du galvanomètre."},
-  {q:"Le bilan de puissances pour la tige avec force F s'écrit :",a:["Fv = ½mv² + Ri²","Fv = d(½mv²)/dt + Ri²","Fv = m(dv/dt) + Ri²","Fv = d(½mv²)/dt − Ri²"],r:1,e:"Eq. 7.85 : <span class='math'>Fv = d(½mv²)/dt + Ri²</span>. La puissance mécanique fournie = accroissement d'énergie cinétique + dissipation Joule."},
-  {q:"L'inductance mutuelle M entre C₁ et C₂ vérifie :",a:["M₁₂ ≠ M₂₁ en général","M₁₂ = M₂₁ = M (réciprocité)","M = L₁ + L₂","M est toujours positif"],r:1,e:"Def. 7.5 : <span class='math'>M₁₂ = M₂₁ = M</span> (théorème de Neumann). M peut être positif ou négatif. Le coefficient de couplage est <span class='math'>K = |M|/√(L₁L₂) ∈ [0,1]</span>."},
-  {q:"Pour un transformateur idéal (K=1), le rapport des tensions est :",a:["u₂/u₁ = N₁/N₂","u₂/u₁ = N₂/N₁","u₂/u₁ = √(N₂/N₁)","u₂/u₁ = (N₂/N₁)²"],r:1,e:"Loi 7.5 : <span class='math'>u₂/u₁ = N₂/N₁</span>. N₂ > N₁ : transformateur élévateur. N₂ < N₁ : transformateur abaisseur. Conservation de l'énergie : i₂/i₁ = N₁/N₂."},
-  {q:"La fem induite dans le haut-parleur (N spires, rayon a, champ radial B) est :",a:["e = vBN","e = vBℓ (ℓ = 2πNa)","e = vB × 2πa","e = NvBa"],r:1,e:"Chaque spire donne e_spire = vB × 2πa. Pour N spires : <span class='math'>e = vBℓ</span> avec <span class='math'>ℓ = 2πNa</span>."},
-  {q:"La densité d'énergie magnétique dans le vide est :",a:["e_mag = B²/(μ₀)","e_mag = B²/(2μ₀)","e_mag = μ₀B²/2","e_mag = B/(2μ₀)"],r:1,e:"<span class='math'>e_mag = B²/(2μ₀)</span>. Analogue électrique : ε₀E²/2. Pour un solénoïde : E_mag = ½Li² = (B²/2μ₀)×Volume."}
+  {q:"La loi de Faraday-Lenz énonce que la f.é.m. induite vaut :",a:["$e=\\dfrac{d\\Phi}{dt}$","$e=-\\dfrac{d\\Phi}{dt}$","$e=\\Phi\\cdot t$","$e=-\\Phi$"],r:1,e:"$e=-\\dfrac{d\\Phi}{dt}$. Le signe $-$ traduit la loi de Lenz : le courant induit s'oppose à la cause qui lui donne naissance (modération)."},
+  {q:"Le flux du champ magnétique à travers une surface $S$ orientée s'écrit :",a:["$\\Phi=\\iint\\vec{B}\\cdot d\\vec{S}$","$\\Phi=\\oint\\vec{B}\\cdot d\\vec{\\ell}$","$\\Phi=\\vec{B}\\cdot\\vec{S}$ uniquement si $\\vec{B}$ uniforme","$\\Phi=BS\\sin\\theta$"],r:0,e:"$\\Phi=\\iint_S\\vec{B}\\cdot d\\vec{S}$. Pour $\\vec{B}$ uniforme : $\\Phi=\\vec{B}\\cdot\\vec{S}=BS\\cos\\theta$ où $\\theta$ est l'angle entre $\\vec{B}$ et la normale."},
+  {q:"L'induction de Neumann concerne :",a:["Un circuit fixe dans un champ $\\vec{B}$ variable","Un circuit mobile dans un champ $\\vec{B}$ permanent","Les deux à la fois","La pression magnétique"],r:0,e:"Neumann : circuit immobile, $\\vec{B}(t)$ varie ⇒ apparition d'un champ électromoteur $\\vec{E}_m=-\\partial\\vec{A}/\\partial t$. Lorentz : $\\vec{B}$ constant, circuit déformé/déplacé."},
+  {q:"L'induction de Lorentz : la f.é.m. induite dans un conducteur en mouvement vaut :",a:["$e=\\oint(\\vec{v}\\times\\vec{B})\\cdot d\\vec{\\ell}$","$e=\\oint\\vec{B}\\cdot d\\vec{\\ell}$","$e=\\vec{v}\\cdot\\vec{B}$","$e=BvL\\,t$"],r:0,e:"Le champ électromoteur de Lorentz est $\\vec{E}_m=\\vec{v}\\times\\vec{B}$. Sa circulation sur le contour donne $e$. Pour une tige de longueur $L$ : $e=BLv$."},
+  {q:"Une tige de longueur $L$ se déplace à vitesse $\\vec{v}$ perpendiculaire à $\\vec{B}$. La f.é.m. induite vaut :",a:["$e=BvL$","$e=B/(vL)$","$e=B+vL$","$e=BL/v$"],r:0,e:"$e=BLv$ (en valeur absolue). Cette tige se comporte comme un générateur Thévenin de f.é.m. $BLv$. Les charges libres subissent $\\vec{F}=q\\vec{v}\\times\\vec{B}$."},
+  {q:"L'inductance propre $L$ d'une bobine est définie par :",a:["$L=\\Phi/I$","$L=I/\\Phi$","$L=\\Phi\\cdot I$","$L=B/I$"],r:0,e:"$\\Phi_\\text{propre}=L\\cdot I$. L'inductance traduit la capacité d'un circuit à créer un flux propre. Unité : henry (H)."},
+  {q:"La f.é.m. d'auto-induction d'une bobine vaut :",a:["$e=L\\dfrac{di}{dt}$","$e=-L\\dfrac{di}{dt}$","$e=Li$","$e=-Li$"],r:1,e:"$e_\\text{auto}=-L\\dfrac{di}{dt}$. Loi de Lenz : la f.é.m. s'oppose à la variation du courant. La bobine résiste aux changements de courant."},
+  {q:"L'énergie stockée dans une bobine d'inductance $L$ parcourue par $I$ est :",a:["$W=\\dfrac{1}{2}LI^2$","$W=LI$","$W=LI^2$","$W=\\dfrac{LI}{2}$"],r:0,e:"$W=\\dfrac{1}{2}LI^2$. Énergie magnétique stockée, libérable lors de la variation du courant. Densité volumique : $u_B=B^2/(2\\mu_0)$."},
+  {q:"L'inductance mutuelle $M$ entre deux circuits :",a:["Est toujours positive","Vérifie $|M|\\leq\\sqrt{L_1 L_2}$","Vaut $L_1+L_2$","Est nulle si les courants sont nuls"],r:1,e:"$|M|\\leq\\sqrt{L_1 L_2}$ avec égalité pour un couplage parfait ($k=1$). Le coefficient de couplage est $k=M/\\sqrt{L_1 L_2}\\in[-1,1]$."},
+  {q:"Pour un solénoïde long de $N$ spires, longueur $\\ell$, section $S$, l'inductance vaut :",a:["$L=\\mu_0 N^2 S/\\ell$","$L=\\mu_0 NS$","$L=\\mu_0 NS\\ell$","$L=\\mu_0 N/\\ell$"],r:0,e:"$L=\\mu_0\\dfrac{N^2}{\\ell}S=\\mu_0 n^2\\ell S$ où $n=N/\\ell$. C'est la formule du solénoïde infini, utilisée dès que $\\ell\\gg \\sqrt{S}$."},
+  {q:"Dans un circuit RL en régime établi, $i(t)=i_0+(I_f-i_0)(1-e^{-t/\\tau})$, où $\\tau=$ :",a:["$RL$","$L/R$","$R/L$","$1/(RL)$"],r:1,e:"$\\tau=L/R$ est la constante de temps. Plus $L$ est grand, plus la bobine résiste à la variation : montée plus lente."},
+  {q:"Un circuit RL est ouvert : $i$ passe brutalement à 0 en théorie. Que se passe-t-il en pratique ?",a:["Rien de spécial","Une étincelle ou surtension apparaît à cause de $-L\\dfrac{di}{dt}$ très grand","La bobine se charge","$i$ devient infini"],r:1,e:"$|di/dt|\\to\\infty$ donne une f.é.m. d'auto-induction très grande : étincelle, surtensions. C'est pourquoi on installe des diodes de roue libre en parallèle des bobines."},
+  {q:"La force de Laplace sur un élément $d\\vec{\\ell}$ parcouru par $i$ dans $\\vec{B}$ vaut :",a:["$d\\vec{F}=i\\,d\\vec{\\ell}\\times\\vec{B}$","$d\\vec{F}=i\\,\\vec{B}\\times d\\vec{\\ell}$","$d\\vec{F}=i\\,d\\vec{\\ell}\\cdot\\vec{B}$","$d\\vec{F}=qd\\vec{\\ell}$"],r:0,e:"$d\\vec{F}=i\\,d\\vec{\\ell}\\times\\vec{B}$. Pour un fil rectiligne uniforme : $\\vec{F}=i\\vec{L}\\times\\vec{B}$ avec $|\\vec{F}|=BIL\\sin\\theta$."},
+  {q:"Couplage électromécanique : un rail de Laplace - tige sur rails dans $\\vec{B}\\perp$. Si on lâche une tige, elle :",a:["Reste immobile","Accélère indéfiniment","Atteint une vitesse limite (équilibre Laplace ↔ poids)","Oscille"],r:2,e:"À vitesse $v$ : $e=BLv$, courant $i=e/R=BLv/R$, force de Laplace $F_L=BiL=B^2L^2v/R$ s'oppose au mouvement. Vitesse limite quand $F_L=mg\\sin\\alpha$."},
+  {q:"Dans un transformateur idéal de rapport $m=N_2/N_1$, la tension secondaire vaut :",a:["$U_2=mU_1$","$U_2=U_1/m$","$U_2=U_1$","$U_2=m^2 U_1$"],r:0,e:"$U_2/U_1=N_2/N_1=m$ et $I_2/I_1=N_1/N_2=1/m$ (conservation de la puissance : $U_1I_1=U_2I_2$ pour un transfo idéal)."},
+  {q:"Un transformateur idéal vu du primaire avec impédance $Z_2$ au secondaire présente :",a:["$Z_1=Z_2$","$Z_1=Z_2/m^2$","$Z_1=m^2 Z_2$","$Z_1=mZ_2$"],r:1,e:"L'impédance secondaire est ramenée au primaire avec un facteur $1/m^2$ : $Z_1=Z_2/m^2$ où $m=N_2/N_1$. Adaptation d'impédance par transformateur."},
+  {q:"Les courants de Foucault sont :",a:["Des courants induits dans les masses conductrices à $\\vec{B}$ variable","Des courants permanents","Des charges électrostatiques","Des courants dans les isolants"],r:0,e:"Foucault : tourbillons de courant induits dans les masses conductrices par $\\vec{B}$ variable. Effet : freinage (frein électromagnétique), échauffement (induction cooking, plaques laminées)."},
+  {q:"Pour réduire les pertes par courants de Foucault dans un noyau de transformateur, on utilise :",a:["Un noyau plein","Des tôles minces empilées et isolées","Du cuivre","Un aimant permanent"],r:1,e:"Les tôles minces ($e<\\delta$) limitent la longueur des boucles induites donc les pertes Joule. Cf. lamellage des noyaux ferromagnétiques."},
+  {q:"Le couplage électromécanique d'un haut-parleur : le bobinage mobile est plongé dans $\\vec{B}$. La force de Laplace est en :",a:["$\\propto i\\cdot B$","$\\propto i^2$","$\\propto B^2$","Constante"],r:0,e:"$F=BIL$ où $L$ est la longueur du bobinage. Force proportionnelle au courant : reproduit fidèlement le signal audio."},
+  {q:"Dans une dynamo (génératrice DC), la f.é.m. moyenne vaut :",a:["$E\\propto N\\cdot\\omega$","$E\\propto B/\\omega$","$E\\propto 1/N$","$E\\propto B^2$"],r:0,e:"$E=\\Phi N\\omega/(2\\pi)\\propto N\\Phi\\omega$. Plus on tourne vite ou plus le flux est grand, plus la tension est élevée."},
+  {q:"Une bobine d'inductance $L$ dans un circuit RLC série à la résonance :",a:["A une impédance maximale","Compense la capacité : $L\\omega=1/(C\\omega)$","Devient nulle","Disparaît"],r:1,e:"À la résonance $\\omega_0=1/\\sqrt{LC}$, $jL\\omega+1/(jC\\omega)=0$ : impédance totale $=R$ minimale, courant maximal."},
+  {q:"L'impédance complexe d'une bobine pure vaut :",a:["$\\underline{Z}=jL\\omega$","$\\underline{Z}=L\\omega$","$\\underline{Z}=1/(jL\\omega)$","$\\underline{Z}=L/\\omega$"],r:0,e:"$\\underline{Z}_L=jL\\omega$. Le courant est en retard de $\\pi/2$ sur la tension dans une bobine. Module : $|Z_L|=L\\omega$."},
+  {q:"L'énergie volumique magnétique vaut :",a:["$u_B=B^2/(2\\mu_0)$","$u_B=\\mu_0 B^2/2$","$u_B=B/\\mu_0$","$u_B=\\mu_0 B$"],r:0,e:"$u_B=B^2/(2\\mu_0)$. Pour une bobine, en intégrant $\\iiint u_B\\,dV$, on retrouve bien $W=\\dfrac{1}{2}LI^2$."},
+  {q:"Le couplage électromécanique total respecte :",a:["$P_\\text{élec}\\to P_\\text{méca}$ uniquement","$P_\\text{élec}+P_\\text{méca}=$ pertes par effet Joule","Conservation : $P_\\text{élec}=P_\\text{méca}$ (idéal)","Aucune relation"],r:2,e:"En idéal (sans pertes), la puissance électrique cédée vaut la puissance mécanique reçue (et vice versa). C'est le principe du moteur/génératrice."},
+  {q:"Dans le freinage par induction, la force est :",a:["$F\\propto v^2$","$F\\propto v$ (proportionnelle à la vitesse)","Constante","$F\\propto 1/v$"],r:1,e:"$F\\propto B^2L^2v/R$. Le freinage par induction est donc proportionnel à $v$, comme un frottement visqueux. Utilisé dans les TGV (frein à courants de Foucault)."},
+  {q:"Le moment magnétique d'une boucle de courant $I$, surface $S$, vaut :",a:["$\\vec{m}=I\\vec{S}$","$\\vec{m}=IS^2$","$\\vec{m}=I/S$","$\\vec{m}=IB$"],r:0,e:"$\\vec{m}=IS\\vec{n}$ où $\\vec{n}$ est la normale orientée par la convention de la main droite par rapport au sens de $I$. Unité : A·m²."},
+  {q:"Le couple sur un dipôle magnétique $\\vec{m}$ dans $\\vec{B}$ est :",a:["$\\vec{\\Gamma}=\\vec{m}\\times\\vec{B}$","$\\vec{\\Gamma}=\\vec{m}\\cdot\\vec{B}$","$\\vec{\\Gamma}=m^2 B$","$\\vec{\\Gamma}=\\vec{B}/\\vec{m}$"],r:0,e:"$\\vec{\\Gamma}=\\vec{m}\\times\\vec{B}$, qui tend à aligner $\\vec{m}$ sur $\\vec{B}$. Énergie potentielle : $E_p=-\\vec{m}\\cdot\\vec{B}$."},
+  {q:"Pour un moteur synchrone, le rotor tourne :",a:["Plus vite que le champ statorique","À la même vitesse que le champ statorique","Plus lentement (glissement)","Indépendamment du stator"],r:1,e:"Synchrone = même vitesse. Pour un moteur asynchrone (à induction), il existe un glissement $g=(\\omega_s-\\omega_r)/\\omega_s>0$ permettant l'induction dans le rotor."},
+  {q:"Spires de Helmholtz : deux bobines identiques séparées par leur rayon $R$. Au centre, $\\vec{B}$ est :",a:["Quasi-uniforme (gradient nul)","Maximum","Nul","Singulier"],r:0,e:"À mi-distance, $\\partial^2 B/\\partial z^2=0$ : champ très uniforme. Configuration utilisée pour créer des champs de référence en laboratoire."},
+  {q:"Dans une bobine torique de $N$ spires, rayon moyen $r$, courant $I$, le champ à l'intérieur vaut :",a:["$B=\\mu_0 NI$","$B=\\mu_0 NI/(2\\pi r)$","$B=\\mu_0 NI/r$","$B=0$"],r:1,e:"Théorème d'Ampère : $\\oint\\vec{B}\\cdot d\\vec{\\ell}=\\mu_0 NI$, soit $B\\cdot 2\\pi r=\\mu_0 NI$, donc $B=\\mu_0 NI/(2\\pi r)$. Dehors : $B=0$ (toutes les contributions s'annulent)."},
+  {q:"Un haut-parleur fonctionne par :",a:["Effet Hall","Force de Laplace sur un bobinage dans un champ $\\vec{B}$","Pression de radiation","Capacité variable"],r:1,e:"Haut-parleur : bobinage mobile alimenté par le signal audio, plongé dans le $\\vec{B}$ de l'aimant permanent. La force $F=BIL$ proportionnelle au signal fait osciller la membrane."},
+  {q:"Un microphone dynamique fonctionne par :",a:["Force de Laplace","Effet de masse","Induction (Lenz) : la membrane mobile fait varier $\\Phi$","Effet thermoélectrique"],r:2,e:"Le microphone dynamique est l'inverse du haut-parleur : la pression sonore fait vibrer la membrane (et le bobinage), $d\\Phi/dt$ génère une f.é.m. proportionnelle à la vitesse de la membrane."},
+  {q:"Dans un alternateur, la fréquence du courant produit dépend :",a:["De $B$","De $\\omega_\\text{rotor}$ et du nombre de pôles","Uniquement de la charge","Du courant maximum"],r:1,e:"$f=p\\cdot N/60$ avec $p$ paires de pôles et $N$ tr/min. En France, alternateurs 2 pôles à 3000 tr/min ⇒ 50 Hz."},
+  {q:"Théorème d'Ampère : $\\oint\\vec{B}\\cdot d\\vec{\\ell}=$",a:["$\\mu_0 I_\\text{enlacé}$","$I_\\text{enlacé}$","$\\dfrac{I_\\text{enlacé}}{\\mu_0}$","$\\mu_0 \\Phi$"],r:0,e:"$\\oint\\vec{B}\\cdot d\\vec{\\ell}=\\mu_0 I_\\text{enlacé}$ (régime permanent). En régime variable, ajout du courant de déplacement (Maxwell-Ampère)."},
+  {q:"Le flux propre à travers une bobine d'auto-inductance $L$ parcourue par $i$ vaut :",a:["$\\Phi=Li$","$\\Phi=L+i$","$\\Phi=L/i$","$\\Phi=Li^2$"],r:0,e:"$\\Phi_\\text{propre}=L\\cdot i$. C'est la définition de $L$. Pour deux circuits couplés : $\\Phi_1=L_1 i_1+M i_2$."},
+  {q:"Un transformateur ne fonctionne pas en courant continu parce que :",a:["Trop de pertes","Pas de variation de $\\Phi$ donc pas de f.é.m. induite","La bobine fond","C'est dangereux"],r:1,e:"En DC, $i$ constant donc $\\Phi$ constant et $d\\Phi/dt=0$ : aucune f.é.m. induite au secondaire. Le transformateur ne fonctionne qu'en AC ou en transitoire."},
+  {q:"Le rendement réel d'un transformateur de puissance industriel est typiquement de :",a:["50%","75%","95-99%","100%"],r:2,e:"Très haut rendement, jusqu'à 99% pour les gros transfos de transport (centaines de MVA). Pertes : Joule (cuivre) + Foucault et hystérésis (fer)."},
+  {q:"Pour un moteur DC à excitation séparée, la f.é.m. contre-électromotrice vaut :",a:["$E=K\\Phi\\omega$","$E=K\\omega^2$","$E=K/\\Phi$","$E=KI$"],r:0,e:"$E=K\\Phi\\omega$ (proportionnelle au flux d'excitation et à la vitesse). En régime permanent : $U=E+RI$, donc $\\omega=(U-RI)/(K\\Phi)$."},
+  {q:"Auto-induction d'un câble coaxial : entre les rayons $a$ et $b$ ($b>a$), inductance par unité de longueur :",a:["$\\dfrac{\\mu_0}{2\\pi}\\ln(b/a)$","$\\dfrac{\\mu_0}{2\\pi}(b-a)$","$\\dfrac{\\mu_0 ab}{2\\pi}$","$\\mu_0(b/a)$"],r:0,e:"$\\Lambda=\\dfrac{\\mu_0}{2\\pi}\\ln(b/a)$. C'est l'inductance linéique d'un câble coaxial, importante pour la propagation des signaux."},
+  {q:"Dans un circuit RL alimenté par $E$, à $t=0$ on ferme l'interrupteur. À $t=\\tau$ :",a:["$i=I_f$ (régime permanent atteint)","$i=I_f(1-e^{-1})\\approx 0{,}63\\,I_f$","$i=I_f/2$","$i=0$"],r:1,e:"À $t=\\tau=L/R$, le courant atteint 63% de sa valeur asymptotique. À $5\\tau$ : 99% (régime permanent quasi-atteint)."},
+  {q:"Une bobine supraconductrice :",a:["A une résistance nulle, donc $\\tau=L/R\\to\\infty$","Dissipe peu","Stocke du magnétisme permanent à condition de rester froide","Toutes les réponses précédentes"],r:3,e:"Supra : $R=0$ ⇒ courant peut circuler indéfiniment. Utilisé en IRM (champs très stables) et accélérateurs (pertes Joule nulles). Doit rester sous $T_c$."},
+  {q:"Une bobine d'inductance $L$ traversée par $i(t)=I_0\\cos(\\omega t)$. Tension à ses bornes :",a:["$u=L\\omega I_0\\sin(\\omega t)$","$u=-L\\omega I_0\\sin(\\omega t)$","$u=L\\omega I_0\\cos(\\omega t)$","$u=I_0\\cos(\\omega t)$"],r:1,e:"$u=L\\dfrac{di}{dt}=L\\omega I_0(-\\sin\\omega t)=-L\\omega I_0\\sin(\\omega t)$. La tension est en avance de $\\pi/2$ sur le courant."},
+  {q:"L'effet Hall apparaît quand :",a:["Un conducteur en mouvement coupe des lignes de $\\vec{B}$","Un conducteur parcouru par $\\vec{j}$ est plongé dans $\\vec{B}\\perp$","Un courant alternatif circule","Une bobine est inductive"],r:1,e:"Effet Hall : la force de Lorentz $q\\vec{v}\\times\\vec{B}$ sépare les charges, créant une tension transverse $V_H\\propto BI$. Sondes Hall pour mesurer $\\vec{B}$."},
+  {q:"L'inductance d'un solénoïde dépend principalement de :",a:["Sa longueur uniquement","$N^2$, sa section, et la perméabilité","Sa résistance","La tension appliquée"],r:1,e:"$L=\\mu N^2 S/\\ell$. Doubler $N$ quadruple $L$ ! L'utilisation d'un noyau ferromagnétique ($\\mu_r\\gg 1$) augmente énormément $L$."},
+  {q:"Le freinage électromagnétique transforme l'énergie :",a:["Mécanique en lumière","Mécanique en chaleur (effet Joule des courants induits)","Chaleur en mouvement","Magnétique en chimique"],r:1,e:"L'énergie cinétique est dissipée sous forme de chaleur via les courants induits ($P_J=Ri^2$). Frein doux, sans contact, sans usure."},
+  {q:"Un dipôle magnétique placé dans un champ non uniforme subit :",a:["Une force seulement","Un couple seulement","Force et couple","Aucune action"],r:2,e:"$\\vec{F}=\\nabla(\\vec{m}\\cdot\\vec{B})$ (force) et $\\vec{\\Gamma}=\\vec{m}\\times\\vec{B}$ (couple). En champ uniforme, seul le couple subsiste."},
+  {q:"Loi de Lenz illustrée : on approche un aimant Nord vers une spire fermée. Le courant induit :",a:["S'oppose au mouvement (la spire repousse l'aimant)","Aide le mouvement","Est nul","Est aléatoire"],r:0,e:"La face de la spire vue par l'aimant devient un pôle Nord (répulsion). Lenz : opposition à la cause (le mouvement). Travail mécanique fourni → énergie électromagnétique stockée + dissipée."},
+  {q:"L'équation de Maxwell-Faraday locale est :",a:["$\\nabla\\times\\vec{E}=-\\dfrac{\\partial\\vec{B}}{\\partial t}$","$\\nabla\\times\\vec{B}=\\dfrac{\\partial\\vec{E}}{\\partial t}$","$\\nabla\\cdot\\vec{E}=\\rho$","$\\nabla\\cdot\\vec{B}=0$"],r:0,e:"$\\nabla\\times\\vec{E}=-\\dfrac{\\partial\\vec{B}}{\\partial t}$. Forme locale de la loi de Faraday : un $\\vec{B}$ variable engendre un $\\vec{E}$ rotationnel."},
+  {q:"L'analogie pneumatique : une bobine est analogue à :",a:["Un ressort (capacité)","Une masse (inertie : résiste à la variation de courant)","Un robinet","Une roue"],r:1,e:"Bobine ↔ masse, condensateur ↔ ressort, résistance ↔ frottement visqueux. Une bobine résiste à la variation de courant comme une masse à la variation de vitesse."},
+  {q:"Stockage d'énergie par bobine supraconductrice (SMES) : ordre de grandeur typique :",a:["mJ","J","MJ à GJ (industriel)","TJ"],r:2,e:"Les SMES industriels stockent typiquement de quelques MJ à plusieurs GJ. Avantage : restitution rapide (puissance instantanée). Inconvénient : refroidissement cryogénique."},
+  {q:"Le couplage entre deux bobines est dit serré quand :",a:["$M\\approx 0$","$M\\approx\\sqrt{L_1 L_2}$ (coefficient $k\\to 1$)","$M=L_1+L_2$","$M$ est imaginaire"],r:1,e:"$k=M/\\sqrt{L_1 L_2}$ est proche de 1 pour un couplage serré (cas du transformateur idéal). En pratique : $k\\sim 0{,}99$ pour un transfo enroulé sur le même noyau."}
   ]
 },
-
-// ───────────────────────────────────────────
-// RELATIVITÉ RESTREINTE
-// ───────────────────────────────────────────
-rel_restreinte:{
-  label:"Relativité restreinte", subject:"pm", color:"var(--purple)",
+// ════════════════════════════════════
+// RELATIVITÉ RESTREINTE — 50 questions
+// ════════════════════════════════════
+rel_restreinte: {
+  subject:'pm', label:'Relativité restreinte', color:'var(--purple)',
   questions:[
-  {q:"Le principe de relativité galiléenne stipule que :",a:["Le temps est relatif à l'observateur","Les lois du mouvement sont les mêmes dans tous les référentiels galiléens","La vitesse de la lumière est constante","L'espace est courbé par la matière"],r:1,e:"Loi 1.1 : <em>« Les lois du mouvement sont les mêmes dans tous les référentiels galiléens. »</em> Newton : le temps est absolu mais le mouvement est relatif. Galilée l'avait établi en observant qu'aucune expérience mécanique ne distingue repos et MRU."},
-  {q:"Les transformations de Galilée entre R et R' (R' se déplaçant à vitesse v selon x) donnent :",a:["x'=x−vt, t'=t","x'=γ(x−vt), t'=γ(t−vx/c²)","x'=x+vt, t'=t","x'=x−vt, t'=t+vx/c²"],r:0,e:"Def. 1.1 : <span class='math'>x'=x−vt, y'=y, z'=z, t'=t</span>. Le temps est universel (absolu) en mécanique galiléenne. C'est incompatible avec l'invariance de c, ce que montre l'expérience de Morley."},
-  {q:"Le problème de la loi de composition des vitesses galiléenne avec Maxwell est que :",a:["Elle donne des vitesses négatives","Elle prédit que la vitesse de la lumière dépend du référentiel, contrairement à l'expérience","Elle n'est pas linéaire","Elle n'est valable que pour les solides"],r:1,e:"Si c est la vitesse de la lumière dans R, la composition galiléenne donnerait c' = c−v dans R'. Or les expériences de Fizeau, Morley et Alväger montrent que c est la même dans tous les référentiels galiléens — contradiction."},
-  {q:"Le facteur de Lorentz γ est défini par :",a:["γ = 1 − v²/c²","γ = √(1−v²/c²)","γ = 1/√(1−v²/c²)","γ = c/v"],r:2,e:"<span class='math'>γ = 1/√(1−v²/c²)</span>. Pour v ≪ c : γ ≈ 1 (limite galiléenne). Pour v → c : γ → +∞. Pour v > c, γ serait imaginaire — rien ne peut dépasser c."},
-  {q:"Les transformations de Lorentz (R' se déplaçant à v selon x) donnent :",a:["x'=γ(x+vt), ct'=γ(ct+vx/c)","x'=γ(x−vt/c·ct), ct'=γ(ct−v/c·x)","x'=x−vt, ct'=ct","x'=γ(x−v²t), ct'=γct"],r:1,e:"Def. 1.3 : <span class='math'>x' = γ(x − v/c · ct)</span> et <span class='math'>ct' = γ(ct − v/c · x)</span>. Elles mélangent l'espace et le temps, contrairement à Galilée. Pour v ≪ c, γ→1 et on retrouve Galilée."},
-  {q:"La dilatation des durées s'exprime par :",a:["T = T'/γ","T = γT'","T' = γT","T = T' + v/c²"],r:1,e:"<span class='math'>T = γT'</span> où T' est la durée propre (mesurée là où les deux événements ont lieu au même endroit). Comme γ > 1, T > T' : une horloge en mouvement semble ralentie vue d'un observateur au repos."},
-  {q:"La 'durée propre' d'un phénomène est :",a:["La plus longue durée mesurable","La durée mesurée dans le référentiel où les deux événements ont lieu au même endroit","La durée mesurée dans le référentiel du laboratoire","La durée divisée par γ"],r:1,e:"La durée propre T' est mesurée dans le référentiel où les deux événements sont au même point de l'espace. C'est la durée minimale — tout autre observateur mesure T = γT' ≥ T'."},
-  {q:"La contraction des longueurs s'exprime par :",a:["L = γL'","L = L'/γ","L' = L/γ","L = L'√(1−v/c)"],r:1,e:"<span class='math'>L = L'/γ</span> où L' est la longueur propre (mesurée dans le référentiel de l'objet). Comme γ ≥ 1, L ≤ L' : un objet en mouvement est plus court dans la direction du mouvement, vu d'un observateur au repos."},
-  {q:"La 'longueur propre' d'un objet est :",a:["La longueur maximale mesurable","La longueur mesurée dans le référentiel où l'objet est immobile","La longueur divisée par γ","La longueur mesurée dans le référentiel du laboratoire"],r:1,e:"La longueur propre L' est mesurée dans le référentiel où l'objet est au repos. C'est la longueur maximale. Tout observateur en mouvement relatif mesure L = L'/γ ≤ L'."},
-  {q:"La loi de composition des vitesses d'Einstein (u' vitesse dans R', R' se déplace à v dans R) donne :",a:["u = u' + v","u = (u' + v)/(1 + u'v/c²)","u = (u' + v)/(1 − u'v/c²)","u = γ(u' + v)"],r:1,e:"Def. 1.6 : <span class='math'>u = (u'+v)/(1+u'v/c²)</span>. Si u'=c : u = (c+v)/(1+v/c) = c. La vitesse de la lumière est bien invariante ! Pour u', v ≪ c, on retrouve la loi galiléenne u ≈ u'+v."},
-  {q:"Deux événements simultanés dans R (t₁=t₂) sont-ils simultanés dans R' ?",a:["Oui, toujours","Non, sauf s'ils sont au même point de l'espace","Oui, si les événements sont sur l'axe x","Non, jamais"],r:1,e:"Eq. 1.29 : <span class='math'>c(t'₂−t'₁) = −γv/c · (x₂−x₁)</span>. Deux événements simultanés dans R ne le sont dans R' que s'ils sont au même point spatial (x₁=x₂). La relativité de la simultanéité est une conséquence directe de l'invariance de c."},
-  {q:"L'intervalle d'espace-temps entre deux événements est défini par :",a:["Δs² = Δx² + c²Δt²","Δs² = c²Δt² − Δx²","Δs² = c²Δt² + Δx² + Δy² + Δz²","Δs² = Δx² − c²Δt²"],r:1,e:"Def. 1.7 : <span class='math'>Δs² = c²Δt² − Δx²</span> (en 1D). C'est l'invariant de Lorentz : Δs² a la même valeur dans tous les référentiels galiléens."},
-  {q:"Un intervalle est dit 'de genre temps' si :",a:["Δs² = 0","Δs² < 0","Δs² > 0","Δs² = ∞"],r:2,e:"Def. 1.8 : Δs² > 0 → genre temps. Les deux événements sont plus proches spatialement que temporellement : un voyageur sous-luminique peut assister aux deux. Tous les observateurs s'accordent sur leur chronologie → lien causal possible."},
-  {q:"Un intervalle est dit 'de genre espace' si :",a:["Δs² = 0","Δs² > 0","Δs² < 0","Δs² = 1"],r:2,e:"Def. 1.8 : Δs² < 0 → genre espace. Les événements sont plus séparés spatialement que temporellement. Aucun signal sous-luminique ne peut les relier. Certains observateurs peuvent ne pas s'accorder sur leur chronologie."},
-  {q:"Le temps propre Tp entre deux événements de genre temps est :",a:["Tp = Δs","Tp = Δs/c","Tp = c·Δs","Tp = Δs·c²"],r:1,e:"Def. 1.9 : <span class='math'>Tp = Δs/c</span> où Δs est l'intervalle d'espace-temps. C'est la durée mesurée dans le référentiel où les deux événements se produisent au même endroit. Grandeur universelle, identique pour tous les observateurs."},
-  {q:"Dans un diagramme de Minkowski, la ligne d'univers d'un objet au repos (dans R) est :",a:["Une droite horizontale","Une droite verticale (parallèle à l'axe ct)","Une courbe parabolique","Une droite à 45°"],r:1,e:"Un objet au repos dans R ne se déplace pas en espace mais avance dans le temps : sa ligne d'univers est une droite verticale (parallèle à l'axe Oct). La pente d'une ligne d'univers est c/v — infinie pour un objet au repos."},
-  {q:"Dans un diagramme de Minkowski, un rayon lumineux a une ligne d'univers à :",a:["0° par rapport à l'axe ct","90° par rapport à l'axe ct","45° par rapport à l'axe ct","Aucune direction particulière"],r:2,e:"Pour un photon : x = ct, donc ct = x → droite à 45° de l'axe des x (pente 1). La réunion des deux rayons lumineux (±x) forme le <strong>cône de lumière</strong>."},
-  {q:"Dans le paradoxe des jumeaux, qui vieillit le moins ?",a:["Bob, qui est resté sur Terre","Pat, qui a voyagé dans la fusée","Ils vieillissent pareil (symétrie)","Impossible à dire sans plus d'informations"],r:1,e:"Pat (le voyageur) vieillit moins : T_Pat = 2T/γ < T_Bob = 2T. La symétrie apparente est brisée car Pat a subi des accélérations (changement de vitesse au demi-tour), il n'est pas resté dans un référentiel galiléen."},
-  {q:"Pour v = 0,6c, le facteur γ vaut :",a:["γ = 0,8","γ = 1,25","γ = 1,5","γ = 2"],r:1,e:"<span class='math'>γ = 1/√(1−0,36) = 1/√0,64 = 1/0,8 = 1,25</span>. Une horloge voyageant à 0,6c s'écoule 1,25 fois plus lentement vue d'un observateur au repos."},
-  {q:"Les muons atmosphériques atteignent le sol malgré leur courte durée de vie (τ'=2,2 μs) grâce à :",a:["La contraction des longueurs uniquement","La dilatation des durées (dans le référentiel terrestre, leur durée de vie est γτ')","Un effet quantique","La relativité galiléenne"],r:1,e:"Dans le référentiel de la Terre, la durée de vie des muons est <span class='math'>τ = γτ' ≈ 7×2,2 μs ≈ 15 μs</span> pour v = 0,99c. Ils parcourent ainsi vτ ≈ 4,5 km avant de se désintégrer — suffisant pour atteindre le sol."},
-  {q:"Dans un diagramme de Minkowski, l'axe Oct' d'un référentiel R' (v > 0) est :",a:["Confondu avec Oct","Incliné vers la gauche par rapport à Oct","Incliné vers la droite par rapport à Oct (même côté que x')","Horizontal"],r:2,e:"L'axe Oct' correspond à x'=0, c'est-à-dire x = vt, soit ct = (c/v)x. Pour v > 0 et v < c, la pente c/v > 1 : l'axe Oct' est incliné à droite de Oct. Les axes x' et ct' sont symétriques par rapport à la diagonale des rayons lumineux."},
-  {q:"L'accélération est-elle absolue ou relative en mécanique galiléenne ?",a:["Relative (dépend du référentiel)","Absolue (même valeur dans tous les référentiels galiléens)","Nulle dans tout référentiel galiléen","Dépend de la masse de l'objet"],r:1,e:"En mécanique galiléenne, la loi de composition des vitesses u' = u − v donne par dérivation a' = a (même accélération). L'accélération est <strong>absolue</strong> : c'est la base du principe de relativité galiléenne."},
-  {q:"Pourquoi ne perçoit-on pas la relativité de la simultanéité dans la vie courante ?",a:["Parce que nous sommes toujours dans le même référentiel","Parce que γv/c est extrêmement petit pour les vitesses usuelles","Parce que la relativité ne s'applique qu'aux photons","Parce que nos horloges ne sont pas assez précises"],r:1,e:"Pour v = 80 km/h, γv/c ≈ 7×10⁻⁸. Il faudrait des événements séparés d'une année-lumière pour observer un décalage temporel de l'ordre de la milliseconde. Nos vitesses quotidiennes sont ridiculement petites devant c."},
-  {q:"Un intervalle de genre lumière (Δs²=0) signifie que :",a:["Les deux événements coïncident dans l'espace-temps","Les deux événements peuvent être reliés par un signal lumineux","Les deux événements sont simultanés dans tous les référentiels","L'intervalle est infini"],r:1,e:"Δs² = 0 ↔ c²Δt² = Δx² ↔ |Δx/Δt| = c. Seul un signal lumineux peut relier les deux événements. C'est le cas du signal laser Terre → Lune : la distance L = cT, donc Δs² = c²T² − L² = 0."},
-  {q:"La transformation inverse de Lorentz (de R' vers R) s'obtient en :",a:["Divisant par γ","Effectuant la substitution v → −v dans la matrice Λ","Inversant x et t","Multipliant ct par −1"],r:1,e:"Def. 1.4 : L'inverse Λ⁻¹ s'obtient en remplaçant v par −v dans Λ. Physiquement : si R' se déplace à +v par rapport à R, alors R se déplace à −v par rapport à R'. On obtient <span class='math'>x = γ(x'+vt'), ct = γ(ct'+vx'/c)</span>."}
+  {q:"Premier postulat d'Einstein (1905) :",a:["Le temps est absolu","Les lois de la physique ont la même forme dans tous les référentiels d'inertie","La vitesse de la lumière dépend de la source","La masse dépend du référentiel"],r:1,e:"Principe de relativité restreinte : invariance des lois physiques par changement de référentiel galiléen. Étend Galilée à l'électromagnétisme (et toute la physique)."},
+  {q:"Deuxième postulat d'Einstein :",a:["$c$ vaut $3\\times 10^8$ m/s","La vitesse de la lumière dans le vide est la même dans tous les référentiels d'inertie","La masse est conservée","L'énergie est conservée"],r:1,e:"$c$ est invariante : indépendante du mouvement de la source ou de l'observateur. C'est la rupture radicale avec la mécanique galiléenne."},
+  {q:"Le facteur de Lorentz vaut :",a:["$\\gamma=1/\\sqrt{1-v^2/c^2}$","$\\gamma=\\sqrt{1-v^2/c^2}$","$\\gamma=1+v/c$","$\\gamma=v/c$"],r:0,e:"$\\gamma=\\dfrac{1}{\\sqrt{1-v^2/c^2}}=\\dfrac{1}{\\sqrt{1-\\beta^2)}}\\geq 1$ avec $\\beta=v/c$. À $v\\ll c$, $\\gamma\\approx 1$. Tend vers $\\infty$ quand $v\\to c$."},
+  {q:"Transformation de Lorentz pour le temps (passage de $\\mathcal{R}$ à $\\mathcal{R}'$ se déplaçant à $v\\vec{u}_x$) :",a:["$t'=\\gamma(t-vx/c^2)$","$t'=t$","$t'=\\gamma t$","$t'=t-vx$"],r:0,e:"$t'=\\gamma(t-vx/c^2)$. Le temps n'est plus absolu : il dépend de la position $x$ ! C'est l'un des plus grands chocs conceptuels de la relativité."},
+  {q:"Transformation de Lorentz pour la position $x$ :",a:["$x'=x-vt$","$x'=\\gamma(x-vt)$","$x'=x/\\gamma$","$x'=x$"],r:1,e:"$x'=\\gamma(x-vt)$. À basse vitesse, $\\gamma\\to 1$, on retrouve la transformation de Galilée $x'=x-vt$."},
+  {q:"Transformations transverses entre référentiels en MRU le long de $\\vec{u}_x$ :",a:["$y'=\\gamma y$, $z'=\\gamma z$","$y'=y$, $z'=z$","$y'=y/\\gamma$, $z'=z/\\gamma$","Toutes les coordonnées changent"],r:1,e:"Les coordonnées perpendiculaires au mouvement sont inchangées : $y'=y, z'=z$. Seules les coordonnées longitudinales et le temps subissent la transformation."},
+  {q:"La dilatation du temps : un événement de durée propre $\\Delta\\tau$ dans $\\mathcal{R}'$ apparaît dans $\\mathcal{R}$ comme :",a:["$\\Delta t=\\Delta\\tau$","$\\Delta t=\\gamma\\Delta\\tau$","$\\Delta t=\\Delta\\tau/\\gamma$","$\\Delta t=\\Delta\\tau-v$"],r:1,e:"$\\Delta t=\\gamma\\Delta\\tau\\geq\\Delta\\tau$. Le temps propre est le plus court : tout horloge en mouvement bat plus lentement (vue depuis $\\mathcal{R}$)."},
+  {q:"La contraction des longueurs : longueur propre $L_0$ dans $\\mathcal{R}'$ vue depuis $\\mathcal{R}$ :",a:["$L=L_0$","$L=\\gamma L_0$","$L=L_0/\\gamma$","$L=L_0\\sqrt{1+v^2/c^2}$"],r:2,e:"$L=L_0/\\gamma\\leq L_0$. La longueur propre est la plus grande : la longueur dans le sens du mouvement se contracte."},
+  {q:"À $v=0{,}6c$, le facteur de Lorentz vaut :",a:["$\\gamma=1$","$\\gamma=1{,}25$","$\\gamma=1{,}5$","$\\gamma=2$"],r:1,e:"$\\gamma=1/\\sqrt{1-0{,}36}=1/\\sqrt{0{,}64}=1/0{,}8=1{,}25$. À $0{,}8c$ : $\\gamma=5/3$. À $0{,}99c$ : $\\gamma\\approx 7{,}1$."},
+  {q:"Le temps propre $\\tau$ d'une particule est :",a:["Le temps mesuré par une horloge fixe","Le temps lu par une horloge liée à la particule","Toujours nul","Le temps des photons"],r:1,e:"Temps propre = temps dans le référentiel de la particule. Toujours le minimum. Pour les photons : $\\tau=0$ (ils 'voient' un univers contracté à zéro)."},
+  {q:"L'intervalle d'espace-temps $ds^2$ vaut :",a:["$ds^2=c^2 dt^2+dx^2$","$ds^2=c^2 dt^2-dx^2-dy^2-dz^2$","$ds^2=dx^2+dy^2+dz^2$","$ds^2=dt^2$"],r:1,e:"$ds^2=c^2dt^2-d\\vec{r}^{\\,2}$. C'est l'invariant relativiste : sa valeur ne dépend pas du référentiel inertiel choisi."},
+  {q:"Un intervalle $ds^2>0$ est dit :",a:["Du genre temps","Du genre espace","Du genre lumière","Indéfini"],r:0,e:"$ds^2>0$ : genre temps (deux événements peuvent être reliés causalement par une particule massive). $ds^2<0$ : genre espace (séparés sans lien causal). $ds^2=0$ : genre lumière."},
+  {q:"Composition relativiste des vitesses (collinéaires) : $u'=$",a:["$u-v$","$\\dfrac{u-v}{1-uv/c^2}$","$\\dfrac{u-v}{1+uv/c^2}$","$\\sqrt{u^2-v^2}$"],r:1,e:"$u'=\\dfrac{u-v}{1-uv/c^2}$. Si $u=c$, alors $u'=c$ : la vitesse de la lumière est invariante (vérification cohérente avec le 2ᵉ postulat)."},
+  {q:"Deux fusées vont l'une vers l'autre à $0{,}8c$ chacune dans $\\mathcal{R}$. Vitesse relative ?",a:["$1{,}6c$","$0{,}8c$","$\\dfrac{0{,}8+0{,}8}{1+0{,}64}c\\approx 0{,}976c$","$c$"],r:2,e:"$u'=(0{,}8c+0{,}8c)/(1+0{,}64)=1{,}6c/1{,}64\\approx 0{,}976c$. Toujours $<c$ ! La somme classique $1{,}6c$ est interdite."},
+  {q:"L'énergie totale relativiste vaut :",a:["$E=mc^2$ (pour particule au repos)","$E=\\gamma mc^2$","$E=\\dfrac{1}{2}mv^2$","$E=mc$"],r:1,e:"$E=\\gamma mc^2$. À $v=0$ : $E_0=mc^2$ (énergie au repos). $E_c=E-E_0=(\\gamma-1)mc^2$ : énergie cinétique."},
+  {q:"L'impulsion relativiste s'écrit :",a:["$\\vec{p}=m\\vec{v}$","$\\vec{p}=\\gamma m\\vec{v}$","$\\vec{p}=mc^2$","$\\vec{p}=\\gamma\\vec{v}/c$"],r:1,e:"$\\vec{p}=\\gamma m\\vec{v}$. À basse vitesse, $\\gamma\\approx 1$, on retrouve $\\vec{p}=m\\vec{v}$. Tend vers $\\infty$ quand $v\\to c$."},
+  {q:"Relation énergie-impulsion :",a:["$E^2=p^2c^2+m^2c^4$","$E=pc$","$E=p^2/(2m)$","$E^2=p^2c^2-m^2c^4$"],r:0,e:"$E^2=p^2c^2+m^2c^4$. Pour le photon ($m=0$) : $E=pc$. Pour une particule au repos : $E=mc^2$. Cette relation est invariante."},
+  {q:"Un photon a $m=0$ et énergie $E$. Son impulsion vaut :",a:["$p=mc=0$","$p=E/c$","$p=Ec$","$p=E/c^2$"],r:1,e:"$E^2=p^2c^2+0$ donne $p=E/c$. Avec $E=h\\nu$ : $p=h/\\lambda$. C'est aussi la relation de De Broglie pour le photon."},
+  {q:"Énergie cinétique relativiste :",a:["$E_c=\\dfrac{1}{2}mv^2$","$E_c=(\\gamma-1)mc^2$","$E_c=\\gamma mc^2$","$E_c=mc^2$"],r:1,e:"$E_c=(\\gamma-1)mc^2$. À basse vitesse : $\\gamma\\approx 1+v^2/(2c^2)$, donc $E_c\\approx \\dfrac{1}{2}mv^2$ (limite classique)."},
+  {q:"Le quadrivecteur impulsion-énergie vaut :",a:["$P^\\mu=(E,\\vec{p})$","$P^\\mu=(E/c,\\vec{p})$","$P^\\mu=(\\vec{p},E)$","$P^\\mu=(m,\\vec{v})$"],r:1,e:"$P^\\mu=(E/c,\\vec{p})$ ou $(E,c\\vec{p})$ selon convention. Sa pseudo-norme vaut $E^2/c^2-p^2=m^2c^2$ : invariant relativiste."},
+  {q:"Effet Doppler relativiste longitudinal (source s'éloignant à $v$) :",a:["$\\nu'=\\nu\\sqrt{\\dfrac{1-\\beta}{1+\\beta}}$","$\\nu'=\\nu(1-\\beta)$","$\\nu'=\\nu\\gamma$","$\\nu'=\\nu/\\beta$"],r:0,e:"Source qui s'éloigne ($v>0$) : $\\nu'<\\nu$ (red-shift). C'est l'origine du décalage vers le rouge des galaxies lointaines (cosmologie)."},
+  {q:"Le paradoxe des jumeaux : un jumeau voyage à grande $v$, revient. Au retour :",a:["Ils ont le même âge","Le voyageur est plus jeune","Le sédentaire est plus jeune","Indéterminé"],r:1,e:"Le voyageur est plus jeune ! Pas de paradoxe : il a subi des accélérations (départ, demi-tour, arrivée), donc sa ligne d'univers n'est pas inertielle. La symétrie est brisée."},
+  {q:"Les muons cosmiques $\\mu^-$ ont $\\tau_0\\approx 2{,}2$ μs au repos. Pourquoi atteignent-ils le sol depuis 15 km d'altitude ?",a:["Ils vont à $c$","La dilatation du temps : $\\tau$ apparent $=\\gamma\\tau_0$","La gravité","Hasard"],r:1,e:"À $v\\approx 0{,}995c$, $\\gamma\\approx 10$ : durée de vie effective $\\sim 22$ μs au lieu de 2,2. Permet de parcourir $\\sim 6{,}6$ km, suffisant compte tenu de la statistique."},
+  {q:"Un photon ne possède pas de référentiel propre car :",a:["Il n'a pas de masse","Au cas limite, $\\gamma$ diverge et le 'temps propre' n'a pas de sens","Il est invisible","Il se meut"],r:1,e:"À $v=c$ : $\\gamma\\to\\infty$, $d\\tau=ds/c=0$. Aucun référentiel galiléen n'a la vitesse exacte $c$. La notion de temps propre n'existe pas pour le photon."},
+  {q:"Dans un diagramme d'espace-temps de Minkowski, le cône de lumière :",a:["Sépare passé/futur causalement accessibles du reste","N'a aucune signification","Est l'horizon des événements","Tourne avec le mouvement"],r:0,e:"Cône de lumière : ensemble des événements joignables à la vitesse de la lumière. À l'intérieur : reliable causalement. Hors cône : aucun lien causal possible."},
+  {q:"La causalité relativiste impose que :",a:["Aucun signal ne dépasse $c$","$v$ peut excéder $c$ pour les particules sans masse","$E$ est conservée","$m$ est invariante"],r:0,e:"Aucune information/signal physique ne peut dépasser $c$ dans le vide. Les vitesses 'apparentes' supérieures (faisceaux laser balayants) ne transportent pas d'information."},
+  {q:"L'invariant masse-énergie : pour un système isolé, ce qui est conservé c'est :",a:["La masse au repos seulement","L'énergie totale et l'impulsion (séparément)","La somme $m+E$","Aucune des trois"],r:1,e:"$E$ et $\\vec{p}$ sont conservés indépendamment. La masse au repos d'un système peut diminuer (énergie de liaison nucléaire, défaut de masse $\\Delta m=\\Delta E/c^2$)."},
+  {q:"La célèbre formule $E_0=mc^2$ s'interprète comme :",a:["Une équivalence masse-énergie","Une formule cinétique","La quantité de matière","Le débit lumineux"],r:0,e:"L'énergie au repos d'un objet de masse $m$ vaut $mc^2$. Conséquence : la masse peut être convertie en énergie (fission, fusion, annihilation) et vice versa."},
+  {q:"Conservation des quadrivecteurs : dans une collision élastique, ce qui se conserve est :",a:["L'énergie cinétique seule","$\\sum P^\\mu$ (énergie et impulsion)","Le moment cinétique uniquement","La masse propre individuelle"],r:1,e:"$\\sum P^\\mu_\\text{avant}=\\sum P^\\mu_\\text{après}$. Quatre équations : conservation de l'énergie + 3 composantes de l'impulsion."},
+  {q:"Annihilation $e^++e^-\\to 2\\gamma$ au repos. L'énergie de chaque photon vaut :",a:["$m_e c^2$","$2m_e c^2$","$0$","$m_e c$"],r:0,e:"Conservation de $E$ : $2m_e c^2$ partagés entre 2 photons d'égale énergie (par symétrie d'impulsion) : $E_\\gamma=m_e c^2\\approx 511$ keV chacun (rayon γ de la PET)."},
+  {q:"Une particule de masse $m$ accélérée à $v\\to c$ nécessite une énergie :",a:["Finie","Infinie","Négative","Nulle"],r:1,e:"$E=\\gamma mc^2$ et $\\gamma\\to\\infty$ quand $v\\to c$ : énergie infinie nécessaire. C'est pourquoi aucune particule massive n'atteint $c$."},
+  {q:"Au LHC, des protons sont accélérés à $E\\approx 7$ TeV. Sachant $m_p c^2\\approx 938$ MeV, $\\gamma\\approx$ :",a:["$\\sim 100$","$\\sim 7500$","$\\sim 10^6$","$\\sim 1$"],r:1,e:"$\\gamma=E/(mc^2)=7\\times 10^3/0{,}938\\approx 7460$. À ce $\\gamma$, $v/c\\approx 1-\\dfrac{1}{2\\gamma^2}\\approx 0{,}99999999$."},
+  {q:"Dans la transformation de Lorentz, le quadrivecteur position est :",a:["$X^\\mu=(ct,\\vec{r})$","$X^\\mu=(t,\\vec{r})$","$X^\\mu=(\\vec{r},t)$","$X^\\mu=(c,\\vec{r})$"],r:0,e:"$X^\\mu=(ct,\\vec{r})$. Le facteur $c$ pour rendre toutes les composantes de même dimension (longueur). Norme : $X^\\mu X_\\mu=c^2t^2-r^2$."},
+  {q:"L'aberration relativiste (changement de direction angulaire de la lumière) provient :",a:["De la gravité","Du mouvement de l'observateur (changement d'angles entre référentiels)","De l'effet Doppler","De la dilatation du temps"],r:1,e:"Aberration : un photon arrivant sous un angle $\\theta$ dans $\\mathcal{R}$ arrive sous $\\theta'\\neq\\theta$ dans $\\mathcal{R}'$. Effet déjà connu en optique classique (Bradley), corrigé en relativité."},
+  {q:"Pour des vitesses $v\\ll c$, les transformations de Lorentz redonnent :",a:["Galilée","Toujours Lorentz","Quantique","Relativité générale"],r:0,e:"À l'ordre 0 en $v/c$ : $\\gamma\\to 1$, et on retrouve $x'=x-vt$, $t'=t$ (Galilée). La relativité restreinte contient la mécanique galiléenne comme cas limite."},
+  {q:"Le temps propre pour un objet immobile dans son référentiel s'écrit :",a:["$d\\tau=dt$","$d\\tau=ds/c$","$d\\tau=\\gamma dt$","$d\\tau=0$"],r:1,e:"$d\\tau=ds/c=dt\\sqrt{1-v^2/c^2}=dt/\\gamma$. Pour la particule au repos dans son ref. : $v=0$, $\\gamma=1$, $d\\tau=dt$."},
+  {q:"L'intervalle est invariant : $ds^2$ a la même valeur dans :",a:["Un seul référentiel","Tous les référentiels d'inertie","Aucun","Seulement à basse vitesse"],r:1,e:"$ds^2$ est l'invariant fondamental de la relativité restreinte. C'est l'analogue du module $\\|\\vec{r}\\|^2$ en géométrie euclidienne, mais en signature $(+,-,-,-)$."},
+  {q:"Effet Doppler transverse (mouvement perpendiculaire à la ligne de vue) :",a:["$\\nu'=\\nu$","$\\nu'=\\nu/\\gamma$ (red-shift pur dû à la dilatation)","$\\nu'=\\gamma\\nu$","$\\nu'=2\\nu$"],r:1,e:"Effet purement relativiste, sans contrepartie classique : $\\nu'=\\nu/\\gamma$. Mesuré sur les jets relativistes, confirme la dilatation du temps."},
+  {q:"La force de Lorentz est :",a:["Invariante par changement de référentiel","Donne lieu à $\\vec{E}$ et $\\vec{B}$ qui se mélangent par changement de référentiel","Toujours nulle à grande $v$","Indépendante de $\\vec{v}$"],r:1,e:"$\\vec{E}$ et $\\vec{B}$ sont les composantes d'un même tenseur $F^{\\mu\\nu}$. Pour un observateur en mouvement, un $\\vec{E}$ pur peut apparaître mêlé à un $\\vec{B}$ et vice versa."},
+  {q:"En relativité, $E^2=p^2c^2+m^2c^4$. Pour un système, $m_\\text{système}c^2=E_\\text{tot}-?$",a:["$m_\\text{système}c^2$ inclut l'énergie de liaison","$m_\\text{système}=\\sum m_i$ toujours","Il n'y a pas de masse système","$m_\\text{système}=0$"],r:0,e:"La masse d'un système composite ($m_\\text{sys}c^2=\\sqrt{E^2-p^2c^2}$) inclut l'énergie de liaison : $m_\\text{sys}<\\sum m_i$ pour un système lié (défaut de masse). Source de l'énergie nucléaire."},
+  {q:"Une horloge en orbite GPS subit (à $v\\sim 4$ km/s) :",a:["Aucune correction","Une dilatation relativiste à corriger pour la précision GPS","Du temps qui s'écoule plus vite","Rien d'observable"],r:1,e:"Effet relativiste restreint (moins) + relativité générale (plus, à cause de l'altitude) : sans correction, GPS dérive de $\\sim 38$ μs/jour, soit $\\sim 10$ km de positionnement."},
+  {q:"Une fusée de longueur propre 100 m passe devant un observateur à $0{,}8c$. Longueur observée ?",a:["100 m","60 m","80 m","125 m"],r:1,e:"$\\gamma=1{,}667$, $L=L_0/\\gamma=100/1{,}667=60$ m. La contraction des longueurs ne concerne que la direction du mouvement."},
+  {q:"Effet Compton : un photon de longueur d'onde $\\lambda$ diffuse sur un électron au repos. La longueur d'onde diffusée :",a:["Reste $\\lambda$","Augmente : $\\lambda'-\\lambda=\\dfrac{h}{m_e c}(1-\\cos\\theta)$","Diminue","Devient nulle"],r:1,e:"$\\Delta\\lambda=\\lambda_C(1-\\cos\\theta)$ avec $\\lambda_C=h/(m_e c)\\approx 2{,}4$ pm (longueur d'onde Compton). Confirme la nature corpusculaire du photon."},
+  {q:"Loi de transformation des champs : $E_\\parallel'=$",a:["$E_\\parallel$","$\\gamma E_\\parallel$","$E_\\parallel/\\gamma$","$0$"],r:0,e:"La composante de $\\vec{E}$ parallèle à $\\vec{v}$ est invariante : $E_\\parallel'=E_\\parallel$. Les composantes transverses se mélangent à $\\vec{B}$ : $\\vec{E}'_\\perp=\\gamma(\\vec{E}+\\vec{v}\\times\\vec{B})_\\perp$."},
+  {q:"Au LHC, deux protons à $\\gamma\\sim 7000$ entrent en collision. L'énergie disponible dans le centre de masse vaut :",a:["$2\\gamma m_p c^2$","$\\gamma m_p c^2$","$2m_p c^2$","$\\gamma^2 m_p c^2$"],r:0,e:"Pour collision frontale symétrique : $E_\\text{cm}=2E=2\\gamma m_p c^2\\approx 14$ TeV au LHC. Cible fixe au lieu de collisionneur : $E_\\text{cm}\\propto\\sqrt{E}$ (beaucoup moins efficace)."},
+  {q:"L'antimatière dans le formalisme relativiste :",a:["A une masse négative","A la même masse que la matière, charge opposée","N'existe pas","Voyage à $c$"],r:1,e:"Antiparticules (Dirac, 1928) : même masse, charges opposées (charge électrique, baryonique, leptonique...). $e^+$ a $m=m_e$ mais $q=+e$."},
+  {q:"L'invariant $ds^2$ d'un photon vaut :",a:["$+c^2dt^2$","$-c^2dt^2$","$0$","$dt$"],r:2,e:"Pour la lumière : $ds^2=c^2dt^2-dr^2=c^2dt^2-c^2dt^2=0$ (genre lumière). Sur la ligne d'univers d'un photon, le temps propre est nul."},
+  {q:"Un photon a $m=0$, énergie $E=h\\nu$. Quelle est la 'masse équivalente' selon $E=mc^2$ ?",a:["$0$ (la masse au repos est nulle)","$h\\nu/c^2$","$h\\nu$","$c^2$"],r:1,e:"La masse au repos est nulle. La 'masse relativiste' (concept dépassé) serait $m_\\text{rel}=E/c^2=h\\nu/c^2$, non utilisé en physique moderne. Préférer $E$ et $\\vec{p}$."},
+  {q:"L'expérience de Michelson-Morley (1887) a montré que :",a:["L'éther existe","Il n'y a pas de mouvement par rapport à un éther : $c$ est invariante","La Terre est immobile","La lumière voyage instantanément"],r:1,e:"Michelson-Morley : aucun décalage interférométrique détecté entre les deux directions perpendiculaires. $c$ est la même partout, indépendamment de la rotation terrestre. Étape clé vers la relativité restreinte."},
+  {q:"Si je voyage à $0{,}99c$ vers une étoile à 4 années-lumière, mon temps propre vaut :",a:["$4$ ans","$\\sim 4{,}04$ ans","$\\sim 0{,}57$ an (≈ 7 mois)","$\\sim 0$"],r:2,e:"$\\gamma=1/\\sqrt{1-0{,}99^2}\\approx 7{,}09$. Distance perçue : $4/\\gamma\\approx 0{,}56$ AL. Temps mis (à $\\sim c$) : $0{,}56$ an. Pour un observateur fixe : $\\sim 4{,}04$ ans."}
   ]
 },
-
-// ───────────────────────────────────────────
-// MÉCANIQUE QUANTIQUE
-// ───────────────────────────────────────────
-meca_quant:{
-  label:"Mécanique quantique", subject:"pm", color:"var(--green)",
+// ════════════════════════════════════
+// MÉCANIQUE QUANTIQUE — 50 questions
+// ════════════════════════════════════
+meca_quant: {
+  subject:'pm', label:'Mécanique quantique', color:'var(--green)',
   questions:[
-  {q:"La 'catastrophe ultraviolette' désigne :",a:["L'explosion de l'énergie totale prédite par la loi de Rayleigh-Jeans pour hautes fréquences","La destruction du corps noir par les UV","L'absorption totale des UV par l'atmosphère","La divergence de la loi de Planck"],r:0,e:"La loi de Rayleigh-Jeans (physique classique) : u(ν,T) ∝ Tν². Elle diverge pour ν → ∞, donnant une énergie totale infinie. Ce résultat absurde, la 'catastrophe ultraviolette', pointait vers les limites de la physique classique."},
-  {q:"La loi de Planck introduit l'hypothèse que :",a:["L'énergie est continue et peut prendre toute valeur","L'énergie est échangée en 'paquets' multiples entiers de hν","La lumière est uniquement une onde","La température est quantifiée"],r:1,e:"Planck (1900) : l'énergie d'un oscillateur de fréquence ν n'est échangée qu'en multiples entiers de <span class='math'>hν</span> (quanta). Cela résout la catastrophe UV : les hautes fréquences ne peuvent être excitées que si l'énergie thermique kT ≫ hν."},
-  {q:"L'énergie d'un photon de fréquence ν est :",a:["E = hν²","E = hν","E = h/ν","E = ν/h"],r:1,e:"<span class='math'>E = hν = ℏω</span> avec h ≈ 6,626×10⁻³⁴ J·s et ℏ = h/(2π). C'est la relation d'Einstein (1905) qui introduit le photon comme quantum de lumière et permet d'expliquer l'effet photoélectrique."},
-  {q:"La quantité de mouvement d'un photon est :",a:["p = h/λ = ℏk","p = hλ","p = hν/c²","p = mc"],r:0,e:"<span class='math'>p = h/λ = ℏk</span> où k = 2π/λ est le nombre d'onde. Un photon, bien que de masse nulle, possède une quantité de mouvement. C'est elle qui permet d'expliquer l'effet photoélectrique (collision photon-électron)."},
-  {q:"L'hypothèse de De Broglie (1923) propose que :",a:["Seule la lumière présente une dualité onde-corpuscule","Toute particule matérielle de quantité de mouvement p est associée à une longueur d'onde λ = h/p","Les électrons sont des ondes pures","La matière n'a pas de propriétés ondulatoires"],r:1,e:"Loi 2.1 : <span class='math'>k⃗ = p⃗/ℏ</span> soit <span class='math'>λ = h/p</span>. Si la lumière peut se comporter comme des particules (photons), la matière peut se comporter comme des ondes. Confirmé par l'expérience des fentes de Young avec des électrons."},
-  {q:"Dans l'expérience des fentes de Young avec des électrons envoyés un par un, on observe :",a:["Deux bandes d'impact correspondant aux deux fentes","Aucune figure car les électrons se comportent comme des particules","Une figure d'interférences se formant impact après impact","Un impact aléatoire sans structure"],r:2,e:"Même envoyé un par un, chaque électron contribue à construire la figure d'interférences ! Cela prouve que c'est bien la <strong>fonction d'onde individuelle</strong> qui interfère avec elle-même — et non l'interaction entre électrons."},
-  {q:"Lorsqu'on installe un détecteur pour savoir par quelle fente passe l'électron, la figure d'interférences :",a:["Reste identique","Disparaît — on observe une diffraction simple","Se dédouble","Est amplifiée"],r:1,e:"L'acte de mesure (déterminer par quelle fente passe l'électron) détruit la superposition : les interférences disparaissent. C'est la <strong>réduction de la fonction d'onde</strong> : la mesure affecte irrémédiablement le système."},
-  {q:"Le premier postulat de la mécanique quantique stipule que :",a:["L'énergie d'une particule est toujours discrète","L'état d'une particule est décrit par une fonction d'onde ψ(x,t) à valeurs complexes","La position d'une particule est toujours connue précisément","La particule suit une trajectoire déterminée"],r:1,e:"Loi 2.2 : L'état d'une particule est décrit par une <strong>fonction d'onde ψ(x,t)</strong>, un nombre complexe associé à chaque position et instant. La physique quantique est fondamentalement probabiliste — |ψ|² donne la densité de probabilité."},
-  {q:"L'interprétation de Born de la fonction d'onde stipule que :",a:["ψ(x,t) est directement la densité de charge","|ψ(x,t)|² dx est la probabilité de trouver la particule entre x et x+dx","ψ(x,t) est la position de la particule","|ψ(x,t)| est l'énergie de la particule"],r:1,e:"<span class='math'>dP(x,t) = |ψ(x,t)|² dx</span>. Le module carré de la fonction d'onde est une densité de probabilité de présence. C'est l'interprétation statistique de Born (1926)."},
-  {q:"La condition de normalisation de la fonction d'onde est :",a:["∫|ψ|dx = 1","∫|ψ|²dx = 1 (sur tout l'espace)","∫ψ dx = 1","ψ(0) = 1"],r:1,e:"<span class='math'>∫₋∞^{+∞} |ψ(x,t)|² dx = 1</span>. La particule étant quelque part dans l'espace, la probabilité totale de présence doit être 1. Cette contrainte fixe le module de la constante de normalisation."},
-  {q:"L'équation de Schrödinger est :",a:["iℏ ∂ψ/∂t = −(ℏ²/2m)∂²ψ/∂x² + Vψ","iℏ ∂ψ/∂t = (ℏ²/2m)∂²ψ/∂x² + Vψ","−iℏ ∂ψ/∂t = −(ℏ²/2m)∂²ψ/∂x² + Vψ","ℏ² ∂²ψ/∂t² = −(ℏ²/2m)∂²ψ/∂x² + Vψ"],r:0,e:"Loi 2.3 : <span class='math'>iℏ ∂ψ/∂t = −(ℏ²/2m)∂²ψ/∂x² + Vψ = Ĥψ</span>. C'est l'analogue quantique de la 2ème loi de Newton. Elle est linéaire (principe de superposition) et du 1er ordre en t (l'état initial détermine tout)."},
-  {q:"L'opérateur position x̂ est défini par son action sur ψ comme :",a:["x̂ψ = ∂ψ/∂x","x̂ψ = −iℏ∂ψ/∂x","x̂ψ = x·ψ","x̂ψ = xψ/ℏ"],r:2,e:"<span class='math'>x̂ψ(x,t) = x·ψ(x,t)</span>. L'opérateur position 'multiplie par x'. Sa valeur moyenne <x> = ∫ψ* x̂ ψ dx = ∫x|ψ|²dx est la position moyenne attendue sur un grand nombre de mesures."},
-  {q:"L'opérateur quantité de mouvement p̂ est défini par :",a:["p̂ψ = pψ","p̂ψ = iℏ∂ψ/∂x","p̂ψ = −iℏ∂ψ/∂x","p̂ψ = ℏ²/2m ∂²ψ/∂x²"],r:2,e:"<span class='math'>p̂ψ = −iℏ∂ψ/∂x</span>. Le facteur −iℏ vient de la relation de De Broglie : une onde plane e^{ikx} est état propre de p̂ avec valeur propre ℏk = p."},
-  {q:"L'hamiltonien Ĥ en mécanique quantique représente :",a:["La force appliquée à la particule","L'énergie totale de la particule (opérateur)","La quantité de mouvement totale","La position d'équilibre"],r:1,e:"<span class='math'>Ĥ = p̂²/(2m) + V(x̂) = −(ℏ²/2m)∂²/∂x² + V(x)</span>. C'est l'opérateur énergie totale (énergie cinétique + potentielle). L'équation de Schrödinger s'écrit iℏ∂ψ/∂t = Ĥψ."},
-  {q:"La relation d'indétermination de Heisenberg exprime :",a:["Δx·Δp ≥ ℏ","Δx·Δp ≥ ℏ/2","Δx·Δp = 0 pour un état propre","Δx = Δp toujours"],r:1,e:"Loi 2.5 : <span class='math'>ΔxΔp ≥ ℏ/2</span>. C'est une propriété intrinsèque des systèmes quantiques (pas une limitation des appareils). Position et quantité de mouvement ne peuvent pas être déterminées simultanément avec une précision arbitraire."},
-  {q:"Un état stationnaire ψ(x,t) se factorise sous la forme :",a:["ψ(x,t) = φ(x) + f(t)","ψ(x,t) = φ(x) × f(t) avec f(t) = e^{−iEt/ℏ}","ψ(x,t) = φ(x)/f(t)","ψ(x,t) = φ(x) × e^{iEt/ℏ}"],r:1,e:"Def. 2.3 : <span class='math'>ψ(x,t) = e^{−iEt/ℏ} φ(x)</span>. La dépendance temporelle est une simple phase oscillante. Ces états ont une énergie bien définie E et leur densité de probabilité |ψ|² = |φ|² est <strong>indépendante du temps</strong>."},
-  {q:"La densité de probabilité de présence d'un état stationnaire est :",a:["Nulle partout","Variable dans le temps","Indépendante du temps","Égale à 1 en tout point"],r:2,e:"<span class='math'>|ψ(x,t)|² = |φ(x)|²</span> : la partie temporelle e^{−iEt/ℏ} a module 1, donc disparaît dans le calcul de |ψ|². La densité de probabilité ne dépend pas du temps pour un état stationnaire — d'où le nom 'stationnaire'."},
-  {q:"L'équation de Schrödinger indépendante du temps s'écrit :",a:["iℏ dφ/dt = Ĥφ","Ĥφ = Eφ","Ĥφ = iℏφ","d²φ/dx² = Eφ"],r:1,e:"Eq. 2.46/2.51 : <span class='math'>Ĥφ = Eφ</span>. C'est une équation aux valeurs propres : φ est un état propre de l'énergie pour la valeur propre E. Dans un puits de potentiel, cela conduit à la quantification de l'énergie."},
-  {q:"Pour un puits de potentiel carré infiniment profond (0 à a), les niveaux d'énergie sont :",a:["En = nπℏ²/(2ma²)","En = n²π²ℏ²/(2ma²)","En = n²ℏ²/(2ma²)","En = nℏω₀"],r:1,e:"Eq. 2.66 : <span class='math'>En = n²π²ℏ²/(2ma²)</span> avec n = 1, 2, 3... L'énergie est proportionnelle à n² et inversement proportionnelle à a² : plus le puits est étroit, plus les niveaux sont espacés."},
-  {q:"Les fonctions propres du puits infini sont :",a:["φₙ(x) = (2/a)cos(nπx/a)","φₙ(x) = √(2/a) sin(nπx/a)","φₙ(x) = √(1/a) e^{inπx/a}","φₙ(x) = (1/a)sin²(nπx/a)"],r:1,e:"Eq. 2.70 : <span class='math'>φₙ(x) = √(2/a) sin(nπx/a)</span> pour 0 ≤ x ≤ a. Le cosinus est exclu car φ(0) = 0. La normalisation donne le facteur √(2/a)."},
-  {q:"L'énergie minimale d'une particule dans un puits infini (énergie de confinement) est :",a:["E₀ = 0 (état fondamental classique)","E₁ = π²ℏ²/(2ma²) > 0","E₁ = ℏω₀","E₁ = ℏ/(2ma²)"],r:1,e:"Eq. 2.74 : <span class='math'>E₁ = π²ℏ²/(2ma²) > 0</span>. Contrairement au cas classique, l'énergie minimale n'est pas nulle ! C'est une conséquence directe du principe d'incertitude de Heisenberg : si la particule est confinée, Δx ≤ a implique Δp ≥ ℏ/(2a) donc E_min > 0."},
-  {q:"L'effet tunnel quantique permet à une particule de :",a:["Se déplacer plus vite que la lumière","Traverser une barrière de potentiel dont la hauteur dépasse son énergie totale","Exister à deux endroits simultanément","Avoir une énergie cinétique négative dans le vide"],r:1,e:"L'effet tunnel : une particule quantique (décrite par une fonction d'onde) a une probabilité non-nulle de traverser une barrière dont V₀ > E. Classiquement, c'est impossible. Quantiquement, la fonction d'onde est évanescente dans la barrière mais non nulle."},
-  {q:"La probabilité de transmission par effet tunnel (barrière épaisse, hauteur V₀, largeur a) varie comme :",a:["T ∝ e^{+2αa}","T ∝ e^{−2αa} avec α = √(2m(V₀−E))/ℏ","T = constante indépendante de a","T ∝ 1/a²"],r:1,e:"Eq. 2.99 : <span class='math'>T ∝ e^{−2αa}</span> avec <span class='math'>α = √(2m(V₀−E))/ℏ</span>. La probabilité décroît exponentiellement avec la largeur a de la barrière, la masse m et la hauteur de barrière V₀−E. C'est pourquoi l'effet tunnel est surtout important pour les électrons (faible masse)."},
-  {q:"Le microscope à effet tunnel (STM) fonctionne en :",a:["Illuminant la surface avec des UV","Mesurant le courant tunnel entre une pointe et la surface, qui varie exponentiellement avec la distance","Mesurant la force de Casimir entre atomes","Utilisant la diffraction des électrons sur la surface"],r:1,e:"Le courant tunnel dépend exponentiellement de la distance pointe-surface : <span class='math'>I ∝ e^{−2αd}</span>. Cette sensibilité extrême (1 pm de variation → 10% de variation de I) permet d'imager la surface atome par atome."},
-  {q:"Les états excités d'un puits infini (n > 1) ont des nœuds (où φₙ = 0). Pour n = 3, il y a :",a:["1 nœud","2 nœuds (à x = a/3 et x = 2a/3)","3 nœuds","Aucun nœud"],r:1,e:"φ₃(x) = √(2/a) sin(3πx/a) s'annule pour 3πx/a = π et 2π, soit x = a/3 et x = 2a/3. Il y a 2 nœuds (sans compter les extrémités). En général, l'état φₙ a n−1 nœuds intérieurs."}
+  {q:"La catastrophe ultraviolette (rayonnement du corps noir classique) prédit :",a:["Une émission finie","Une émission infinie aux hautes fréquences","Une émission nulle","Un spectre discret"],r:1,e:"La théorie classique de Rayleigh-Jeans donne $u_\\nu\\propto \\nu^2$, divergeant à haute $\\nu$ : énergie totale infinie ! Résolu par Planck (1900) avec quanta d'énergie $E=h\\nu$."},
+  {q:"La loi de Planck pour la densité spectrale d'énergie du corps noir :",a:["$u_\\nu=\\dfrac{8\\pi h\\nu^3}{c^3}\\dfrac{1}{e^{h\\nu/(k_BT)}-1}$","$u_\\nu=k_B T$","$u_\\nu=h\\nu$","$u_\\nu\\propto T^4$"],r:0,e:"Loi de Planck (1900). À basse fréquence : Rayleigh-Jeans. À haute fréquence : Wien. La quantification $E=nh\\nu$ résout la catastrophe ultraviolette."},
+  {q:"L'effet photoélectrique : Einstein (1905) propose que l'énergie cinétique maximale des électrons éjectés vaut :",a:["$E_c=h\\nu$","$E_c=h\\nu-W$ (où $W$ est le travail de sortie)","$E_c=h\\nu+W$","$E_c=W$"],r:1,e:"$E_c=h\\nu-W$. Pas d'effet photoélectrique si $\\nu<W/h$ (seuil), même à forte intensité. Confirmation de la nature corpusculaire de la lumière. Nobel 1921 (Einstein)."},
+  {q:"L'énergie d'un photon vaut :",a:["$E=h\\nu$","$E=hc\\nu$","$E=h/\\lambda$","$E=hc$"],r:0,e:"$E=h\\nu=hc/\\lambda$ avec $h\\approx 6{,}626\\times 10^{-34}$ J·s. Pour la lumière visible : $E\\sim$ 1,5 à 3,3 eV (rouge → violet)."},
+  {q:"L'impulsion d'un photon de longueur d'onde $\\lambda$ vaut :",a:["$p=h\\lambda$","$p=h/\\lambda$","$p=h\\nu/c^2$","$p=mc$"],r:1,e:"$p=h/\\lambda=h\\nu/c=E/c$. Le photon transporte une impulsion finie malgré $m=0$. Origine de la pression de radiation et de l'effet Compton."},
+  {q:"La longueur d'onde de De Broglie d'une particule d'impulsion $p$ vaut :",a:["$\\lambda=hp$","$\\lambda=h/p$","$\\lambda=p/h$","$\\lambda=h/(mc)$"],r:1,e:"$\\lambda=h/p$ (1924). Pour $p=mv$ (non-relativiste) : $\\lambda=h/(mv)$. Confirmé par diffraction d'électrons (Davisson-Germer, 1927)."},
+  {q:"À température ambiante, la longueur d'onde de De Broglie d'un électron thermique ($v\\sim 10^5$ m/s) est :",a:["$\\sim 1$ μm","$\\sim 7$ nm (échelle atomique)","$\\sim 1$ mm","$\\sim 1$ m"],r:1,e:"$\\lambda=h/(m_e v)\\approx \\dfrac{6{,}6\\times 10^{-34}}{9{,}1\\times 10^{-31}\\cdot 10^5}\\approx 7$ nm. Les électrons sont diffractés par les cristaux : base de la microscopie électronique."},
+  {q:"L'expérience des fentes de Young avec des électrons un par un :",a:["Donne deux taches","Donne une figure d'interférences","Ne produit aucune figure","Tue les électrons"],r:1,e:"Même un électron à la fois construit une figure d'interférences ! La particule 'interfère avec elle-même'. C'est le mystère central de la dualité onde-corpuscule."},
+  {q:"Si on détecte par quelle fente passe l'électron, la figure d'interférences :",a:["Reste identique","Disparaît : on voit juste deux taches","Devient circulaire","Se déplace"],r:1,e:"L'observation perturbe le système : la mesure de la fente projette l'état dans une fente unique, détruisant la cohérence quantique. Décohérence."},
+  {q:"L'inégalité de Heisenberg position-impulsion s'écrit :",a:["$\\Delta x\\,\\Delta p\\geq h$","$\\Delta x\\,\\Delta p\\geq\\hbar/2$","$\\Delta x\\,\\Delta p=\\hbar$","$\\Delta x+\\Delta p=\\hbar$"],r:1,e:"$\\Delta x\\,\\Delta p\\geq\\hbar/2$. C'est une borne fondamentale, non technique : impossible de connaître simultanément avec précision la position et l'impulsion."},
+  {q:"L'inégalité de Heisenberg énergie-temps :",a:["$\\Delta E\\,\\Delta t\\geq\\hbar/2$","$\\Delta E=\\Delta t$","$\\Delta E\\cdot\\Delta t=h$","$\\Delta E\\,\\Delta t\\geq c$"],r:0,e:"$\\Delta E\\,\\Delta t\\geq\\hbar/2$. Permet l'apparition fugace de particules virtuelles (théorie quantique des champs) ou la largeur naturelle des raies spectrales."},
+  {q:"La fonction d'onde $\\psi(x,t)$ est :",a:["Une grandeur observable","Une amplitude de probabilité (peut être complexe)","Une probabilité","Une vitesse"],r:1,e:"$\\psi$ est complexe en général. C'est $|\\psi|^2$ qui a un sens physique (densité de probabilité de présence). $\\psi$ lui-même n'est pas observable directement."},
+  {q:"Interprétation de Born : $|\\psi(x,t)|^2 dx$ représente :",a:["L'énergie","La probabilité de trouver la particule entre $x$ et $x+dx$","La vitesse","Le moment cinétique"],r:1,e:"Densité de probabilité de présence : $P(a\\leq x\\leq b)=\\int_a^b|\\psi|^2 dx$. Normalisation : $\\int_{-\\infty}^{+\\infty}|\\psi|^2 dx=1$."},
+  {q:"L'équation de Schrödinger dépendante du temps s'écrit :",a:["$i\\hbar\\dfrac{\\partial\\psi}{\\partial t}=\\hat{H}\\psi$","$\\dfrac{\\partial\\psi}{\\partial t}=\\hat{H}\\psi$","$i\\hbar\\dfrac{\\partial\\psi}{\\partial x}=\\hat{H}\\psi$","$\\hat{H}\\psi=0$"],r:0,e:"$i\\hbar\\dfrac{\\partial\\psi}{\\partial t}=\\hat{H}\\psi$. Équation fondamentale de la mécanique quantique non-relativiste (1926). Linéaire (principe de superposition)."},
+  {q:"L'opérateur hamiltonien d'une particule libre vaut :",a:["$\\hat{H}=\\hat{p}/(2m)$","$\\hat{H}=\\dfrac{\\hat{p}^2}{2m}$","$\\hat{H}=m c^2$","$\\hat{H}=h\\nu$"],r:1,e:"$\\hat{H}=\\hat{p}^2/(2m)=-\\dfrac{\\hbar^2}{2m}\\dfrac{\\partial^2}{\\partial x^2}$. C'est l'analogue quantique de l'énergie cinétique. Avec potentiel : $\\hat{H}=\\hat{p}^2/(2m)+V(\\hat{x})$."},
+  {q:"L'équation de Schrödinger indépendante du temps est :",a:["$\\hat{H}\\varphi=E\\varphi$","$\\hat{H}\\varphi=0$","$\\hat{H}=E$","$i\\hbar\\partial_t\\varphi=E\\varphi$"],r:0,e:"$\\hat{H}\\varphi=E\\varphi$ : équation aux valeurs propres. Pour les états stationnaires : $\\psi(x,t)=\\varphi(x)e^{-iEt/\\hbar}$, $|\\psi|^2$ indépendant du temps."},
+  {q:"L'opérateur impulsion en représentation position vaut :",a:["$\\hat{p}=-i\\hbar\\dfrac{\\partial}{\\partial x}$","$\\hat{p}=i\\hbar\\dfrac{\\partial}{\\partial t}$","$\\hat{p}=\\hbar\\dfrac{\\partial}{\\partial x}$","$\\hat{p}=mv$"],r:0,e:"$\\hat{p}_x=-i\\hbar\\partial_x$. Sa valeur propre $p$ pour l'onde plane $\\psi=e^{ikx}$ : $\\hat{p}\\psi=-i\\hbar(ik)e^{ikx}=\\hbar k\\,\\psi$, donc $p=\\hbar k$."},
+  {q:"Pour le puits infini de largeur $a$ ($V=0$ pour $0<x<a$, $V=\\infty$ ailleurs), les énergies sont :",a:["$E_n=\\dfrac{n^2\\pi^2\\hbar^2}{2ma^2}$","$E_n=nh\\nu$","$E_n=n\\hbar$","$E_n=n^2 a$"],r:0,e:"$E_n=\\dfrac{n^2\\pi^2\\hbar^2}{2ma^2}$, $n=1,2,3,\\ldots$ Spectre quantifié, $E_1>0$ (énergie minimale, conséquence d'Heisenberg)."},
+  {q:"Les fonctions d'onde du puits infini valent :",a:["$\\varphi_n(x)=\\sqrt{\\dfrac{2}{a}}\\sin\\!\\left(\\dfrac{n\\pi x}{a}\\right)$","$\\varphi_n=\\cos(n\\pi x/a)$","$\\varphi_n=e^{ikx}$","$\\varphi_n=$ cste"],r:0,e:"$\\varphi_n(x)=\\sqrt{2/a}\\sin(n\\pi x/a)$. Conditions aux limites $\\varphi(0)=\\varphi(a)=0$ imposées par $V=\\infty$. La normalisation donne le préfacteur $\\sqrt{2/a}$."},
+  {q:"L'état fondamental $\\varphi_1$ du puits infini :",a:["A 1 nœud","N'a aucun nœud intérieur","En a 2","En a une infinité"],r:1,e:"L'état $\\varphi_n$ a $(n-1)$ nœuds intérieurs : $\\varphi_1$ → 0 nœud, $\\varphi_2$ → 1 nœud, $\\varphi_3$ → 2 nœuds. C'est le théorème d'oscillation de Sturm."},
+  {q:"L'effet tunnel : une particule d'énergie $E<V_0$ traverse une barrière de potentiel avec une probabilité :",a:["Nulle","Non nulle, décroissante exponentiellement avec la largeur","100%","Aléatoire"],r:1,e:"$T\\propto e^{-2\\kappa L}$ avec $\\kappa=\\sqrt{2m(V_0-E)}/\\hbar$. Phénomène purement quantique, à la base de la radioactivité $\\alpha$, du STM, des diodes tunnel."},
+  {q:"Le microscope à effet tunnel (STM) :",a:["Mesure le champ magnétique","Mesure le courant tunnel entre une pointe et la surface","Utilise des photons","Détecte la chaleur"],r:1,e:"Une pointe à $\\sim$ 1 nm de la surface : courant tunnel $I\\propto e^{-2\\kappa d}$. Sensibilité $\\sim$ atomique (1 pm de variation → 10% de variation de $I$). Image atome par atome."},
+  {q:"L'oscillateur harmonique quantique a pour énergies :",a:["$E_n=n\\hbar\\omega$","$E_n=(n+1/2)\\hbar\\omega$","$E_n=n^2\\hbar\\omega$","$E_n=\\hbar\\omega$"],r:1,e:"$E_n=(n+1/2)\\hbar\\omega$, $n=0,1,2,\\ldots$ Le niveau fondamental $E_0=\\hbar\\omega/2$ est l'énergie de point zéro (Heisenberg empêche $E=0$)."},
+  {q:"Pour l'atome d'hydrogène, les niveaux d'énergie valent :",a:["$E_n=-13{,}6/n^2$ eV","$E_n=13{,}6 n^2$ eV","$E_n=n\\hbar\\omega$","$E_n=h\\nu/n$"],r:0,e:"$E_n=-E_I/n^2$ avec $E_I=13{,}6$ eV. État fondamental : $-13{,}6$ eV. Spectres de Lyman, Balmer, Paschen pour les transitions."},
+  {q:"L'opérateur $\\hat{A}$ associé à une grandeur physique observable est :",a:["Quelconque","Hermitique : $\\hat{A}^\\dagger=\\hat{A}$ (valeurs propres réelles)","Anti-hermitique","Idempotent"],r:1,e:"L'hermiticité garantit que les valeurs propres (résultats de mesure) sont réelles. L'évolution est unitaire ($U=e^{-i\\hat{H}t/\\hbar}$ avec $\\hat{H}$ hermitique)."},
+  {q:"Le commutateur $[\\hat{x},\\hat{p}]$ vaut :",a:["$0$","$i\\hbar$","$\\hbar$","$1$"],r:1,e:"$[\\hat{x},\\hat{p}]=\\hat{x}\\hat{p}-\\hat{p}\\hat{x}=i\\hbar$. Relation de commutation canonique. Lien direct avec l'inégalité d'Heisenberg : $\\Delta A\\Delta B\\geq |\\langle [\\hat{A},\\hat{B}]\\rangle|/2$."},
+  {q:"Une mesure quantique :",a:["Ne perturbe pas le système","Projette l'état sur un état propre de l'observable mesurée (réduction)","Donne toujours le même résultat","Est déterministe"],r:1,e:"Postulat de la mesure : projection (collapse) de $\\psi$ sur $|\\varphi_n\\rangle$ avec probabilité $|\\langle\\varphi_n|\\psi\\rangle|^2$. Aspect statistique fondamental, pas de prédiction individuelle."},
+  {q:"Le principe de superposition stipule que :",a:["Si $\\psi_1$ et $\\psi_2$ sont des solutions, $a\\psi_1+b\\psi_2$ aussi","Les états ne se mélangent pas","Tout état est unique","Une particule est en plusieurs endroits"],r:0,e:"L'équation de Schrödinger étant linéaire, toute combinaison linéaire de solutions est solution. Conséquence : chat de Schrödinger, intrication, qubits..."},
+  {q:"Une particule libre dans la position de la fonction d'onde $\\psi=A e^{i(kx-\\omega t)}$ :",a:["Est localisée","Est totalement délocalisée ($|\\psi|^2=$ cste)","Possède plusieurs positions à la fois","Est en mouvement classique"],r:1,e:"$|\\psi|^2=|A|^2$ partout : densité de probabilité uniforme. Impulsion bien définie ($p=\\hbar k$), donc position complètement indéterminée (Heisenberg)."},
+  {q:"Pour trouver la valeur moyenne d'une grandeur $\\hat{A}$ dans l'état $\\psi$ :",a:["$\\langle\\hat{A}\\rangle=\\hat{A}\\psi$","$\\langle\\hat{A}\\rangle=\\int\\psi^*\\hat{A}\\psi\\,dx$","$\\langle\\hat{A}\\rangle=\\hat{A}/\\psi$","$\\langle\\hat{A}\\rangle=\\psi^2$"],r:1,e:"$\\langle\\hat{A}\\rangle=\\int\\psi^*(x)\\hat{A}\\psi(x)\\,dx=\\langle\\psi|\\hat{A}|\\psi\\rangle$. Moyenne sur de nombreuses mesures effectuées sur des copies identiques."},
+  {q:"L'effet Compton confirme :",a:["L'aspect ondulatoire du photon","L'aspect corpusculaire du photon (collision avec un électron)","La présence d'éther","La quantification de l'énergie"],r:1,e:"Compton (1923) : la diffusion d'un photon X sur un électron suit les lois des collisions élastiques relativistes : $\\Delta\\lambda=\\lambda_C(1-\\cos\\theta)$. Photon = particule."},
+  {q:"L'expérience de Davisson-Germer (1927) a montré :",a:["L'effet photoélectrique","La diffraction des électrons par un cristal de Ni","La création de paires","L'antimatière"],r:1,e:"Confirmation expérimentale de De Broglie : les électrons sont diffractés comme les rayons X par les plans cristallins. Loi de Bragg : $2d\\sin\\theta=n\\lambda$."},
+  {q:"Une marche de potentiel : $V=0$ pour $x<0$, $V=V_0$ pour $x>0$. Pour une onde incidente d'énergie $E>V_0$ :",a:["100% est transmise","Une partie est réfléchie (effet purement quantique)","100% est réfléchie","Rien ne se passe"],r:1,e:"Bien que classiquement la particule passerait sans encombre, en quantique il existe une probabilité de réflexion non nulle (sauf cas particuliers d'accord d'impédance)."},
+  {q:"L'équation de continuité quantique pour la probabilité :",a:["$\\partial_t|\\psi|^2=0$","$\\partial_t|\\psi|^2+\\nabla\\cdot\\vec{j}=0$","$\\partial_t\\psi=0$","$\\nabla\\cdot\\vec{j}=|\\psi|^2$"],r:1,e:"Le courant de probabilité $\\vec{j}=\\dfrac{\\hbar}{2mi}(\\psi^*\\nabla\\psi-\\psi\\nabla\\psi^*)$ vérifie une équation de continuité : conservation de la probabilité totale."},
+  {q:"L'équation de Schrödinger conserve la norme $\\|\\psi\\|^2$ :",a:["Non","Oui, car $\\hat{H}$ est hermitique","Seulement à $V=0$","Seulement à $t=0$"],r:1,e:"Évolution unitaire : $\\psi(t)=e^{-i\\hat{H}t/\\hbar}\\psi(0)$. La probabilité totale $\\int|\\psi|^2 dx$ reste égale à 1 au cours du temps."},
+  {q:"L'expérience de Stern-Gerlach (1922) a démontré :",a:["L'effet photoélectrique","La quantification du moment magnétique de spin","La nature ondulatoire","La fission"],r:1,e:"Un faisceau d'atomes d'argent dans un champ magnétique non uniforme se sépare en 2 (pas un continuum) : preuve directe de la quantification de la projection du spin ($\\pm\\hbar/2$)."},
+  {q:"Le spin de l'électron vaut :",a:["$0$","$1/2$ (en unités de $\\hbar$)","$1$","$2$"],r:1,e:"$s=1/2$. Projections possibles : $s_z=\\pm\\hbar/2$. Le spin est une grandeur purement quantique, sans analogue classique. Combiné au principe de Pauli, il structure le tableau périodique."},
+  {q:"Le principe de Pauli pour les fermions énonce :",a:["Deux fermions ne peuvent occuper le même état quantique","Tous les fermions sont identiques","Les fermions s'attirent","Le spin est nul"],r:0,e:"Principe d'exclusion : deux fermions identiques (mêmes nombres quantiques, $n,\\ell,m_\\ell,m_s$) sont impossibles. Origine de la structure électronique des atomes, fonction d'onde antisymétrique."},
+  {q:"Pour la radioactivité $\\alpha$, l'effet tunnel explique :",a:["L'énergie totale","Pourquoi des noyaux peuvent émettre des $\\alpha$ classiquement piégés (Gamow, 1928)","La désintégration $\\beta$","La fission spontanée"],r:1,e:"Modèle de Gamow : la particule $\\alpha$ tunnele à travers la barrière coulombienne. Probabilité $\\propto e^{-G}$, ce qui explique les durées de vie variables sur 25 ordres de grandeur."},
+  {q:"Le théorème d'Ehrenfest dit que :",a:["Les valeurs moyennes obéissent aux équations classiques","La quantique est fausse","$\\hat{H}$ est nul","Tout est aléatoire"],r:0,e:"$\\dfrac{d\\langle x\\rangle}{dt}=\\dfrac{\\langle p\\rangle}{m}$ et $\\dfrac{d\\langle p\\rangle}{dt}=-\\langle\\nabla V\\rangle$. La trajectoire moyenne d'un paquet d'onde suit la mécanique classique (limite classique)."},
+  {q:"Le paquet d'onde gaussien minimise l'inégalité d'Heisenberg :",a:["Non, jamais","Oui : $\\Delta x\\,\\Delta p=\\hbar/2$","À condition d'être plat","Seulement pour le photon"],r:1,e:"L'état gaussien $\\psi\\propto e^{-x^2/(4\\sigma^2)}$ atteint l'égalité $\\Delta x\\,\\Delta p=\\hbar/2$. État cohérent minimal, le plus 'classique' possible."},
+  {q:"Un état stationnaire est tel que :",a:["$\\psi$ ne dépend pas de $t$","$|\\psi|^2$ est indépendant du temps","$\\hat{H}\\psi=0$","$\\psi=0$"],r:1,e:"$\\psi(x,t)=\\varphi(x)e^{-iEt/\\hbar}$ : $\\psi$ varie avec une phase, mais $|\\psi|^2=|\\varphi|^2$ est constant. Distribution de probabilité figée dans le temps."},
+  {q:"L'effet photoélectrique disparaît :",a:["À haute intensité","Pour $\\nu<\\nu_\\text{seuil}=W/h$ (peu importe l'intensité)","Aux basses températures","Dans le vide"],r:1,e:"Critère seuil : $h\\nu\\geq W$ (travail de sortie). Sous le seuil, même une lumière intense n'arrache aucun électron. Confirmation cruciale du caractère corpusculaire."},
+  {q:"Le coefficient de transmission par effet tunnel à travers une barrière vaut approximativement :",a:["$T\\approx 16\\dfrac{E(V_0-E)}{V_0^2}e^{-2\\kappa L}$","$T=1$","$T=e^{2\\kappa L}$","$T=L\\cdot V_0$"],r:0,e:"Pour $\\kappa L\\gg 1$ : $T\\approx 16\\dfrac{E(V_0-E)}{V_0^2}e^{-2\\kappa L}$. Atténuation exponentielle avec $\\kappa=\\sqrt{2m(V_0-E)}/\\hbar$."},
+  {q:"L'expérience de Young avec photons un par un :",a:["Donne deux fentes éclairées","Donne une figure d'interférence après accumulation","Détruit les photons","N'a aucun résultat"],r:1,e:"Réalisée historiquement par Taylor (1909). Chaque photon contribue à un point, mais l'accumulation de millions de photons construit la figure d'interférence : le photon interfère avec lui-même."},
+  {q:"L'opérateur position $\\hat{x}$ en représentation $x$ vaut :",a:["$\\hat{x}=x\\cdot$ (multiplication par $x$)","$\\hat{x}=\\partial_x$","$\\hat{x}=i\\hbar$","$\\hat{x}=0$"],r:0,e:"En représentation position, $\\hat{x}\\psi(x)=x\\,\\psi(x)$ (simple multiplication). En représentation impulsion, $\\hat{x}=i\\hbar\\partial_p$. Dualité Fourier."},
+  {q:"L'énergie minimale d'un puits infini ($n=1$) est :",a:["Nulle","$E_1=\\dfrac{\\pi^2\\hbar^2}{2ma^2}>0$ : énergie de point zéro","$E_1=k_BT$","$\\infty$"],r:1,e:"Conséquence d'Heisenberg : si $\\Delta x\\sim a$, alors $\\Delta p\\geq\\hbar/(2a)$, donc $E_c=\\langle p^2\\rangle/(2m)\\geq\\hbar^2/(8ma^2)>0$. Le repos absolu est interdit."},
+  {q:"Une particule classique vs quantique : la différence essentielle est :",a:["La masse","Les trajectoires bien définies vs fonction d'onde et probabilités","La couleur","La forme"],r:1,e:"En classique, position+vitesse $\\to$ trajectoire. En quantique, fonction d'onde $\\psi\\to$ distribution de probabilité. Pas de trajectoire entre deux mesures (interprétation standard)."},
+  {q:"L'effet tunnel est exploité dans :",a:["Les transistors","Le STM, la diode tunnel, la radioactivité $\\alpha$","Les piles","La capacité électrique"],r:1,e:"STM : imagerie atomique. Diode tunnel : composant électronique rapide. Radioactivité $\\alpha$ : émission par effet tunnel à travers la barrière coulombienne. Cellule mémoire flash."},
+  {q:"En résolvant Schrödinger pour l'atome d'hydrogène, le rayon de Bohr $a_0\\approx 5{,}29\\times 10^{-11}$ m vaut :",a:["$a_0=\\hbar^2/(m_e e^2/(4\\pi\\varepsilon_0))$","$a_0=\\hbar/c$","$a_0=h\\nu$","$a_0=\\lambda_e$"],r:0,e:"$a_0=4\\pi\\varepsilon_0\\hbar^2/(m_e e^2)$. C'est l'échelle naturelle des distances atomiques. Apparaît à partir des constantes fondamentales du problème H."}
   ]
 }
 
 }; // end DB
 
 // ═══════════════════════════════════════════
-// APP STATE
+// METADATA — chapters are colored by subject
 // ═══════════════════════════════════════════
-let appState = {
-  currentSubject: null,
-  selectedChapters: [],
-  shuffleQ: true,
-  shuffleA: true,
-  // quiz session
-  session: {
-    questions: [],  // {q, a, r, e, chapter}
-    shuffledAnswers: [], // per question
-    shuffledCorrect: [], // per question
-    answers: [],    // null or {chosen, isSkipped}
-    current: 0,
-    correct: 0,
-    wrong: 0,
-    chapterStats: {}, // chapterId -> {correct, total}
-  }
+const CHAPTER_META = {
+  em_ondes:      { num:'01', subject:'em', label:'Ondes EM',    desc:'Maxwell, OPPM, polarisation, Poynting, guides' },
+  em_induction:  { num:'02', subject:'em', label:'Induction',   desc:'Faraday, Lenz, inductance, transformateur' },
+  rel_restreinte:{ num:'03', subject:'pm', label:'Relativité',  desc:'Lorentz, dilatation, énergie, paradoxes' },
+  meca_quant:    { num:'04', subject:'pm', label:'Quantique',   desc:'Planck, De Broglie, Schrödinger, tunnel' }
+};
+const SUBJECT_INFO = {
+  em: { title:'Électromagnétisme', sub:'Sélectionnez un ou plusieurs chapitres', chapters:['em_ondes','em_induction'] },
+  pm: { title:'Physique Moderne',   sub:'Sélectionnez un ou plusieurs chapitres', chapters:['rel_restreinte','meca_quant'] }
 };
 
 // ═══════════════════════════════════════════
-// NAVIGATION
+// STATE
+// ═══════════════════════════════════════════
+let state = {
+  user: 'Anonymous',
+  subject: null,
+  selectedChapters: new Set(),
+  questions: [],
+  idx: 0,
+  score: 0,
+  wrong: 0,
+  answered: [],   // {qIndex, selectedIdx, correct, chapterKey}
+  shuffleQ: true,
+  shuffleA: true,
+  reviewMode: false,
+  fromDashboard: false
+};
+
+// ═══════════════════════════════════════════
+// KaTeX HELPERS
+// ═══════════════════════════════════════════
+function renderMath(el) {
+  if (!el || typeof renderMathInElement === 'undefined') return;
+  try {
+    renderMathInElement(el, {
+      delimiters: [
+        { left:'$$', right:'$$', display:true },
+        { left:'$',  right:'$',  display:false }
+      ],
+      throwOnError: false,
+      strict: false
+    });
+  } catch(e) { console.warn('KaTeX render error', e); }
+}
+
+// ═══════════════════════════════════════════
+// URL PARAMS — pick up from dashboard
+// ═══════════════════════════════════════════
+function parseUrl() {
+  const p = new URLSearchParams(window.location.search);
+  const u = p.get('user');
+  const s = p.get('subject');
+  if (u) { state.user = u; state.fromDashboard = true; }
+  if (s && SUBJECT_INFO[s]) {
+    setTimeout(() => goSubject(s), 50);
+  }
+}
+
+// ═══════════════════════════════════════════
+// SCREEN MANAGEMENT
 // ═══════════════════════════════════════════
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
-function goHome() { showScreen('home'); appState.selectedChapters = []; }
-function goSubject(sub) {
-  appState.currentSubject = sub;
-  appState.selectedChapters = [];
-  buildChapterSelect(sub);
-  showScreen('chapters');
+
+function goHome() {
+  state.subject = null;
+  state.selectedChapters.clear();
+  state.reviewMode = false;
+  showScreen('screen-home');
+}
+
+function goDashboard() {
+  window.location.href = 'index.html';
 }
 
 // ═══════════════════════════════════════════
-// CHAPTER SELECT
+// SUBJECT → CHAPTER SELECT
 // ═══════════════════════════════════════════
-function buildChapterSelect(sub) {
-  const titles = { em:'Électromagnétisme', pm:'Physique Moderne' };
-  const subs = { em:'Chapitres EM', pm:'Chapitres Physique Moderne' };
-  document.getElementById('subject-title').textContent = titles[sub];
-  document.getElementById('subject-sub').textContent = subs[sub];
+function goSubject(subjectKey) {
+  state.subject = subjectKey;
+  state.selectedChapters.clear();
+  const info = SUBJECT_INFO[subjectKey];
+  document.getElementById('subject-title').textContent = info.title;
+  document.getElementById('subject-sub').textContent = info.sub;
+  renderChapterGrid();
+  updateStartBtn();
+  showScreen('screen-chapters');
+}
 
-  const chapters = Object.entries(DB).filter(([k, v]) => v.subject === sub);
-  const totalQ = chapters.reduce((s, [, v]) => s + v.questions.length, 0);
-  document.getElementById('all-count-text').textContent = `${totalQ} questions sur ${chapters.length} chapitre${chapters.length > 1 ? 's' : ''}`;
-
+function renderChapterGrid() {
   const grid = document.getElementById('chapter-grid');
+  const chapters = SUBJECT_INFO[state.subject].chapters;
   grid.innerHTML = '';
-  const cls = sub === 'em' ? 'ch-em' : 'ch-pm';
-  chapters.forEach(([key, ch]) => {
+  chapters.forEach(key => {
+    const meta = CHAPTER_META[key];
+    const count = (DB[key] && DB[key].questions) ? DB[key].questions.length : 0;
     const card = document.createElement('div');
-    card.className = `chapter-card ${cls}`;
-    card.id = `ch-card-${key}`;
-    card.onclick = () => toggleChapter(key, cls);
+    card.className = 'chapter-card' + (meta.subject === 'pm' ? ' ch-pm' : '');
+    card.dataset.key = key;
     card.innerHTML = `
-      <div class="c-check" id="ch-check-${key}"></div>
-      <div class="c-num">${ch.subject === 'em' ? 'Electromagnétisme' : 'Physique Moderne'}</div>
-      <h3>${ch.label}</h3>
-      <div class="c-count">${ch.questions.length} questions</div>`;
+      <div class="c-check"></div>
+      <div class="c-num">CH ${meta.num}</div>
+      <div class="c-name">${meta.label}</div>
+      <div class="c-desc">${meta.desc}</div>
+      <div class="c-count">${count} questions</div>
+    `;
+    card.onclick = () => toggleChapter(key, card);
     grid.appendChild(card);
   });
-  updateStartBtn();
+  // also update "all" count
+  let totalAll = 0;
+  chapters.forEach(k => totalAll += (DB[k] && DB[k].questions) ? DB[k].questions.length : 0);
+  document.getElementById('all-count-text').textContent = `Réviser tous les chapitres (${totalAll} questions)`;
 }
 
-function toggleChapter(key, cls) {
-  const idx = appState.selectedChapters.indexOf(key);
-  if (idx === -1) { appState.selectedChapters.push(key); }
-  else { appState.selectedChapters.splice(idx, 1); }
-  // update visuals
-  document.querySelectorAll('.chapter-card').forEach(c => {
-    const k = c.id.replace('ch-card-', '');
-    if (appState.selectedChapters.includes(k)) {
-      c.classList.add('selected');
-      document.getElementById(`ch-check-${k}`).textContent = '✓';
-    } else {
-      c.classList.remove('selected');
-      document.getElementById(`ch-check-${k}`).textContent = '';
-    }
-  });
+function toggleChapter(key, card) {
+  if (state.selectedChapters.has(key)) {
+    state.selectedChapters.delete(key);
+    card.classList.remove('selected');
+  } else {
+    state.selectedChapters.add(key);
+    card.classList.add('selected');
+  }
   updateStartBtn();
 }
 
 function selectAll() {
-  const sub = appState.currentSubject;
-  const chapters = Object.entries(DB).filter(([k, v]) => v.subject === sub).map(([k]) => k);
-  appState.selectedChapters = chapters;
-  startQuiz();
+  const chapters = SUBJECT_INFO[state.subject].chapters;
+  state.selectedChapters.clear();
+  chapters.forEach(k => state.selectedChapters.add(k));
+  document.querySelectorAll('.chapter-card').forEach(c => c.classList.add('selected'));
+  updateStartBtn();
+  // small visual cue: scroll to the start button
+  setTimeout(() => document.getElementById('btn-start').scrollIntoView({ behavior:'smooth', block:'center' }), 100);
 }
 
 function updateStartBtn() {
   const btn = document.getElementById('btn-start');
-  if (appState.selectedChapters.length > 0) {
-    btn.style.display = 'flex';
-    const total = appState.selectedChapters.reduce((s, k) => s + DB[k].questions.length, 0);
-    btn.textContent = `⚡ Commencer — ${total} questions`;
-    const isPm = appState.currentSubject === 'pm';
-    btn.className = `btn btn-primary${isPm ? ' pm-btn' : ''}`;
+  if (state.selectedChapters.size > 0) {
+    let total = 0;
+    state.selectedChapters.forEach(k => total += DB[k].questions.length);
+    btn.style.display = 'inline-flex';
+    btn.innerHTML = `⚡ Commencer (${total} questions)`;
   } else {
     btn.style.display = 'none';
   }
 }
 
 // ═══════════════════════════════════════════
-// QUIZ
+// QUIZ — START
 // ═══════════════════════════════════════════
-function startQuiz() {
-  const shuffleQ = document.getElementById('opt-shuffle').checked;
-  const shuffleA = document.getElementById('opt-shuffle-ans').checked;
-  appState.shuffleQ = shuffleQ;
-  appState.shuffleA = shuffleA;
-
-  // Build question pool
-  let pool = [];
-  appState.selectedChapters.forEach(k => {
-    DB[k].questions.forEach(q => pool.push({...q, chapter: k}));
-  });
-  if (shuffleQ) pool = shuffleArr(pool);
-
-  // Build shuffled answers
-  const shuffledAnswers = pool.map(q => {
-    let ans = q.a.map((text, i) => ({text, origIdx: i}));
-    if (shuffleA) ans = shuffleArr(ans);
-    return ans;
-  });
-  const shuffledCorrect = pool.map((q, i) =>
-    shuffledAnswers[i].findIndex(a => a.origIdx === q.r)
-  );
-
-  // Init session
-  const chapterStats = {};
-  appState.selectedChapters.forEach(k => { chapterStats[k] = {correct:0, total:0}; });
-
-  appState.session = {
-    questions: pool,
-    shuffledAnswers,
-    shuffledCorrect,
-    answers: new Array(pool.length).fill(null),
-    current: 0,
-    correct: 0,
-    wrong: 0,
-    chapterStats
-  };
-
-  showScreen('quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const sess = appState.session;
-  const idx = sess.current;
-  const q = sess.questions[idx];
-  const total = sess.questions.length;
-  const answered = sess.answers[idx];
-  const isReview = answered !== null;
-
-  // topbar
-  document.getElementById('q-num').textContent = idx + 1;
-  document.getElementById('q-total').textContent = total;
-  document.getElementById('progress-fill').style.width = `${(idx / total) * 100}%`;
-  document.getElementById('score-v').textContent = sess.correct;
-  document.getElementById('score-x').textContent = sess.wrong;
-
-  // review banner
-  const banner = document.getElementById('review-banner');
-  banner.className = 'review-banner' + (isReview ? ' show' : '');
-
-  // question card
-  const card = document.getElementById('question-card');
-  card.className = 'question-card';
-  if (isReview) {
-    card.classList.add('review-mode');
-    if (!answered.isSkipped) {
-      card.classList.add(answered.chosen === sess.shuffledCorrect[idx] ? 'answered-correct' : 'answered-wrong');
-    }
-  }
-
-  // chapter tag
-  const chId = q.chapter;
-  const ch = DB[chId];
-  const tag = document.getElementById('q-chapter-tag');
-  tag.textContent = ch.label;
-  tag.style.color = ch.color;
-
-  document.getElementById('q-num-display').textContent = `Question ${idx + 1} sur ${total}`;
-  document.getElementById('q-text').innerHTML = q.q;
-
-  // answers
-  const grid = document.getElementById('answers-grid');
-  grid.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  sess.shuffledAnswers[idx].forEach((ans, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-btn';
-    const letter = document.createElement('span');
-    letter.className = 'answer-letter';
-    letter.textContent = letters[i];
-    const text = document.createElement('span');
-    text.innerHTML = ans.text;
-    btn.appendChild(letter);
-    btn.appendChild(text);
-
-    if (isReview) {
-      btn.disabled = true;
-      if (i === sess.shuffledCorrect[idx]) {
-        btn.classList.add('correct');
-        const icon = document.createElement('span');
-        icon.className = 'answer-icon';
-        icon.textContent = '✓';
-        btn.appendChild(icon);
-      } else if (!answered.isSkipped && i === answered.chosen) {
-        btn.classList.add('wrong');
-        const icon = document.createElement('span');
-        icon.className = 'answer-icon';
-        icon.textContent = '✗';
-        btn.appendChild(icon);
-      } else {
-        btn.classList.add('reveal');
-      }
-    } else {
-      btn.onclick = () => checkAnswer(i);
-    }
-    grid.appendChild(btn);
-  });
-
-  // explanation
-  const expl = document.getElementById('explanation');
-  const explText = document.getElementById('expl-text');
-  if (isReview) {
-    explText.innerHTML = q.e;
-    expl.className = 'explanation show';
-  } else {
-    expl.className = 'explanation';
-  }
-
-  // nav buttons
-  const btnPrev = document.getElementById('btn-prev');
-  const btnNext = document.getElementById('btn-next');
-  const btnSkip = document.getElementById('btn-skip');
-
-  btnPrev.disabled = idx === 0;
-
-  if (isReview) {
-    btnNext.style.display = 'inline-flex';
-    btnNext.textContent = idx === total - 1 ? 'Voir résultats →' : 'Suivante →';
-    btnSkip.style.display = 'none';
-  } else {
-    btnNext.style.display = 'none';
-    btnSkip.style.display = 'inline-flex';
-  }
-}
-
-function checkAnswer(chosen) {
-  const sess = appState.session;
-  const idx = sess.current;
-  if (sess.answers[idx] !== null) return;
-
-  const correct = sess.shuffledCorrect[idx];
-  const q = sess.questions[idx];
-  sess.answers[idx] = {chosen, isSkipped: false};
-
-  if (chosen === correct) {
-    sess.correct++;
-    sess.chapterStats[q.chapter].correct++;
-    document.getElementById('question-card').classList.add('answered-correct', 'pulse-green');
-    spawnConfetti(4);
-  } else {
-    sess.wrong++;
-    document.getElementById('question-card').classList.add('answered-wrong', 'shake');
-    setTimeout(() => document.getElementById('question-card').classList.remove('shake'), 400);
-  }
-  sess.chapterStats[q.chapter].total++;
-
-  // show answers
-  const btns = document.querySelectorAll('.answer-btn');
-  btns.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === correct) {
-      btn.classList.add('correct');
-      const icon = document.createElement('span');
-      icon.className = 'answer-icon';
-      icon.textContent = '✓';
-      btn.appendChild(icon);
-    } else if (i === chosen && chosen !== correct) {
-      btn.classList.add('wrong');
-      const icon = document.createElement('span');
-      icon.className = 'answer-icon';
-      icon.textContent = '✗';
-      btn.appendChild(icon);
-    } else {
-      btn.classList.add('reveal');
-    }
-  });
-
-  // show explanation
-  document.getElementById('expl-text').innerHTML = q.e;
-  document.getElementById('explanation').className = 'explanation show';
-
-  document.getElementById('score-v').textContent = sess.correct;
-  document.getElementById('score-x').textContent = sess.wrong;
-  document.getElementById('btn-next').style.display = 'inline-flex';
-  document.getElementById('btn-next').textContent = idx === sess.questions.length - 1 ? 'Voir résultats →' : 'Suivante →';
-  document.getElementById('btn-skip').style.display = 'none';
-}
-
-function nextQuestion() {
-  const sess = appState.session;
-  if (sess.current >= sess.questions.length - 1) {
-    showResults();
-  } else {
-    sess.current++;
-    renderQuestion();
-  }
-}
-
-function prevQuestion() {
-  const sess = appState.session;
-  if (sess.current > 0) {
-    sess.current--;
-    renderQuestion();
-  }
-}
-
-function skipQuestion() {
-  const sess = appState.session;
-  const idx = sess.current;
-  if (sess.answers[idx] === null) {
-    sess.answers[idx] = {chosen: -1, isSkipped: true};
-  }
-  nextQuestion();
-}
-
-// ═══════════════════════════════════════════
-// RESULTS
-// ═══════════════════════════════════════════
-function showResults() {
-  showScreen('results');
-  const sess = appState.session;
-  const played = sess.correct + sess.wrong;
-  const skipped = sess.answers.filter(a => a && a.isSkipped).length;
-  const pct = played > 0 ? Math.round((sess.correct / played) * 100) : 0;
-
-  const circumference = 2 * Math.PI * 52;
-  const ring = document.getElementById('ring-fill');
-  ring.style.strokeDasharray = circumference;
-  ring.style.strokeDashoffset = circumference;
-  ring.style.stroke = pct >= 75 ? 'var(--green)' : pct >= 50 ? 'var(--yellow)' : 'var(--red)';
-  setTimeout(() => { ring.style.strokeDashoffset = circumference * (1 - pct / 100); }, 100);
-  document.getElementById('ring-pct').textContent = pct + '%';
-
-  const [title, sub] = pct >= 90 ? ['Excellent ! 🏆','Maîtrise totale.'] :
-    pct >= 75 ? ['Très bien ! ✦','Tu maîtrises le chapitre.'] :
-    pct >= 50 ? ['Bien ! 📈','Quelques points à revoir.'] :
-    ['À retravailler 📚','Reprends le cours et refais le quiz.'];
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent = sub;
-
-  document.getElementById('res-v').textContent = sess.correct;
-  document.getElementById('res-x').textContent = sess.wrong;
-  document.getElementById('res-s').textContent = skipped;
-  document.getElementById('res-t').textContent = played;
-
-  const breakdown = document.getElementById('ch-breakdown');
-  breakdown.innerHTML = '';
-  Object.entries(sess.chapterStats).forEach(([k, data]) => {
-    if (data.total === 0) return;
-    const p = Math.round((data.correct / data.total) * 100);
-    const color = DB[k].color;
-    const row = document.createElement('div');
-    row.className = 'ch-result-row';
-    row.innerHTML = `<span class="ch-name">${DB[k].label}</span>
-      <div class="ch-bar-outer"><div class="ch-bar-fill" style="width:0%;background:${color}"></div></div>
-      <span class="ch-score-txt" style="color:${color}">${data.correct}/${data.total}</span>`;
-    breakdown.appendChild(row);
-    setTimeout(() => row.querySelector('.ch-bar-fill').style.width = p + '%', 200);
-  });
-
-  if (pct >= 80) spawnConfetti(25);
-  saveResults();
-}
-
-function reviewWrong() {
-  const sess = appState.session;
-  const wrong = sess.questions.filter((q, i) => {
-    const a = sess.answers[i];
-    return a && !a.isSkipped && a.chosen !== sess.shuffledCorrect[i];
-  });
-  if (wrong.length === 0) return;
-
-  // rebuild session with wrong questions
-  appState.selectedChapters = [...new Set(wrong.map(q => q.chapter))];
-  const chapterStats = {};
-  appState.selectedChapters.forEach(k => { chapterStats[k] = {correct:0, total:0}; });
-
-  const pool = wrong.map(q => ({...q}));
-  const shuffledAnswers = pool.map(q => {
-    let ans = q.a.map((text, i) => ({text, origIdx: i}));
-    if (appState.shuffleA) ans = shuffleArr(ans);
-    return ans;
-  });
-  const shuffledCorrect = pool.map((q, i) => shuffledAnswers[i].findIndex(a => a.origIdx === q.r));
-
-  appState.session = { questions: pool, shuffledAnswers, shuffledCorrect,
-    answers: new Array(pool.length).fill(null), current: 0, correct: 0, wrong: 0, chapterStats };
-  showScreen('quiz');
-  renderQuestion();
-}
-
-// ═══════════════════════════════════════════
-// LOCALSTORAGE — SAVE SCORES (namespaced by user)
-// ═══════════════════════════════════════════
-function getCurrentUser() {
-  // Priority: URL param > localStorage current user
-  const params = new URLSearchParams(window.location.search);
-  const urlUser = params.get('user');
-  if (urlUser) return urlUser;
-  return localStorage.getItem('pq_current') || null;
-}
-
-function saveResults() {
-  try {
-    const user = getCurrentUser();
-    if (!user) return; // no user → skip save (shouldn't happen in normal flow)
-    const storageKey = `pq_sc_${user}`;
-    const sess = appState.session;
-    const scores = JSON.parse(localStorage.getItem(storageKey) || '{}');
-    const date = new Date().toISOString().split('T')[0];
-    Object.entries(sess.chapterStats).forEach(([k, data]) => {
-      if (data.total === 0) return;
-      const pct = Math.round((data.correct / data.total) * 100);
-      if (!scores[k]) scores[k] = { best: 0, sessions: [], last: '' };
-      scores[k].sessions.push({ date, correct: data.correct, total: data.total, pct });
-      if (scores[k].sessions.length > 30) scores[k].sessions.shift();
-      scores[k].best = Math.max(scores[k].best, pct);
-      scores[k].last = date;
-    });
-    localStorage.setItem(storageKey, JSON.stringify(scores));
-  } catch(e) { /* silently fail if localStorage unavailable */ }
-}
-
-// ═══════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════
-function shuffleArr(arr) {
-  const a = [...arr];
+function shuffleArray(arr) {
+  const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
@@ -947,54 +698,389 @@ function shuffleArr(arr) {
   return a;
 }
 
-function spawnConfetti(n) {
-  const colors = ['#00c8ff','#00e5a0','#ffd166','#ff4f6b','#b57bee'];
-  for (let i = 0; i < n; i++) {
-    setTimeout(() => {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.cssText = `left:${Math.random()*100}vw;top:${Math.random()*40}vh;background:${colors[Math.floor(Math.random()*5)]};transform:rotate(${Math.random()*360}deg);animation-duration:${1.5+Math.random()}s;animation-delay:${Math.random()*0.3}s`;
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 3000);
-    }, i * 40);
+function startQuiz() {
+  state.shuffleQ = document.getElementById('opt-shuffle').checked;
+  state.shuffleA = document.getElementById('opt-shuffle-ans').checked;
+  state.reviewMode = false;
+
+  // Build pool, attach chapterKey to each question
+  let pool = [];
+  state.selectedChapters.forEach(key => {
+    DB[key].questions.forEach((q, qi) => {
+      pool.push({
+        ...q,
+        chapterKey: key,
+        chapterLabel: CHAPTER_META[key].label,
+        chapterSubject: CHAPTER_META[key].subject,
+        origIndex: qi
+      });
+    });
+  });
+
+  // Shuffle answers if required (rebuild a/r mapping)
+  if (state.shuffleA) {
+    pool = pool.map(q => {
+      const idxs = q.a.map((_, i) => i);
+      const shuf = shuffleArray(idxs);
+      const newA = shuf.map(i => q.a[i]);
+      const newR = shuf.indexOf(q.r);
+      return { ...q, a: newA, r: newR };
+    });
+  }
+
+  if (state.shuffleQ) pool = shuffleArray(pool);
+
+  state.questions = pool;
+  state.idx = 0;
+  state.score = 0;
+  state.wrong = 0;
+  state.answered = new Array(pool.length).fill(null);
+
+  document.getElementById('q-total').textContent = pool.length;
+  document.getElementById('score-v').textContent = '0';
+  document.getElementById('score-x').textContent = '0';
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════════
+// QUIZ — RENDER
+// ═══════════════════════════════════════════
+function renderQuestion() {
+  const q = state.questions[state.idx];
+  const prevAnswer = state.answered[state.idx];
+
+  document.getElementById('q-num').textContent = state.idx + 1;
+  document.getElementById('q-num-display').textContent = `Question ${state.idx + 1}`;
+  document.getElementById('progress-fill').style.width = `${((state.idx + 1) / state.questions.length) * 100}%`;
+
+  // Chapter tag
+  const tag = document.getElementById('q-chapter-tag');
+  tag.textContent = q.chapterLabel;
+  tag.style.color = q.chapterSubject === 'pm' ? 'var(--purple)' : 'var(--blue)';
+
+  // Review banner
+  const banner = document.getElementById('review-banner');
+  const card = document.getElementById('question-card');
+  if (prevAnswer !== null) {
+    banner.classList.add('show');
+    card.classList.add('review-mode');
+  } else {
+    banner.classList.remove('show');
+    card.classList.remove('review-mode');
+  }
+
+  // Question text
+  const qText = document.getElementById('q-text');
+  qText.textContent = q.q;
+  renderMath(qText);
+
+  // Answers
+  const grid = document.getElementById('answers-grid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+  q.a.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.dataset.idx = i;
+    btn.innerHTML = `
+      <span class="answer-letter">${letters[i]}</span>
+      <span class="answer-content">${ans}</span>
+      <span class="answer-icon"></span>
+    `;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+  renderMath(grid);
+
+  // Explanation
+  const expl = document.getElementById('explanation');
+  const explText = document.getElementById('expl-text');
+  expl.classList.remove('show');
+
+  // Restore prev answered state
+  if (prevAnswer !== null) {
+    revealAnswer(prevAnswer.selectedIdx, false);
+  }
+
+  // Nav buttons
+  document.getElementById('btn-prev').style.display = state.idx > 0 ? 'inline-flex' : 'none';
+  if (prevAnswer !== null) {
+    document.getElementById('btn-next').style.display = state.idx < state.questions.length - 1 ? 'inline-flex' : 'none';
+    document.getElementById('btn-skip').style.display = 'none';
+    if (state.idx === state.questions.length - 1) {
+      document.getElementById('btn-next').style.display = 'inline-flex';
+      document.getElementById('btn-next').innerHTML = '🏁 Voir résultats';
+    }
+  } else {
+    document.getElementById('btn-next').style.display = 'none';
+    document.getElementById('btn-skip').style.display = state.idx < state.questions.length - 1 ? 'inline-flex' : 'none';
   }
 }
 
 // ═══════════════════════════════════════════
-// AUTO-SELECT SUBJECT FROM URL ?subject=em|pm
-// Also display current user in header
+// QUIZ — ANSWER
 // ═══════════════════════════════════════════
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const sub  = params.get('subject');
-  const user = params.get('user') || localStorage.getItem('pq_current');
+function selectAnswer(selectedIdx) {
+  if (state.answered[state.idx] !== null) return;  // already answered
+  const q = state.questions[state.idx];
+  const correct = (selectedIdx === q.r);
 
-  // Show user name in a small pill if available
-  if (user) {
-    const COLORS = ['#00c8ff','#00e5a0','#b57bee','#ff9f43','#ff4f6b','#ffd166','#54a0ff','#ff6b81'];
-    const col = (n => { let h=0; for(let c of n) h=(h*31+c.charCodeAt(0))&0xffffffff; return COLORS[Math.abs(h)%COLORS.length]; })(user);
-    const pill = document.createElement('div');
-    pill.style.cssText = 'display:inline-flex;align-items:center;gap:.45rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem .3rem .35rem;font-family:var(--sans);font-size:.75rem;color:var(--text-bright)';
-    const av = document.createElement('div');
-    av.style.cssText = `width:22px;height:22px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#000;flex-shrink:0`;
-    av.textContent = user.slice(0,2).toUpperCase();
-    pill.appendChild(av);
-    pill.appendChild(document.createTextNode(user));
+  state.answered[state.idx] = {
+    selectedIdx,
+    correct,
+    chapterKey: q.chapterKey
+  };
 
-    // Insert after the back link in home header
-    const homeHeader = document.querySelector('.home-header');
-    if (homeHeader) {
-      const row = document.createElement('div');
-      row.style.cssText = 'display:flex;justify-content:center;margin-bottom:.5rem';
-      row.appendChild(pill);
-      homeHeader.insertBefore(row, homeHeader.querySelector('.tag'));
+  if (correct) {
+    state.score++;
+    document.getElementById('score-v').textContent = state.score;
+    spawnConfetti();
+    document.getElementById('question-card').classList.add('pulse-green');
+    setTimeout(() => document.getElementById('question-card').classList.remove('pulse-green'), 600);
+  } else {
+    state.wrong++;
+    document.getElementById('score-x').textContent = state.wrong;
+    document.getElementById('question-card').classList.add('shake');
+    setTimeout(() => document.getElementById('question-card').classList.remove('shake'), 500);
+  }
+
+  revealAnswer(selectedIdx, true);
+
+  // Show next button
+  document.getElementById('btn-skip').style.display = 'none';
+  if (state.idx < state.questions.length - 1) {
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.style.display = 'inline-flex';
+    nextBtn.innerHTML = 'Suivant →';
+  } else {
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.style.display = 'inline-flex';
+    nextBtn.innerHTML = '🏁 Voir résultats';
+  }
+}
+
+function revealAnswer(selectedIdx, showExpl) {
+  const q = state.questions[state.idx];
+  const buttons = document.querySelectorAll('.answer-btn');
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.r) {
+      btn.classList.add('correct');
+      btn.querySelector('.answer-icon').textContent = '✓';
+    } else if (i === selectedIdx) {
+      btn.classList.add('wrong');
+      btn.querySelector('.answer-icon').textContent = '✗';
+    } else {
+      btn.classList.add('reveal');
     }
-  }
+  });
 
-  if (sub === 'em' || sub === 'pm') {
-    goSubject(sub);
+  if (showExpl || state.answered[state.idx]) {
+    const expl = document.getElementById('explanation');
+    const explText = document.getElementById('expl-text');
+    explText.textContent = q.e;
+    renderMath(explText);
+    expl.classList.add('show');
   }
-})();
+}
+
+// ═══════════════════════════════════════════
+// QUIZ — NAVIGATION
+// ═══════════════════════════════════════════
+function nextQuestion() {
+  if (state.idx >= state.questions.length - 1) {
+    showResults();
+    return;
+  }
+  state.idx++;
+  renderQuestion();
+}
+
+function prevQuestion() {
+  if (state.idx > 0) {
+    state.idx--;
+    renderQuestion();
+  }
+}
+
+function skipQuestion() {
+  if (state.idx < state.questions.length - 1) {
+    state.idx++;
+    renderQuestion();
+  }
+}
+
+function confirmQuit() {
+  if (state.answered.some(a => a !== null)) {
+    if (!confirm('Quitter le quiz ? Votre progression sera perdue.')) return;
+  }
+  goHome();
+}
+
+// ═══════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════
+function showResults() {
+  const total = state.questions.length;
+  const answered = state.answered.filter(a => a !== null).length;
+  const correct = state.score;
+  const wrong = state.wrong;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  document.getElementById('r-pct').textContent = pct + '%';
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-total').textContent = total;
+
+  // Color the circle based on pct
+  const circle = document.getElementById('results-circle');
+  let color = 'var(--red)';
+  if (pct >= 80) color = 'var(--green)';
+  else if (pct >= 60) color = 'var(--blue)';
+  else if (pct >= 40) color = 'var(--yellow)';
+  else if (pct >= 20) color = 'var(--orange)';
+  circle.style.borderColor = color;
+  document.getElementById('r-pct').style.color = color;
+
+  // Message
+  const msgEl = document.getElementById('r-msg');
+  if (pct >= 90) msgEl.textContent = '🏆 Excellent — maîtrise complète';
+  else if (pct >= 75) msgEl.textContent = '✨ Très bien — solide';
+  else if (pct >= 60) msgEl.textContent = '👍 Bien — quelques révisions';
+  else if (pct >= 40) msgEl.textContent = '📚 À retravailler';
+  else msgEl.textContent = '💪 Reprenez le cours';
+
+  // Per-chapter breakdown
+  const chapterStats = {};
+  state.answered.forEach((a, i) => {
+    if (a === null) return;
+    const key = a.chapterKey;
+    if (!chapterStats[key]) chapterStats[key] = { correct:0, total:0 };
+    chapterStats[key].total++;
+    if (a.correct) chapterStats[key].correct++;
+  });
+  // include unanswered too in totals (count toward total)
+  state.questions.forEach(q => {
+    const key = q.chapterKey;
+    if (!chapterStats[key]) chapterStats[key] = { correct:0, total:0 };
+  });
+  // recount totals from question pool
+  Object.keys(chapterStats).forEach(k => chapterStats[k].total = state.questions.filter(q => q.chapterKey === k).length);
+
+  const list = document.getElementById('chapter-results-list');
+  list.innerHTML = '';
+  Object.entries(chapterStats).forEach(([key, s]) => {
+    const meta = CHAPTER_META[key];
+    const p = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'ch-result-row';
+    row.innerHTML = `
+      <div class="ch-name">${meta.label}</div>
+      <div class="ch-bar-outer"><div class="ch-bar-fill" style="width:${p}%;background:${meta.subject==='pm'?'var(--purple)':'var(--blue)'}"></div></div>
+      <div class="ch-score-txt" style="color:${p>=70?'var(--green)':p>=50?'var(--yellow)':'var(--red)'}">${s.correct}/${s.total}</div>
+    `;
+    list.appendChild(row);
+  });
+
+  // Save score
+  saveScore(pct, correct, total);
+
+  showScreen('screen-results');
+  // big celebration
+  if (pct >= 80) {
+    for (let i = 0; i < 5; i++) setTimeout(spawnConfetti, i * 150);
+  }
+}
+
+function reviewWrong() {
+  // Build a new pool with only wrong-answered questions
+  const wrongQs = [];
+  state.answered.forEach((a, i) => {
+    if (a !== null && !a.correct) {
+      wrongQs.push(state.questions[i]);
+    }
+  });
+  if (wrongQs.length === 0) {
+    alert('Aucune erreur à revoir — bravo !');
+    return;
+  }
+  state.questions = wrongQs;
+  state.idx = 0;
+  state.score = 0;
+  state.wrong = 0;
+  state.answered = new Array(wrongQs.length).fill(null);
+  state.reviewMode = true;
+  document.getElementById('q-total').textContent = wrongQs.length;
+  document.getElementById('score-v').textContent = '0';
+  document.getElementById('score-x').textContent = '0';
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════════
+// LOCALSTORAGE — score history per user
+// ═══════════════════════════════════════════
+function saveScore(pct, correct, total) {
+  try {
+    const key = 'pq_sc_' + state.user;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    const chapters = Array.from(state.selectedChapters);
+    existing.push({
+      date: Date.now(),
+      pct, correct, total,
+      chapters,
+      subject: state.subject
+    });
+    // keep last 50
+    if (existing.length > 50) existing.splice(0, existing.length - 50);
+    localStorage.setItem(key, JSON.stringify(existing));
+  } catch(e) { console.warn('Score save failed', e); }
+}
+
+// ═══════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════
+function spawnConfetti() {
+  const colors = ['#00c8ff','#00e5a0','#ffd166','#b57bee','#ff9f43','#ff4f6b'];
+  for (let i = 0; i < 18; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = (50 + (Math.random() - 0.5) * 80) + '%';
+    c.style.top = '40%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.setProperty('--dx', (Math.random() - 0.5) * 400 + 'px');
+    c.style.setProperty('--dy', (Math.random() * 300 + 100) + 'px');
+    c.style.setProperty('--rot', (Math.random() * 720) + 'deg');
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1200);
+  }
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD BACK LINK + INIT
+// ═══════════════════════════════════════════
+function injectDashboardLink() {
+  if (!state.fromDashboard) return;
+  const homeHeader = document.querySelector('.home-header');
+  if (!homeHeader || document.getElementById('dashboard-back')) return;
+  const link = document.createElement('div');
+  link.id = 'dashboard-back';
+  link.style.cssText = 'text-align:left;margin-bottom:1rem';
+  link.innerHTML = `<button class="btn-back" onclick="goDashboard()">← Tableau de bord</button>`;
+  homeHeader.parentNode.insertBefore(link, homeHeader);
+  // also add user pill
+  const userPill = document.createElement('div');
+  userPill.style.cssText = 'display:inline-block;font-family:var(--mono);font-size:.7rem;color:var(--green);background:var(--green-dim);padding:.3rem .8rem;border-radius:20px;margin-left:.5rem;border:1px solid var(--green)';
+  userPill.textContent = '👤 ' + state.user;
+  link.appendChild(userPill);
+}
+
+// Init
+window.addEventListener('DOMContentLoaded', () => {
+  parseUrl();
+  injectDashboardLink();
+});
 </script>
 </body>
 </html>
