@@ -9,7 +9,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --bg:#F5F2EC; --surface:#FFFFFF; --text:#1A1814; --muted:#7A7670; --border:#E2DDD5; }
-    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:3rem 1.5rem 5rem; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:3rem 1.5rem 100px; }
     header { max-width:800px; margin:0 auto 3.5rem; }
     .eyebrow { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:8px; margin-bottom:1rem; }
     .eyebrow::before { content:''; display:inline-block; width:20px; height:1px; background:var(--muted); }
@@ -35,7 +35,18 @@
     .open-link svg { width:13px; height:13px; transition:transform .15s ease; }
     .card:hover .open-link svg { transform:translate(2px,-2px); }
     footer { max-width:800px; margin:3rem auto 0; text-align:center; font-size:12px; color:var(--muted); }
-  </style>
+  
+.bnav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:440px;background:rgba(255,255,255,.97);border:1px solid #E2DDD5;border-radius:28px;box-shadow:0 4px 28px rgba(0,0,0,.10),0 1px 4px rgba(0,0,0,.06);display:flex;align-items:stretch;height:68px;padding:8px 6px;z-index:400;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;text-decoration:none;font-family:'DM Sans','Sora',sans-serif;font-size:.58rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#b0b8c4;transition:color .2s;border-radius:20px;padding:0 4px;cursor:pointer;position:relative;}
+.bnav-icon-bg{width:40px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.bnav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke-width .15s;}
+.bnav-item:hover .bnav-icon-bg{background:rgba(0,0,0,.04);}
+.bnav-item.active{color:#FF7B54;}
+.bnav-item.active .bnav-icon-bg{background:rgba(255,123,84,.12);}
+.bnav-item.active svg{stroke-width:2.3;}
+.bnav-item.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#FF7B54;}
+
+</style>
 </head>
 <body>
 
@@ -125,5 +136,11 @@
 
   <footer>Placez tous les fichiers dans le même dossier pour que la navigation fonctionne.</footer>
 
+<nav class="bnav">
+  <a href="accueil.html" class="bnav-item" aria-label="Accueil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div><span>Accueil</span></a>
+  <a href="index.html" class="bnav-item" aria-label="QCM"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>QCM</span></a>
+  <a href="index_fiches.html" class="bnav-item active" aria-label="Fiches"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Fiches</span></a>
+  <a href="profil.html" class="bnav-item" aria-label="Profil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><span>Profil</span></a>
+</nav>
 </body>
 </html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil · FGE2-S4</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080b10;--surface:#111620;--surface2:#182030;--border:#1e2840;
+  --blue:#00c8ff;--blue-dim:rgba(0,200,255,.1);--blue-glow:rgba(0,200,255,.2);
+  --green:#00e5a0;--green-dim:rgba(0,229,160,.1);
+  --red:#ff4f6b;--red-dim:rgba(255,79,107,.1);
+  --yellow:#ffd166;--yellow-dim:rgba(255,209,102,.1);
+  --purple:#b57bee;--purple-dim:rgba(181,123,238,.1);
+  --orange:#FF7B54;--orange-dim:rgba(255,123,84,.12);
+  --text:#b8c5e0;--text-dim:#3d4d68;--text-bright:#e8f0ff;
+  --mono:'JetBrains Mono',monospace;--sans:'Sora',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.18;pointer-events:none;z-index:0}
+.wrap{max-width:640px;margin:0 auto;padding:2rem 1.25rem;position:relative;z-index:1}
+
+/* ─ USER HEADER ─ */
+.user-hdr{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:1.8rem 1.6rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.3rem;position:relative;overflow:hidden}
+.user-hdr::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--orange),transparent)}
+.av-xl{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.35rem;font-weight:700;color:#000;flex-shrink:0;border:3px solid rgba(255,255,255,.08)}
+.user-info h2{font-size:1.4rem;font-weight:700;color:var(--text-bright);letter-spacing:-.03em}
+.user-info p{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);letter-spacing:.1em;margin-top:.25rem;text-transform:uppercase}
+.user-badges{display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
+.ubadge{font-family:var(--mono);font-size:.58rem;padding:.2rem .55rem;border-radius:10px;font-weight:600}
+
+/* ─ STATS GRID ─ */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.25rem}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem .8rem;position:relative;overflow:hidden}
+.scard::after{content:'';position:absolute;top:0;right:0;width:3px;height:100%;border-radius:0 12px 12px 0}
+.sc1::after{background:var(--blue)}.sc2::after{background:var(--green)}.sc3::after{background:var(--yellow)}.sc4::after{background:var(--orange)}
+.sv{font-family:var(--mono);font-size:1.4rem;font-weight:700;color:var(--text-bright);line-height:1}
+.sl{font-size:.63rem;color:var(--text-dim);margin-top:.3rem;line-height:1.3}
+
+/* ─ SECTION TITLE ─ */
+.stitle{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem;display:flex;align-items:center;gap:.65rem}
+.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ─ CHAPTER PROGRESS ─ */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem;overflow:hidden}
+.panel-hdr{padding:.9rem 1.3rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
+.panel-hdr span{font-size:.85rem;font-weight:600;color:var(--text-bright)}
+.ch-row{display:flex;align-items:center;gap:.8rem;padding:.75rem 1.3rem;border-bottom:1px solid var(--border)}
+.ch-row:last-child{border-bottom:none}
+.ch-name{font-size:.78rem;font-weight:600;color:var(--text-bright);width:160px;flex-shrink:0}
+.ch-bar-wrap{flex:1}
+.ch-bar-bg{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.ch-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.ch-pct{font-family:var(--mono);font-size:.68rem;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.ch-badge{font-family:var(--mono);font-size:.6rem;font-weight:600;padding:.18rem .5rem;border-radius:8px;flex-shrink:0;width:60px;text-align:center}
+.b-none{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.b-low{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,79,107,.25)}
+.b-mid{background:var(--yellow-dim);color:var(--yellow);border:1px solid rgba(255,209,102,.25)}
+.b-good{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.25)}
+.b-top{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(0,200,255,.3)}
+
+/* ─ ACTION BUTTONS ─ */
+.actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.25rem}
+.abtn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.1rem;border-radius:10px;font-family:var(--sans);font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.a-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.25)}
+.a-green:hover{background:rgba(0,229,160,.2)}
+.a-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(0,200,255,.25)}
+.a-blue:hover{background:rgba(0,200,255,.2)}
+.a-red{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+.a-red:hover{border-color:var(--red);color:var(--red)}
+.a-orange{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(255,123,84,.25)}
+.a-orange:hover{background:rgba(255,123,84,.2)}
+
+/* ─ SYNC ─ */
+.sync-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.3rem;border-bottom:1px solid var(--border)}
+.sync-row:last-child{border-bottom:none}
+.sync-label{font-size:.8rem;color:var(--text-bright);font-weight:600;display:flex;align-items:center;gap:.5rem}
+.sync-val{font-family:var(--mono);font-size:.68rem;color:var(--text-dim)}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sync-dot.on{background:var(--green);box-shadow:0 0 6px rgba(0,229,160,.5)}
+.sync-dot.off{background:var(--text-dim)}
+
+/* ─ PROFILES LIST ─ */
+.prof-list{padding:.5rem 0}
+.prof-item{display:flex;align-items:center;gap:.8rem;padding:.65rem 1.3rem;cursor:pointer;transition:background .12s;border-radius:0}
+.prof-item:hover{background:var(--surface2)}
+.prof-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#000;flex-shrink:0}
+.prof-name{font-size:.83rem;font-weight:600;color:var(--text-bright);flex:1}
+.prof-check{color:var(--orange);font-size:.8rem}
+.prof-add{display:flex;align-items:center;gap:.6rem;padding:.65rem 1.3rem;cursor:pointer;color:var(--text-dim);font-size:.8rem;transition:color .15s}
+.prof-add:hover{color:var(--text)}
+
+/* ─ TOKEN INPUT ─ */
+.token-row{display:flex;gap:.5rem;padding:0 1.3rem 1rem}
+.tok-inp{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .9rem;font-family:var(--mono);font-size:.75rem;color:var(--text-bright);outline:none;transition:border-color .2s}
+.tok-inp:focus{border-color:var(--orange)}
+.tok-inp::placeholder{color:var(--text-dim)}
+
+/* ─ HINT ─ */
+.hint{font-size:.7rem;color:var(--text-dim);line-height:1.6;padding:.6rem 1.3rem 1rem;display:flex;flex-direction:column;gap:.35rem}
+.hint a{color:var(--blue);text-decoration:none}
+
+/* ─ TOAST ─ */
+#toasts{position:fixed;bottom:88px;right:1rem;display:flex;flex-direction:column;gap:.4rem;z-index:600;pointer-events:none}
+.toast{display:flex;align-items:center;gap:.6rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.65rem .9rem;font-size:.78rem;color:var(--text-bright);box-shadow:0 8px 32px rgba(0,0,0,.5);pointer-events:all;animation:toastIn .25s ease;max-width:260px}
+.tok{border-color:rgba(0,229,160,.35)}.terr{border-color:rgba(255,79,107,.35)}.tinf{border-color:rgba(0,200,255,.35)}
+.tx{margin-left:auto;background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:.8rem;padding:0 0 0 .3rem}
+@keyframes toastIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+body{animation:fadeIn .3s ease}
+
+.bnav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:440px;background:var(--surface);border:1px solid var(--border);border-radius:28px;box-shadow:0 8px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4);display:flex;align-items:stretch;height:68px;padding:8px 6px;z-index:400;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;text-decoration:none;font-family:var(--sans);font-size:.58rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);transition:color .2s;border-radius:20px;padding:0 4px;cursor:pointer;position:relative;}
+.bnav-icon-bg{width:40px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s;}
+.bnav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke-width .15s;}
+.bnav-item:hover .bnav-icon-bg{background:rgba(255,255,255,.04);}
+.bnav-item.active{color:var(--orange);}
+.bnav-item.active .bnav-icon-bg{background:var(--orange-dim);}
+.bnav-item.active svg{stroke-width:2.3;}
+.bnav-item.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- USER HEADER -->
+  <div class="user-hdr">
+    <div class="av-xl" id="av-xl"></div>
+    <div class="user-info">
+      <h2 id="prof-name">—</h2>
+      <p id="prof-sub">FGE2-S4 · EPF Engineering</p>
+      <div class="user-badges">
+        <span class="ubadge" id="badge-sess" style="background:var(--blue-dim);color:var(--blue)">0 sessions</span>
+        <span class="ubadge" id="badge-avg" style="background:var(--green-dim);color:var(--green)">—% moy.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="sgrid">
+    <div class="scard sc1"><div class="sv" id="gs1">—</div><div class="sl">Sessions</div></div>
+    <div class="scard sc2"><div class="sv" id="gs2">—</div><div class="sl">Questions</div></div>
+    <div class="scard sc3"><div class="sv" id="gs3">—</div><div class="sl">Score moy.</div></div>
+    <div class="scard sc4"><div class="sv" id="gs4">—</div><div class="sl">Meilleur ch.</div></div>
+  </div>
+
+  <!-- CHAPTER PROGRESS -->
+  <div class="stitle">Progression</div>
+  <div class="panel" id="prog-panel">
+    <div class="panel-hdr">⚡ <span>Électromagnétisme</span></div>
+    <div id="ch-em"></div>
+    <div class="panel-hdr">🌀 <span>Physique Moderne</span></div>
+    <div id="ch-pm"></div>
+  </div>
+
+  <!-- SAVE -->
+  <div class="stitle">Sauvegarde</div>
+  <div class="actions">
+    <button class="abtn a-green" onclick="doExport()">⬇ Exporter (.json)</button>
+    <button class="abtn a-blue" onclick="document.getElementById('fi').click()">⬆ Importer</button>
+    <button class="abtn a-red" onclick="doReset()">🗑 Réinitialiser</button>
+  </div>
+  <input type="file" id="fi" accept=".json" style="display:none" onchange="doImport(event)">
+
+  <!-- SYNC -->
+  <div class="stitle">Sync GitHub</div>
+  <div class="panel" style="margin-bottom:1.25rem">
+    <div class="sync-row">
+      <span class="sync-label"><span class="sync-dot" id="sync-dot"></span>Statut</span>
+      <span class="sync-val" id="sync-txt">Non connecté</span>
+    </div>
+    <div id="sync-setup-row">
+      <div class="hint">
+        Sauvegarde tes scores dans un Gist GitHub privé.<br>
+        <a href="https://github.com/settings/tokens/new?scopes=gist&description=Quiz+FGE2" target="_blank" rel="noopener">→ Créer un token (scope: gist)</a>
+      </div>
+      <div class="token-row">
+        <input class="tok-inp" id="gh-tok" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxx" autocomplete="off">
+        <button class="abtn a-orange" onclick="connectGH()" style="flex-shrink:0">Connecter</button>
+      </div>
+    </div>
+    <div id="sync-ctrl-row" style="display:none">
+      <div class="actions" style="padding:.8rem 1.3rem 1rem;gap:.5rem">
+        <button class="abtn a-green" id="btn-push" onclick="syncUp()">⬆ Push</button>
+        <button class="abtn a-blue" id="btn-pull" onclick="syncDown()">⬇ Pull</button>
+        <button class="abtn a-orange" id="btn-find" onclick="findGist()">🔍 Trouver</button>
+        <button class="abtn a-red" onclick="discGH()">Déconnecter</button>
+      </div>
+      <div class="sync-row" style="border-top:1px solid var(--border)">
+        <span class="sync-val" id="sync-gist-link"></span>
+        <span class="sync-val" id="sync-last"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILES -->
+  <div class="stitle">Profils</div>
+  <div class="panel" style="margin-bottom:2rem">
+    <div class="prof-list" id="prof-list"></div>
+    <div class="prof-add" onclick="goNewProfile()">＋ Nouveau profil</div>
+    <div style="border-top:1px solid var(--border)">
+      <div class="prof-add" style="color:var(--red);border-top:none" onclick="delProfile()">🗑 Supprimer ce profil</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toasts"></div>
+<nav class="bnav">
+  <a href="accueil.html" class="bnav-item" aria-label="Accueil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div><span>Accueil</span></a>
+  <a href="index.html" class="bnav-item" aria-label="QCM"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>QCM</span></a>
+  <a href="index_fiches.html" class="bnav-item" aria-label="Fiches"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Fiches</span></a>
+  <a href="profil.html" class="bnav-item active" aria-label="Profil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><span>Profil</span></a>
+</nav>
+
+<script>
+
+const KU='pq_users',KC='pq_current';
+const sk=u=>`pq_sc_${u}`;
+const getCur=()=>localStorage.getItem(KC)||null;
+const getUsers=()=>{try{return JSON.parse(localStorage.getItem(KU)||'[]')}catch{return[]}};
+const loadSc=u=>{try{return JSON.parse(localStorage.getItem(sk(u))||'{}')}catch{return{}}};
+const COLORS=['#00c8ff','#00e5a0','#b57bee','#ff9f43','#ff4f6b','#ffd166','#54a0ff','#ff6b81'];
+const avc=n=>{let h=0;for(let c of n)h=(h*31+c.charCodeAt(0))&0xffffffff;return COLORS[Math.abs(h)%COLORS.length]};
+const ini=n=>n.slice(0,2).toUpperCase();
+const CHAPTERS={
+  em_ondes:{label:'Ondes EM',sub:'em',color:'var(--blue)',n:25},
+  em_induction:{label:'Induction',sub:'em',color:'var(--blue)',n:25},
+  rel_restreinte:{label:'Relativité restreinte',sub:'pm',color:'var(--purple)',n:25},
+  meca_quant:{label:'Mécanique quantique',sub:'pm',color:'var(--green)',n:25},
+};
+
+const TK='pq_gh_token', gk=u=>`pq_gist_${u}`, lsk=u=>`pq_sync_${u}`;
+const getToken=()=>localStorage.getItem(TK)||'';
+const setToken=t=>t?localStorage.setItem(TK,t):localStorage.removeItem(TK);
+const getGistId=u=>localStorage.getItem(gk(u))||'';
+const setGistId=(u,id)=>localStorage.setItem(gk(u),id);
+const sk2=u=>`pq_sc_${u}`;
+const saveSc=(u,d)=>localStorage.setItem(sk2(u),JSON.stringify(d));
+const ek=u=>`pq_ex_${u}`;
+
+function toast(msg,cls='tinf',dur=4000){
+  const icons={tok:'✅',terr:'❌',tinf:'💡'};
+  const w=document.getElementById('toasts');
+  const t=document.createElement('div');t.className=`toast ${cls}`;
+  t.innerHTML=`<span>${icons[cls]||'💡'}</span><span style="flex:1">${msg}</span><button class="tx" onclick="this.parentElement.remove()">✕</button>`;
+  w.appendChild(t);
+  if(dur>0)setTimeout(()=>{t.style.opacity='0';t.style.transition='.25s';setTimeout(()=>t.remove(),250);},dur);
+  return t;
+}
+
+function setCur(u){localStorage.setItem(KC,u);}
+const rmUser=u=>{const l=getUsers().filter(x=>x!==u);localStorage.setItem(KU,JSON.stringify(l));};
+const addUser=u=>{const l=getUsers();if(!l.includes(u)){l.push(u);localStorage.setItem(KU,JSON.stringify(l));}};
+
+function initPage(u){
+  // Header
+  const col=avc(u);
+  const av=document.getElementById('av-xl');av.textContent=ini(u);av.style.background=col;
+  document.getElementById('prof-name').textContent=u;
+  // Stats
+  const sc=loadSc(u);let sess=0,qs=0,bests=[],bname='—',bpct=-1;
+  Object.entries(CHAPTERS).forEach(([k,ch])=>{
+    const d=sc[k];if(!d?.sessions?.length)return;
+    sess+=d.sessions.length;qs+=d.sessions.reduce((s,x)=>s+(x.total||0),0);
+    if(d.best>0)bests.push(d.best);
+    if(d.best>bpct){bpct=d.best;bname=ch.label.split(' ').slice(0,2).join(' ');}
+  });
+  const avg=bests.length?Math.round(bests.reduce((a,b)=>a+b,0)/bests.length):null;
+  document.getElementById('gs1').textContent=sess||'0';
+  document.getElementById('gs2').textContent=qs||'0';
+  document.getElementById('gs3').textContent=avg!==null?avg+'%':'—';
+  document.getElementById('gs4').textContent=bpct>0?bname:'—';
+  document.getElementById('badge-sess').textContent=sess+' session'+(sess>1?'s':'');
+  document.getElementById('badge-avg').textContent=(avg!==null?avg+'%':'—')+' moy.';
+  // Chapters
+  renderCh('ch-em',['em_ondes','em_induction'],sc,'var(--blue)');
+  renderCh('ch-pm',['rel_restreinte','meca_quant'],sc,'var(--purple)');
+  // Profiles
+  renderProfiles(u);
+  // Sync
+  updateSyncUI(u);
+}
+
+function renderCh(elId,chs,sc,color){
+  const el=document.getElementById(elId);el.innerHTML='';
+  chs.forEach(k=>{
+    const ch=CHAPTERS[k],d=sc[k];
+    const best=d?.best||0,sess=d?.sessions?.length||0;
+    let bc='b-none';
+    if(sess>0){bc=best>=90?'b-top':best>=70?'b-good':best>=50?'b-mid':'b-low';}
+    const bclr=best>=80?'var(--green)':best>=55?'var(--yellow)':best>0?'var(--red)':'var(--surface2)';
+    const bt=sess>0?(best>=90?'★ '+best+'%':best>=70?'✓ '+best+'%':best+'%'):'—';
+    const row=document.createElement('div');row.className='ch-row';
+    row.innerHTML=`<div class="ch-name">${ch.label}</div>
+      <div class="ch-bar-wrap"><div class="ch-bar-bg"><div class="ch-bar-fill" style="width:0%;background:${bclr}" data-w="${best}"></div></div></div>
+      <span class="ch-pct" style="color:${bclr}">${best>0?best+'%':'—'}</span>
+      <span class="ch-badge ${bc}">${bt}</span>`;
+    el.appendChild(row);
+  });
+  setTimeout(()=>el.querySelectorAll('.ch-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),80);
+}
+
+function renderProfiles(cur){
+  const el=document.getElementById('prof-list');el.innerHTML='';
+  getUsers().forEach(u=>{
+    const col=avc(u);
+    const item=document.createElement('div');item.className='prof-item';
+    item.innerHTML=`<div class="prof-av" style="background:${col}">${ini(u)}</div><span class="prof-name">${u}</span>${u===cur?'<span class="prof-check">●</span>':''}`;
+    item.onclick=()=>{if(u!==cur){setCur(u);location.reload();}};
+    el.appendChild(item);
+  });
+}
+
+function goNewProfile(){ window.location.href='index.html'; }
+
+function delProfile(){
+  const u=getCur();
+  if(!confirm(`Supprimer le profil "${u}" et tous ses scores ?`))return;
+  localStorage.removeItem(sk2(u));rmUser(u);
+  const rem=getUsers();
+  if(rem.length){setCur(rem[0]);location.reload();}
+  else{localStorage.removeItem(KC);window.location.href='index.html';}
+}
+
+function doExport(){
+  const u=getCur();const sc=loadSc(u);
+  if(!Object.keys(sc).length){toast('Aucun score à exporter.','terr');return;}
+  const payload={version:1,user:u,exported:new Date().toISOString(),app:'quiz-physique-fge2',scores:sc};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`scores_${u.replace(/\s+/g,'_')}_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();URL.revokeObjectURL(url);
+  localStorage.setItem(ek(u),new Date().toISOString());
+  toast(`Scores de ${u} exportés ✓`,'tok');
+}
+
+function doImport(ev){
+  const file=ev.target.files[0];if(!file)return;ev.target.value='';
+  const u=getCur();const ld=toast('Lecture…','tinf',0);
+  const r=new FileReader();
+  r.onload=e=>{
+    ld.remove();
+    try{
+      const p=JSON.parse(e.target.result);
+      if(!p.scores||typeof p.scores!=='object'){toast('Format invalide.','terr');return;}
+      if(p.user&&p.user!==u&&!confirm(`Ce fichier appartient à "${p.user}".
+Importer dans "${u}" ?`))return;
+      const ex=loadSc(u);const mg={...ex};let added=0;
+      Object.entries(p.scores).forEach(([k,d])=>{
+        if(!d?.sessions)return;
+        if(!mg[k]){mg[k]=d;added+=d.sessions.length;return;}
+        const xk=new Set((mg[k].sessions||[]).map(s=>`${s.date}-${s.pct}-${s.total}`));
+        const ns=d.sessions.filter(s=>!xk.has(`${s.date}-${s.pct}-${s.total}`));
+        mg[k].sessions=[...(mg[k].sessions||[]),...ns].slice(-30);
+        mg[k].best=Math.max(mg[k].best||0,d.best||0);
+        if(d.last&&(!mg[k].last||d.last>mg[k].last))mg[k].last=d.last;
+        added+=ns.length;
+      });
+      saveSc(u,mg);renderCh('ch-em',['em_ondes','em_induction'],loadSc(u),'var(--blue)');
+      renderCh('ch-pm',['rel_restreinte','meca_quant'],loadSc(u),'var(--purple)');
+      toast(`${added} session${added>1?'s':''} importée${added>1?'s':''} ✓`,'tok',5000);
+    }catch{toast('Fichier JSON corrompu.','terr');}
+  };
+  r.readAsText(file);
+}
+
+function doReset(){
+  const u=getCur();
+  if(!confirm(`Réinitialiser tous les scores de "${u}" ?`))return;
+  saveSc(u,{});initPage(u);toast(`Scores réinitialisés.`,'tinf');
+}
+
+function updateSyncUI(user){
+  const hasToken=!!getToken(),hasGist=!!getGistId(user);
+  document.getElementById('sync-setup-row').style.display=hasToken?'none':'';
+  document.getElementById('sync-ctrl-row').style.display=hasToken?'':'none';
+  const dot=document.getElementById('sync-dot'),txt=document.getElementById('sync-txt');
+  if(!hasToken){dot.className='sync-dot off';txt.textContent='Non connecté';}
+  else if(hasGist){dot.className='sync-dot on';txt.textContent='Connecté · Gist actif';}
+  else{dot.className='sync-dot off';txt.style.color='var(--yellow)';txt.textContent='Connecté · Pas de Gist';}
+  const gl=document.getElementById('sync-gist-link'),lt=document.getElementById('sync-last');
+  if(hasGist&&gl)gl.innerHTML=`<a href="https://gist.github.com/${getGistId(user)}" target="_blank" style="color:var(--blue);text-decoration:none">→ Voir le Gist</a>`;
+  const ls=localStorage.getItem(lsk(user));
+  if(ls&&lt){const d=new Date(ls);lt.textContent='Sync : '+d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}
+  const btnPull=document.getElementById('btn-pull');if(btnPull)btnPull.disabled=!hasGist;
+}
+
+function connectGH(){
+  const t=document.getElementById('gh-tok').value.trim();
+  if(!t||!t.startsWith('gh')){toast('Token invalide — commence par "ghp_".','terr');return;}
+  setToken(t);document.getElementById('gh-tok').value='';updateSyncUI(getCur());toast('Token GitHub enregistré ✓','tok');
+}
+
+function discGH(){
+  if(!confirm('Déconnecter GitHub ?'))return;
+  setToken('');updateSyncUI(getCur());toast('Déconnecté.','tinf');
+}
+
+async function syncUp(silent=false){
+  const user=getCur(),token=getToken();
+  if(!token){toast('Configure un token GitHub.','terr');return;}
+  const scores=loadSc(user);
+  const content=JSON.stringify({version:1,user,synced:new Date().toISOString(),app:'quiz-physique-fge2',scores},null,2);
+  const filename=`scores_${user.replace(/\s+/g,'_')}.json`;
+  try{
+    let gistId=getGistId(user);
+    if(gistId){
+      const r=await fetch(`https://api.github.com/gists/${gistId}`,{method:'PATCH',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({files:{[filename]:{content}}})}); 
+      if(r.status===404){setGistId(user,'');gistId='';}
+      else if(!r.ok){const e=await r.json();throw new Error(e.message||r.status);}
+    }
+    if(!gistId){
+      const r=await fetch('https://api.github.com/gists',{method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify({description:`Quiz FGE2-S4 — Scores de ${user}`,public:false,files:{[filename]:{content}}})});
+      if(!r.ok){const e=await r.json();throw new Error(e.message||r.status);}
+      const g=await r.json();setGistId(user,g.id);
+    }
+    localStorage.setItem(lsk(user),new Date().toISOString());updateSyncUI(user);
+    if(!silent)toast('Push vers le cloud ✓','tok');
+  }catch(e){toast(`Push échoué : ${e.message}`,'terr');}
+}
+
+async function syncDown(){
+  const user=getCur(),token=getToken(),gistId=getGistId(user);
+  if(!token||!gistId){toast('Manque token ou Gist.','terr');return;}
+  try{
+    const r=await fetch(`https://api.github.com/gists/${gistId}`,{headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'}});
+    if(!r.ok){const e=await r.json();throw new Error(e.message||r.status);}
+    const g=await r.json();
+    const file=Object.values(g.files).find(f=>f.filename.endsWith('.json'));
+    if(!file?.content)throw new Error('Fichier introuvable');
+    const p=JSON.parse(file.content);const existing=loadSc(user);const merged={...existing};let added=0;
+    Object.entries(p.scores||{}).forEach(([k,d])=>{
+      if(!d?.sessions)return;
+      if(!merged[k]){merged[k]=d;added+=d.sessions.length;return;}
+      const xk=new Set((merged[k].sessions||[]).map(s=>`${s.date}-${s.pct}-${s.total}`));
+      const ns=d.sessions.filter(s=>!xk.has(`${s.date}-${s.pct}-${s.total}`));
+      merged[k].sessions=[...(merged[k].sessions||[]),...ns].slice(-30);
+      merged[k].best=Math.max(merged[k].best||0,d.best||0);
+      if(d.last&&(!merged[k].last||d.last>merged[k].last))merged[k].last=d.last;
+      added+=ns.length;
+    });
+    saveSc(user,merged);localStorage.setItem(lsk(user),new Date().toISOString());
+    updateSyncUI(user);initPage(user);toast(`${added?added+` session${added>1?'s':''} récupérée${added>1?'s':''}`:' Déjà à jour'} ✓`,'tok');
+  }catch(e){toast(`Pull échoué : ${e.message}`,'terr');}
+}
+
+async function findGist(){
+  const user=getCur(),token=getToken();if(!token){toast('Configure un token.','terr');return;}
+  try{
+    const r=await fetch('https://api.github.com/gists?per_page=100',{headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json'}});
+    if(!r.ok)throw new Error(r.status);
+    const gists=await r.json();
+    const safeName=user.replace(/\s+/g,'_');
+    const match=gists.find(g=>g.description?.includes('Quiz FGE2-S4')||Object.keys(g.files).some(f=>f===`scores_${safeName}.json`||f.startsWith('scores_')));
+    if(match){setGistId(user,match.id);localStorage.setItem(lsk(user),new Date().toISOString());updateSyncUI(user);toast('Gist trouvé ! Fais un Pull pour récupérer.','tok',6000);}
+    else toast('Aucun Gist trouvé. Fais un Push pour en créer un.','tinf',5000);
+  }catch(e){toast(`Recherche échouée : ${e.message}`,'terr');}
+}
+
+(()=>{
+  const u=getCur();
+  if(u&&getUsers().includes(u))initPage(u);
+  else window.location.href='index.html';
+})();
+</script>
+</body>
+</html>

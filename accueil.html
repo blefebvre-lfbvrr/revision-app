@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accueil · FGE2-S4</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080b10;--surface:#111620;--surface2:#182030;--border:#1e2840;
+  --blue:#00c8ff;--blue-dim:rgba(0,200,255,.1);--blue-glow:rgba(0,200,255,.2);
+  --green:#00e5a0;--green-dim:rgba(0,229,160,.1);
+  --red:#ff4f6b;--red-dim:rgba(255,79,107,.1);
+  --yellow:#ffd166;--yellow-dim:rgba(255,209,102,.1);
+  --purple:#b57bee;--purple-dim:rgba(181,123,238,.1);
+  --orange:#FF7B54;--orange-dim:rgba(255,123,84,.12);
+  --text:#b8c5e0;--text-dim:#3d4d68;--text-bright:#e8f0ff;
+  --mono:'JetBrains Mono',monospace;--sans:'Sora',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.18;pointer-events:none;z-index:0}
+.wrap{max-width:640px;margin:0 auto;padding:2rem 1.25rem;position:relative;z-index:1}
+
+/* ─ GREETING ─ */
+.greeting{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.greet-left h1{font-size:1.55rem;font-weight:700;color:var(--text-bright);letter-spacing:-.03em;line-height:1.2}
+.greet-left h1 em{color:var(--orange);font-style:normal}
+.greet-left p{font-family:var(--mono);font-size:.62rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-top:.35rem}
+.av-big{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#000;flex-shrink:0;border:2px solid rgba(255,255,255,.1)}
+
+/* ─ STAT PILLS ─ */
+.pills{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:.45rem 1rem;display:flex;align-items:center;gap:.45rem;flex:1;min-width:100px}
+.pill-val{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--text-bright);line-height:1}
+.pill-lbl{font-size:.65rem;color:var(--text-dim);line-height:1.3}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ─ SECTION TITLE ─ */
+.stitle{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem;display:flex;align-items:center;gap:.65rem}
+.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ─ MAIN CARDS ─ */
+.mcards{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.mcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.2rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.75rem;transition:border-color .2s,transform .18s;position:relative;overflow:hidden}
+.mcard::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--mc-color,var(--blue))}
+.mcard:hover{border-color:var(--mc-color,var(--blue));transform:translateY(-2px)}
+.mcard-icon{font-size:1.6rem;line-height:1}
+.mcard-title{font-size:.92rem;font-weight:700;color:var(--text-bright);line-height:1.2}
+.mcard-sub{font-size:.7rem;color:var(--text-dim);line-height:1.4}
+.mcard-ring{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.mcard-pct{font-family:var(--mono);font-size:1.1rem;font-weight:700}
+.mcard-btn{font-family:var(--sans);font-size:.68rem;font-weight:600;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:.3rem .65rem;color:var(--text);cursor:pointer;text-decoration:none}
+
+/* ─ FICHES CARD ─ */
+.fcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.4rem;text-decoration:none;color:inherit;display:flex;align-items:center;gap:1.1rem;transition:border-color .2s,transform .18s;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.fcard::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange)}
+.fcard:hover{border-color:var(--orange);transform:translateY(-2px)}
+.fcard-icon{font-size:1.5rem;flex-shrink:0}
+.fcard-info h3{font-size:.92rem;font-weight:700;color:var(--text-bright);margin-bottom:.2rem}
+.fcard-info p{font-size:.72rem;color:var(--text-dim)}
+.fcard-arrow{margin-left:auto;color:var(--text-dim);font-size:1.1rem;flex-shrink:0}
+
+/* ─ COMING ─ */
+.coming{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.citem{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:1rem .8rem;text-align:center;opacity:.35}
+.citem .ci{font-size:1.3rem;margin-bottom:.35rem}
+.citem h4{font-size:.75rem;font-weight:600;color:var(--text-bright)}
+.citem p{font-size:.62rem;color:var(--text-dim);margin-top:.1rem}
+
+/* ─ NO USER ─ */
+.no-user{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:1rem}
+.no-user h2{font-size:1.3rem;font-weight:700;color:var(--text-bright)}
+.no-user p{font-size:.82rem;color:var(--text-dim);max-width:280px;line-height:1.6}
+.no-user a{display:inline-flex;align-items:center;gap:.4rem;padding:.8rem 1.6rem;background:var(--blue);color:#000;font-family:var(--sans);font-weight:700;font-size:.88rem;border-radius:10px;text-decoration:none;margin-top:.5rem}
+
+
+.bnav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:440px;background:var(--surface);border:1px solid var(--border);border-radius:28px;box-shadow:0 8px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4);display:flex;align-items:stretch;height:68px;padding:8px 6px;z-index:400;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;text-decoration:none;font-family:var(--sans);font-size:.58rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);transition:color .2s;border-radius:20px;padding:0 4px;cursor:pointer;position:relative;}
+.bnav-icon-bg{width:40px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s;}
+.bnav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke-width .15s;}
+.bnav-item:hover .bnav-icon-bg{background:rgba(255,255,255,.04);}
+.bnav-item.active{color:var(--orange);}
+.bnav-item.active .bnav-icon-bg{background:var(--orange-dim);}
+.bnav-item.active svg{stroke-width:2.3;}
+.bnav-item.active::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);}
+
+</style>
+</head>
+<body>
+<div class="wrap" id="app" style="display:none">
+
+  <div class="greeting">
+    <div class="greet-left">
+      <h1 id="greet-title">Bonsoir, <em id="greet-name">—</em></h1>
+      <p id="greet-date"></p>
+    </div>
+    <div class="av-big" id="av"></div>
+  </div>
+
+  <div class="pills">
+    <div class="pill"><span class="pill-dot" style="background:var(--blue)"></span><div><div class="pill-val" id="ps1">—</div><div class="pill-lbl">Sessions</div></div></div>
+    <div class="pill"><span class="pill-dot" style="background:var(--green)"></span><div><div class="pill-val" id="ps2">—</div><div class="pill-lbl">Score moy.</div></div></div>
+    <div class="pill"><span class="pill-dot" style="background:var(--yellow)"></span><div><div class="pill-val" id="ps3">—</div><div class="pill-lbl">Meilleur</div></div></div>
+  </div>
+
+  <div class="stitle">Physique · QCM</div>
+  <div class="mcards">
+    <a class="mcard" style="--mc-color:var(--blue)" id="card-em" href="index.html?subject=em">
+      <div class="mcard-icon">⚡</div>
+      <div class="mcard-title">Électro&shy;magnétisme</div>
+      <div class="mcard-sub">Ondes EM · Induction</div>
+      <div class="mcard-ring">
+        <span class="mcard-pct" style="color:var(--blue)" id="pct-em">—</span>
+        <a class="mcard-btn" href="index.html">Réviser</a>
+      </div>
+    </a>
+    <a class="mcard" style="--mc-color:var(--purple)" id="card-pm" href="index.html?subject=pm">
+      <div class="mcard-icon">🌀</div>
+      <div class="mcard-title">Physique Moderne</div>
+      <div class="mcard-sub">Relativité · Quantique</div>
+      <div class="mcard-ring">
+        <span class="mcard-pct" style="color:var(--purple)" id="pct-pm">—</span>
+        <a class="mcard-btn" href="index.html">Réviser</a>
+      </div>
+    </a>
+  </div>
+
+  <div class="stitle">Fiches de révision</div>
+  <a class="fcard" href="index_fiches.html">
+    <div class="fcard-icon">📋</div>
+    <div class="fcard-info">
+      <h3>3 fiches disponibles</h3>
+      <p>Électronique · Droit des brevets · Maths BET</p>
+    </div>
+    <div class="fcard-arrow">→</div>
+  </a>
+
+  <div class="stitle">À venir</div>
+  <div class="coming">
+    <div class="citem"><div class="ci">📐</div><h4>Maths</h4><p>Analyse · Proba</p></div>
+    <div class="citem"><div class="ci">🔧</div><h4>Mécanique</h4><p>Dynamique</p></div>
+    <div class="citem"><div class="ci">⚗️</div><h4>Chimie</h4><p>Thermo</p></div>
+  </div>
+
+</div>
+
+<div class="no-user" id="no-user" style="display:none">
+  <h2>Crée ton profil</h2>
+  <p>Commence par créer un profil pour suivre ta progression.</p>
+  <a href="index.html">Commencer →</a>
+</div>
+
+<nav class="bnav">
+  <a href="accueil.html" class="bnav-item active" aria-label="Accueil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div><span>Accueil</span></a>
+  <a href="index.html" class="bnav-item" aria-label="QCM"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>QCM</span></a>
+  <a href="index_fiches.html" class="bnav-item" aria-label="Fiches"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Fiches</span></a>
+  <a href="profil.html" class="bnav-item" aria-label="Profil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><span>Profil</span></a>
+</nav>
+
+<script>
+
+const KU='pq_users',KC='pq_current';
+const sk=u=>`pq_sc_${u}`;
+const getCur=()=>localStorage.getItem(KC)||null;
+const getUsers=()=>{try{return JSON.parse(localStorage.getItem(KU)||'[]')}catch{return[]}};
+const loadSc=u=>{try{return JSON.parse(localStorage.getItem(sk(u))||'{}')}catch{return{}}};
+const COLORS=['#00c8ff','#00e5a0','#b57bee','#ff9f43','#ff4f6b','#ffd166','#54a0ff','#ff6b81'];
+const avc=n=>{let h=0;for(let c of n)h=(h*31+c.charCodeAt(0))&0xffffffff;return COLORS[Math.abs(h)%COLORS.length]};
+const ini=n=>n.slice(0,2).toUpperCase();
+const CHAPTERS={
+  em_ondes:{label:'Ondes EM',sub:'em',color:'var(--blue)',n:25},
+  em_induction:{label:'Induction',sub:'em',color:'var(--blue)',n:25},
+  rel_restreinte:{label:'Relativité restreinte',sub:'pm',color:'var(--purple)',n:25},
+  meca_quant:{label:'Mécanique quantique',sub:'pm',color:'var(--green)',n:25},
+};
+
+
+function greet(name) {
+  const h = new Date().getHours();
+  const salut = h < 12 ? 'Matin,' : h < 18 ? 'Bonjour,' : 'Bonsoir,';
+  document.getElementById('greet-title').innerHTML = salut + ' <em>' + name + '</em>';
+  const now = new Date();
+  document.getElementById('greet-date').textContent =
+    now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  const col = avc(name);
+  const av = document.getElementById('av');
+  av.textContent = ini(name); av.style.background = col;
+}
+
+function avgSub(sc, chs) {
+  const bests = chs.map(k => sc[k]?.best||0).filter(v=>v>0);
+  return bests.length ? Math.round(bests.reduce((a,b)=>a+b,0)/bests.length) : null;
+}
+
+function initPage(u) {
+  document.getElementById('app').style.display = 'block';
+  greet(u);
+  const sc = loadSc(u);
+  let sess=0, bests=[], bname='—', bpct=-1;
+  Object.entries(CHAPTERS).forEach(([k,ch]) => {
+    const d = sc[k]; if(!d?.sessions?.length) return;
+    sess += d.sessions.length;
+    if(d.best>0) bests.push(d.best);
+    if(d.best>bpct){bpct=d.best;bname=ch.label.split(' ')[0];}
+  });
+  const avg = bests.length ? Math.round(bests.reduce((a,b)=>a+b,0)/bests.length) : null;
+  document.getElementById('ps1').textContent = sess || '0';
+  document.getElementById('ps2').textContent = avg!==null ? avg+'%' : '—';
+  document.getElementById('ps3').textContent = bpct>0 ? bname : '—';
+  const emAvg = avgSub(sc, ['em_ondes','em_induction']);
+  const pmAvg = avgSub(sc, ['rel_restreinte','meca_quant']);
+  document.getElementById('pct-em').textContent = emAvg!==null ? emAvg+'%' : 'Nouveau';
+  document.getElementById('pct-pm').textContent = pmAvg!==null ? pmAvg+'%' : 'Nouveau';
+}
+
+(()=>{
+  const u = getCur();
+  if(u && getUsers().includes(u)) { initPage(u); }
+  else { document.getElementById('no-user').style.display='flex'; }
+})();
+</script>
+</body>
+</html>

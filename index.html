@@ -14,12 +14,13 @@
   --yellow:#ffd166;--yellow-dim:rgba(255,209,102,.1);
   --purple:#b57bee;--purple-dim:rgba(181,123,238,.1);
   --text:#b8c5e0;--text-dim:#3d4d68;--text-bright:#e8f0ff;
+  --orange:#FF7B54;--orange-dim:rgba(255,123,84,.12);
   --mono:'JetBrains Mono',monospace;--sans:'Sora',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.18;pointer-events:none;z-index:0}
-.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.5rem 80px;position:relative;z-index:1}
+.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.5rem 100px;position:relative;z-index:1}
 
 /* ─── ONBOARDING ─── */
 #onboarding{position:fixed;inset:0;background:rgba(4,6,12,.93);backdrop-filter:blur(14px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:fadeIn .35s ease}
@@ -229,180 +230,7 @@ footer p{font-family:var(--mono);font-size:.6rem;color:var(--text-dim)}
   header{flex-direction:column;align-items:flex-start}
 }
 
-/* ─── BOTTOM NAV ─── */
-.bnav{position:fixed;bottom:0;left:0;right:0;z-index:400;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;height:62px;padding-bottom:env(safe-area-inset-bottom,0);}
-.bnav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.2),transparent);}
-.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:none;background:none;color:var(--text-dim);text-decoration:none;font-family:var(--sans);font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:color .15s,background .15s;padding:0;position:relative;}
-.bnav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
-.bnav-item.active{color:var(--blue);}
-.bnav-item.active .bnav-icon svg{filter:drop-shadow(0 0 6px rgba(0,200,255,.5));}
-.bnav-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--blue);border-radius:0 0 3px 3px;}
-.bnav-icon{display:flex;align-items:center;justify-content:center;width:24px;height:22px;}
-.bnav-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
-
-</style>
-</head>
-<body>
-
-<!-- ════════════════════════════════
-     ONBOARDING
-════════════════════════════════ -->
-<div id="onboarding" class="hidden">
-  <div class="ob-card">
-    <div class="ob-badge">FGE2-S4 · EPF Engineering</div>
-    <h2>Bienvenue sur<br>tes <em>révisions</em> 👋</h2>
-    <p>Entre ton prénom ou un pseudo — ta progression sera sauvegardée sous ce nom, et tu pourras retrouver tes scores sur n'importe quel appareil via l'export.</p>
-    <div class="ob-field">
-      <span class="ob-field-icon">👤</span>
-      <input class="ob-input" id="ob-input" type="text" placeholder="Ton prénom ou pseudo…" maxlength="20" autocomplete="off" spellcheck="false">
-    </div>
-    <span class="ob-err" id="ob-err"></span>
-    <button class="ob-submit" onclick="createProfile()">Commencer →</button>
-    <div id="ob-existing-wrap" style="display:none">
-      <div class="ob-divider">ou continuer en tant que</div>
-      <div class="ob-chips" id="ob-chips"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════
-     APP
-════════════════════════════════ -->
-<div class="wrap" id="app" style="display:none">
-
-<header>
-  <div class="logo">
-    <div class="logo-icon">🎓</div>
-    <div class="logo-text">
-      <h1>Révisions FGE2-S4</h1>
-      <p id="hdate"></p>
-    </div>
-  </div>
-  <div class="upw">
-    <div class="upill" id="upill" onclick="toggleDrop()">
-      <div class="uav" id="uav"></div>
-      <span class="uname" id="uname"></span>
-      <span class="ucaret">▾</span>
-    </div>
-    <div class="uddrop" id="uddrop">
-      <span class="ud-lbl">Profils</span>
-      <div id="ud-list"></div>
-      <div class="ud-sep"></div>
-      <div class="ud-act" onclick="openOB()">＋ Nouveau profil</div>
-      <div class="ud-act danger" onclick="deleteProfile()">🗑 Supprimer ce profil</div>
-    </div>
-  </div>
-</header>
-
-<div class="stitle">Vue d'ensemble</div>
-<div class="gstats">
-  <div class="gstat g1"><div class="gv" id="gs1">—</div><div class="gl">Sessions jouées</div></div>
-  <div class="gstat g2"><div class="gv" id="gs2">—</div><div class="gl">Questions répondues</div></div>
-  <div class="gstat g3"><div class="gv" id="gs3">—</div><div class="gl">Score moyen</div><div class="gsub" id="gs3s"></div></div>
-  <div class="gstat g4"><div class="gv" id="gs4">—</div><div class="gl">Meilleur chapitre</div></div>
-</div>
-
-<div class="stitle">Matières</div>
-
-<div class="scard">
-  <div class="shdr">
-    <div class="sbar" style="background:var(--blue)"></div>
-    <div class="sicon">⚡</div>
-    <div class="sinfo"><h2>Électromagnétisme</h2><p>Ondes EM · Induction · Couplage électromécanique</p></div>
-    <div class="sright">
-      <div class="sring"><svg viewBox="0 0 60 60"><circle class="rg-bg" cx="30" cy="30" r="24"/><circle class="rg-fill" id="rem" cx="30" cy="30" r="24"/></svg><div class="rg-lbl" id="reml">—</div></div>
-      <a class="sbtn em-btn" id="bem" href="#">Réviser →</a>
-    </div>
-  </div>
-  <div class="ctable" id="tem"></div>
-</div>
-
-<div class="scard">
-  <div class="shdr">
-    <div class="sbar" style="background:var(--purple)"></div>
-    <div class="sicon">🌀</div>
-    <div class="sinfo"><h2>Physique Moderne</h2><p>Relativité restreinte · Mécanique quantique</p></div>
-    <div class="sright">
-      <div class="sring"><svg viewBox="0 0 60 60"><circle class="rg-bg" cx="30" cy="30" r="24"/><circle class="rg-fill" id="rpm" cx="30" cy="30" r="24"/></svg><div class="rg-lbl" id="rpml">—</div></div>
-      <a class="sbtn pm-btn" id="bpm" href="#">Réviser →</a>
-    </div>
-  </div>
-  <div class="ctable" id="tpm"></div>
-</div>
-
-<div class="stitle" style="margin-top:2.5rem">À venir</div>
-<div class="cgrid">
-  <div class="ccard"><div class="ci">📐</div><h3>Mathématiques</h3><p>Analyse, algèbre, probabilités</p></div>
-  <div class="ccard"><div class="ci">🔧</div><h3>Mécanique</h3><p>Dynamique, statique, cinématique</p></div>
-  <div class="ccard"><div class="ci">⚗️</div><h3>Chimie</h3><p>Thermodynamique, réactions</p></div>
-</div>
-
-<div id="hist-section" style="display:none;margin-top:2.5rem">
-  <div class="stitle">Historique récent</div>
-  <div class="hgrid" id="hgrid"></div>
-</div>
-
-<div class="stitle" style="margin-top:2.5rem">Sauvegarde</div>
-<div class="spanel">
-  <div class="sp-top">
-    <h3>💾 Sauvegarde de <span id="sp-uname"></span></h3>
-    <div class="sp-badge" id="sp-badge">Aucun export</div>
-  </div>
-  <div class="sp-actions">
-    <button class="sp-btn sp-export" onclick="doExport()">⬇ Exporter (.json)</button>
-    <button class="sp-btn sp-import" onclick="document.getElementById('fi').click()">⬆ Importer</button>
-    <button class="sp-btn sp-reset" onclick="doReset()">🗑 Réinitialiser</button>
-  </div>
-  <input type="file" id="fi" accept=".json" style="display:none" onchange="doImport(event)">
-  <div class="sp-hint">
-    <span><span class="dot" style="background:var(--green)"></span>Export lié à ton pseudo → partage ou backup</span>
-    <span><span class="dot" style="background:var(--blue)"></span>Import → fusion intelligente sans doublons</span>
-    <span><span class="dot" style="background:var(--yellow)"></span>Scores auto-sauvegardés dans le navigateur</span>
-  </div>
-
-  <!-- ── CLOUD SYNC ── -->
-  <div class="sync-section">
-    <div class="sync-title">
-      <h4>☁️ Sync GitHub Gist <span style="font-family:var(--mono);font-size:.6rem;background:var(--surface2);border:1px solid var(--border);padding:.15rem .5rem;border-radius:4px;color:var(--text-dim);font-weight:400">CLOUD</span></h4>
-      <div class="sync-status">
-        <span class="sync-dot off" id="sync-dot"></span>
-        <span id="sync-status-txt" style="color:var(--text-dim)">Non connecté</span>
-      </div>
-    </div>
-
-    <!-- Setup (no token) -->
-    <div class="sync-setup" id="sync-setup">
-      <p>Sauvegarde automatiquement tes scores dans un <strong style="color:var(--text)">Gist privé GitHub</strong> — accessible depuis n'importe quel appareil avec ton token.<br>
-      <a href="https://github.com/settings/tokens/new?scopes=gist&description=Quiz+FGE2+Scores" target="_blank" rel="noopener">→ Créer un token GitHub (scope : gist)</a></p>
-      <div class="sync-input-row">
-        <input class="sync-token-input" id="gh-token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
-        <button class="sync-btn sc-connect" onclick="connectGitHub()">Connecter</button>
-      </div>
-    </div>
-
-    <!-- Controls (token set) -->
-    <div id="sync-controls" style="display:none">
-      <div class="sync-controls">
-        <button class="sync-btn sc-push" id="btn-push" onclick="syncUp()">⬆ Push vers cloud</button>
-        <button class="sync-btn sc-pull" id="btn-pull" onclick="syncDown()">⬇ Pull depuis cloud</button>
-        <button class="sync-btn sc-find" id="btn-find" onclick="findGist()">🔍 Trouver mon Gist</button>
-        <button class="sync-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border)" onclick="copyShareLink()">🔗 Lien de partage</button>
-        <button class="sync-btn sc-disc" onclick="disconnectGitHub()">Déconnecter</button>
-        <label class="sync-autosync">
-          <input type="checkbox" id="auto-sync-toggle" onchange="toggleAutoSync(this.checked)">
-          <div class="auto-toggle"></div>
-          Auto-sync après chaque quiz
-        </label>
-      </div>
-      <div class="sync-info" id="sync-info">
-        <span id="sync-gist-link"></span>
-        <span id="sync-last-time"></span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer><p>FGE2-S4 · Révisions Physique · EPF Engineering</p></footer>
+footer><p>FGE2-S4 · Révisions Physique · EPF Engineering</p></footer>
 </div>
 
 <div id="toasts"></div>
@@ -952,44 +780,15 @@ function copyShareLink() {
   else showOB();
 })();
 
-// ─── Bottom nav helpers ───
-function openProfile(){
-  // Scroll to save panel and highlight
-  const el = document.querySelector('.spanel');
-  if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.style.outline='1px solid rgba(0,200,255,.4)'; setTimeout(()=>el.style.outline='',1800); }
-  // Also open dropdown so user can switch
-  setTimeout(()=>{ const d=document.getElementById('uddrop'); if(d&&!d.classList.contains('open')) toggleDrop(); },300);
-}
-// Update QCM link dynamically with current user
-function updateBnavQCM(){
-  const u=getCur(); const btn=document.getElementById('bnav-qcm');
-  if(btn&&u) btn.href=`quiz_physique.html?user=${encodeURIComponent(u)}`;
-}
-
-// Call once after loadApp
-const _origLoadApp = loadApp;
-function loadApp(){_origLoadApp();updateBnavQCM();}
 </script>
 
-<!-- ═══ BOTTOM NAV ═══ -->
-<nav class="bnav">
-  <a class="bnav-item active" href="index.html">
-    <div class="bnav-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
-    Accueil
-  </a>
-  <a class="bnav-item" href="quiz_physique.html" id="bnav-qcm">
-    <div class="bnav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg></div>
-    QCM
-  </a>
-  <a class="bnav-item" href="index_fiches.html">
-    <div class="bnav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-    Fiches
-  </a>
-  <button class="bnav-item" onclick="openProfile()">
-    <div class="bnav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
-    Profil
-  </button>
-</nav>
 
+
+<nav class="bnav">
+  <a href="accueil.html" class="bnav-item" aria-label="Accueil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div><span>Accueil</span></a>
+  <a href="index.html" class="bnav-item active" aria-label="QCM"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span>QCM</span></a>
+  <a href="index_fiches.html" class="bnav-item" aria-label="Fiches"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span>Fiches</span></a>
+  <a href="profil.html" class="bnav-item" aria-label="Profil"><div class="bnav-icon-bg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><span>Profil</span></a>
+</nav>
 </body>
 </html>
