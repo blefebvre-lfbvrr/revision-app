@@ -19,7 +19,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.18;pointer-events:none;z-index:0}
-.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.5rem 5rem;position:relative;z-index:1}
+.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.5rem 80px;position:relative;z-index:1}
 
 /* ─── ONBOARDING ─── */
 #onboarding{position:fixed;inset:0;background:rgba(4,6,12,.93);backdrop-filter:blur(14px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:fadeIn .35s ease}
@@ -228,6 +228,18 @@ footer p{font-family:var(--mono);font-size:.6rem;color:var(--text-dim)}
   .shdr{flex-wrap:wrap}.cname{width:130px}.clast{display:none}
   header{flex-direction:column;align-items:flex-start}
 }
+
+/* ─── BOTTOM NAV ─── */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:400;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:stretch;height:62px;padding-bottom:env(safe-area-inset-bottom,0);}
+.bnav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,255,.2),transparent);}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:none;background:none;color:var(--text-dim);text-decoration:none;font-family:var(--sans);font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:color .15s,background .15s;padding:0;position:relative;}
+.bnav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.bnav-item.active{color:var(--blue);}
+.bnav-item.active .bnav-icon svg{filter:drop-shadow(0 0 6px rgba(0,200,255,.5));}
+.bnav-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--blue);border-radius:0 0 3px 3px;}
+.bnav-icon{display:flex;align-items:center;justify-content:center;width:24px;height:22px;}
+.bnav-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+
 </style>
 </head>
 <body>
@@ -939,6 +951,45 @@ function copyShareLink() {
   if(u&&getUsers().includes(u))loadApp();
   else showOB();
 })();
+
+// ─── Bottom nav helpers ───
+function openProfile(){
+  // Scroll to save panel and highlight
+  const el = document.querySelector('.spanel');
+  if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.style.outline='1px solid rgba(0,200,255,.4)'; setTimeout(()=>el.style.outline='',1800); }
+  // Also open dropdown so user can switch
+  setTimeout(()=>{ const d=document.getElementById('uddrop'); if(d&&!d.classList.contains('open')) toggleDrop(); },300);
+}
+// Update QCM link dynamically with current user
+function updateBnavQCM(){
+  const u=getCur(); const btn=document.getElementById('bnav-qcm');
+  if(btn&&u) btn.href=`quiz_physique.html?user=${encodeURIComponent(u)}`;
+}
+
+// Call once after loadApp
+const _origLoadApp = loadApp;
+function loadApp(){_origLoadApp();updateBnavQCM();}
 </script>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<nav class="bnav">
+  <a class="bnav-item active" href="index.html">
+    <div class="bnav-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
+    Accueil
+  </a>
+  <a class="bnav-item" href="quiz_physique.html" id="bnav-qcm">
+    <div class="bnav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg></div>
+    QCM
+  </a>
+  <a class="bnav-item" href="index_fiches.html">
+    <div class="bnav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+    Fiches
+  </a>
+  <button class="bnav-item" onclick="openProfile()">
+    <div class="bnav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+    Profil
+  </button>
+</nav>
+
 </body>
 </html>
