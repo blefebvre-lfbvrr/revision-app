@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fiche BET – Maths pour l'ingénieur S4</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@600;700;800&display=swap');
+  :root {
+    --c1:#1a3a5c; --c2:#7b2d8b; --c3:#b5490a; --c4:#145a32;
+    --c1l:#e8f0f8; --c2l:#f5eaf8; --c3l:#fdf0e8; --c4l:#e8f5ee;
+    --bg:#fafaf8; --ink:#111; --rule:#ccc; --r:3px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#ddd;font-family:'Crimson Pro',Georgia,serif;font-size:7.4pt;line-height:1.26;color:var(--ink);}
+  .page{width:210mm;min-height:297mm;background:var(--bg);margin:6mm auto;padding:5.5mm 6mm 4mm;display:grid;grid-template-columns:1fr 1fr;gap:0 3.5mm;position:relative;box-shadow:0 2px 12px #0003;}
+  .page-header{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2.5px solid var(--ink);padding-bottom:2px;margin-bottom:3mm;}
+  .page-header h1{font-family:'Montserrat',sans-serif;font-size:9pt;font-weight:800;letter-spacing:-.3px;text-transform:uppercase;}
+  .meta{font-size:6.3pt;color:#555;font-style:italic;}
+  .side-label{font-family:'Montserrat',sans-serif;font-size:6.5pt;font-weight:700;letter-spacing:2px;color:#888;text-transform:uppercase;}
+  section{break-inside:avoid;}
+  .sec-head{font-family:'Montserrat',sans-serif;font-size:7pt;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#fff;padding:2px 5px;border-radius:var(--r);margin-bottom:2mm;display:block;}
+  .c1 .sec-head{background:var(--c1);} .c2 .sec-head{background:var(--c2);}
+  .c3 .sec-head{background:var(--c3);} .c4 .sec-head{background:var(--c4);}
+  .sub{margin-bottom:1.8mm;}
+  .sub-title{font-family:'Montserrat',sans-serif;font-size:6.2pt;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:1px;}
+  .c1 .sub-title{color:var(--c1);} .c2 .sub-title{color:var(--c2);}
+  .c3 .sub-title{color:var(--c3);} .c4 .sub-title{color:var(--c4);}
+  .box{border-left:2px solid currentColor;padding:1px 4px;margin:1px 0;background:#f5f5f3;border-radius:0 var(--r) var(--r) 0;font-size:6.9pt;}
+  .c1 .box{border-color:var(--c1);} .c2 .box{border-color:var(--c2);}
+  .c3 .box{border-color:var(--c3);} .c4 .box{border-color:var(--c4);}
+  .key{background:#fffce0;border:1px solid #e0c800;border-radius:var(--r);padding:1px 4px;margin:1px 0;font-size:6.9pt;display:block;}
+  .method{border-radius:var(--r);padding:2px 5px;margin:1.5px 0;font-size:6.8pt;}
+  .c1 .method{background:var(--c1l);border-left:2.5px solid var(--c1);}
+  .c2 .method{background:var(--c2l);border-left:2.5px solid var(--c2);}
+  .c3 .method{background:var(--c3l);border-left:2.5px solid var(--c3);}
+  .c4 .method{background:var(--c4l);border-left:2.5px solid var(--c4);}
+  .mt{font-family:'Montserrat',sans-serif;font-size:5.8pt;font-weight:700;text-transform:uppercase;margin-bottom:1px;}
+  .c1 .mt{color:var(--c1);} .c2 .mt{color:var(--c2);}
+  .c3 .mt{color:var(--c3);} .c4 .mt{color:var(--c4);}
+  .s{padding-left:9px;text-indent:-9px;margin:.5px 0;}
+  .s b{font-family:'Montserrat',sans-serif;font-size:5.6pt;}
+  table{width:100%;border-collapse:collapse;font-size:6.5pt;margin:1px 0;}
+  th{font-family:'Montserrat',sans-serif;font-weight:700;font-size:5.7pt;padding:1px 3px;text-align:left;border-bottom:1px solid var(--rule);}
+  .c1 th{color:var(--c1);} .c2 th{color:var(--c2);}
+  .c3 th{color:var(--c3);} .c4 th{color:var(--c4);}
+  td{padding:.5px 3px;vertical-align:middle;border-bottom:.4px solid #e8e8e8;}
+  td:first-child{font-weight:600;}
+  code{font-family:'JetBrains Mono',monospace;font-size:5.9pt;background:#f0f0ee;padding:0 2px;border-radius:2px;}
+  .cb{font-family:'JetBrains Mono',monospace;font-size:5.7pt;background:#1e2229;color:#abb2bf;padding:2.5px 5px;border-radius:var(--r);margin:1px 0;line-height:1.5;white-space:pre;}
+  .cb .kw{color:#c678dd;} .cb .fn{color:#61afef;} .cb .cm{color:#5c6370;font-style:italic;} .cb .str{color:#98c379;}
+  p{margin:.7px 0;}
+  hr.d{border:none;border-top:.5px dashed #ccc;margin:1.5mm 0;}
+  .page::after{content:'';position:absolute;left:50%;top:11mm;bottom:4mm;width:.4px;background:var(--rule);transform:translateX(-50%);}
+  @media print{body{background:none;}.page{margin:0;box-shadow:none;break-after:page;}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ RECTO ══════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <h1>BET – Mathématiques pour l'ingénieur S4</h1>
+    <span class="meta">EPF · Lundi 11 mai 2026 · 10h–12h &nbsp;|&nbsp; UE1 Maths : MI + OM4</span>
+    <span class="side-label">◀ Recto</span>
+  </div>
+
+  <!-- ═══ COL 1 : VA CONTINUES ═══ -->
+  <section class="c1">
+    <span class="sec-head">① Variables aléatoires continues — MI Séq. 1</span>
+
+    <div class="sub">
+      <div class="sub-title">Densité &amp; Répartition</div>
+      <div class="box">\(F_X(x)=\int_{-\infty}^x\!f_X(t)\,dt\) &nbsp;·&nbsp; \(F_X'(x)=f_X(x)\) &nbsp;·&nbsp; \(\int_{-\infty}^{+\infty}\!f_X=1\)</div>
+      <div class="box">\(P(a\le X\le b)=F(b)-F(a)=\int_a^b\!f_X(x)\,dx\)</div>
+      <p>VAC : \(P(X=a)=0\), donc bornes ouvertes/fermées identiques.</p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Espérance &amp; Variance</div>
+      <div class="box">\(E[X]=\int x\,f_X(x)\,dx\) &nbsp;·&nbsp; \(E[g(X)]=\int g(x)f_X(x)\,dx\)</div>
+      <div class="box">\(\mathrm{Var}(X)=E[X^2]-(E[X])^2\)</div>
+      <p>\(E[aX+b]=aE[X]+b\) · \(\mathrm{Var}(aX)=a^2\mathrm{Var}(X)\) · Si ind. : \(\mathrm{Var}(X+Y)=\mathrm{Var}(X)+\mathrm{Var}(Y)\)</p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Lois usuelles</div>
+      <table>
+        <tr><th>Loi</th><th>\(f(x)\)</th><th>\(E[X]\)</th><th>\(\mathrm{Var}\)</th></tr>
+        <tr><td>\(\mathcal{U}(\alpha,\beta)\)</td><td>\(\frac{1}{\beta-\alpha}\mathbf{1}_{[\alpha,\beta]}\)</td><td>\(\frac{\alpha+\beta}{2}\)</td><td>\(\frac{(\beta-\alpha)^2}{12}\)</td></tr>
+        <tr><td>\(\mathrm{Exp}(\lambda)\)</td><td>\(\lambda e^{-\lambda x}\mathbf{1}_{x\ge0}\)</td><td>\(\frac{1}{\lambda}\)</td><td>\(\frac{1}{\lambda^2}\)</td></tr>
+        <tr><td>\(\mathcal{N}(\mu,\sigma^2)\)</td><td>\(\frac{e^{-(x-\mu)^2/2\sigma^2}}{\sigma\sqrt{2\pi}}\)</td><td>\(\mu\)</td><td>\(\sigma^2\)</td></tr>
+      </table>
+    </div>
+
+    <!-- ▶ MÉTHODE : trouver k (Ex.6.1 / Ex.6.2 MI_SEQ1) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – Trouver k d'une densité (MI Ex.6.1 pH sol / Ex.6.2 retard)</div>
+      <div class="s"><b>1.</b> Poser \(\int_{-\infty}^{+\infty}f_X(x)\,dx=1\) sur l'intervalle de définition</div>
+      <div class="s"><b>2.</b> Calculer l'intégrale en fonction de \(k\), résoudre \(\Rightarrow k\)</div>
+      <div class="s">Ex.6.2 : \(\int_0^1 kx(1-x)\,dx=k\!\left[\tfrac{x^2}{2}-\tfrac{x^3}{3}\right]_0^1=\tfrac{k}{6}=1\Rightarrow k=6\)</div>
+      <div class="s"><b>3.</b> \(F(x)=\int_{-\infty}^x f(t)\,dt\) par morceaux (vérifier \(F(a)=0\), \(F(b)=1\))</div>
+      <div class="s"><b>4.</b> \(P(X>c)=1-F(c)\) ou \(\int_c^b f\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE : Loi Exponentielle (Ex.6.5 médecin, Ex.6.6 ampoules) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – Loi Exponentielle (MI Ex.6.5 médecin / Ex.6.6 ampoules)</div>
+      <div class="s"><b>1.</b> \(E[X]=1/\lambda\) ⟹ trouver \(\lambda\). Ex.6.5 : moy. 5 min ⟹ \(\lambda=1/5\)</div>
+      <div class="s"><b>2.</b> \(F(x)=1-e^{-\lambda x}\) pour \(x\ge0\) ; &nbsp;\(P(X>a)=e^{-\lambda a}\)</div>
+      <div class="s"><b>3.</b> \(P(a\le X\le b)=e^{-\lambda a}-e^{-\lambda b}\)</div>
+      <div class="s"><b>Sans mémoire</b> (Ex.6.6) : \(P(X>400|X>300)=P(X>100)=e^{-100\lambda}\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE : Loi Normale (Ex.6.4 examen ingénieur) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – Loi Normale (MI Ex.6.4 examen, Ex. précipitations LA)</div>
+      <div class="s"><b>1.</b> Lire \(\mu\) et \(\sigma^2\). ⚠ Écart-type : \(\sigma=\sqrt{\sigma^2}\) !</div>
+      <div class="s"><b>2.</b> Standardiser : \(Z=\tfrac{X-\mu}{\sigma}\sim\mathcal{N}(0,1)\)</div>
+      <div class="s"><b>3.</b> \(P(a\le X\le b)=\Phi\!\bigl(\tfrac{b-\mu}{\sigma}\bigr)-\Phi\!\bigl(\tfrac{a-\mu}{\sigma}\bigr)\)</div>
+      <div class="s"><b>4.</b> \(P(X\ge a)=1-\Phi\!\bigl(\tfrac{a-\mu}{\sigma}\bigr)=\Phi\!\bigl(\tfrac{\mu-a}{\sigma}\bigr)\)</div>
+      <div class="s"><b>Top \(p\%\)</b> (Ex.6.4) : \(P(X\ge c)=0.10\Rightarrow\Phi\!\bigl(\tfrac{c-150}{10}\bigr)=0.90\Rightarrow c=\mu+\sigma\,\Phi^{-1}(0.90)\)</div>
+      <div class="s"><b>Somme ind.</b> : \(X_1+X_2\sim\mathcal{N}(2\mu,2\sigma^2)\) ; \(X_1-X_2\sim\mathcal{N}(0,2\sigma^2)\)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Table \(\mathcal{N}(0,1)\) – valeurs clés</div>
+      <table>
+        <tr><th>\(z\)</th><th>1.28</th><th>1.64</th><th>1.96</th><th>2.33</th><th>2.58</th></tr>
+        <tr><td>\(\Phi(z)\)</td><td>.90</td><td>.95</td><td>.975</td><td>.99</td><td>.995</td></tr>
+      </table>
+      <p>Symétrie : \(\Phi(-z)=1-\Phi(z)\). Lecture : ligne = partie entière+1er décimal, col. = 2e décimal.</p>
+    </div>
+  </section>
+
+  <!-- ═══ COL 2 : THÉORÈMES LIMITES ═══ -->
+  <section class="c2">
+    <span class="sec-head">② Inégalités &amp; Théorèmes limites — MI Séq. 2</span>
+
+    <div class="sub">
+      <div class="sub-title">FGM</div>
+      <div class="box">\(\varphi_X(t)=E[e^{tX}]\) ; &nbsp;\(\varphi_X^{(n)}(0)=E[X^n]\) &nbsp;⟹&nbsp; \(E[X]=\varphi'(0)\), \(\mathrm{Var}(X)=\varphi''(0)-(\varphi'(0))^2\)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Inégalités</div>
+      <div class="box"><b>Markov</b> (\(X\ge0\)) : \(P(X\ge a)\le E[X]/a\)</div>
+      <div class="box"><b>Tchebychev</b> : \(P(|X-\mu|\ge k)\le\sigma^2/k^2\) ⟺ \(P(|X-\mu|<k)\ge1-\sigma^2/k^2\)</div>
+    </div>
+
+    <div class="method">
+      <div class="mt">▶ Méthode – Tchebychev (MI cours – production semaine)</div>
+      <div class="s"><b>1.</b> Identifier \(\mu\), \(\sigma^2\) et l'intervalle \([\mu-k,\mu+k]\) ⟹ lire \(k\)</div>
+      <div class="s"><b>2.</b> \(P(|X-\mu|<k)\ge1-\tfrac{\sigma^2}{k^2}\)</div>
+      <div class="s">Ex. \(\sigma^2=25,k=10\) : \(P(40\le X\le60)\ge\tfrac{3}{4}=75\%\)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Théorème Central Limite (TCL)</div>
+      <p>\(X_i\) i.i.d., \(E[X_i]=\mu\), \(\mathrm{Var}(X_i)=\sigma^2\)</p>
+      <div class="key">\(Z_n=\dfrac{S_n-n\mu}{\sigma\sqrt{n}}\;\xrightarrow{\mathcal{L}}\;\mathcal{N}(0,1)\) &nbsp;&nbsp; (règle : \(n\ge30\))</div>
+      <div class="key">\(\bar X_n\approx\mathcal{N}\!\left(\mu,\,\dfrac{\sigma^2}{n}\right)\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE TCL somme (assurance, pont) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – TCL Somme (MI Ex. assurance 25 000 assurés)</div>
+      <div class="s"><b>1.</b> Calculer \(n\mu\) et \(\sigma_{\mathrm{tot}}=\sigma\sqrt{n}\)</div>
+      <div class="s"><b>2.</b> \(P(S_n>s)=P\!\left(Z>\dfrac{s-n\mu}{\sigma\sqrt{n}}\right)\) ⟹ lire table</div>
+      <div class="s">Ex. \(n=25\,000,\mu=320,\sigma=540\) : \(\sigma_{\mathrm{tot}}=540\sqrt{25\,000}=8.538\times10^4\)</div>
+      <div class="s">\(P(S>8.3\mathrm{M})=P\!(Z>3.51)\approx0.00023\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE TCL Binomiale (école ingénieurs) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – TCL Binomiale (MI Ex. école ingénieurs, Mi Ex. pont)</div>
+      <div class="s"><b>Approx. B\((n,p)\) :</b></div>
+      <div class="box">\(Z=\dfrac{X-np}{\sqrt{np(1-p)}}\approx\mathcal{N}(0,1)\)</div>
+      <div class="s">Ex. \(n=450,p=0.3\) : \(np=135,\sigma=\sqrt{94.5}=9.72\)</div>
+      <div class="s">\(P(X>150)=P\!\left(Z>\tfrac{150-135}{9.72}\right)=P(Z>1.54)\approx0.06\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE Taille échantillon (astronome) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – Taille d'échantillon (MI Ex. astronome, taille travailleurs)</div>
+      <div class="s"><b>But :</b> \(P\!\left(|\bar X-\mu|<\varepsilon\right)\ge p\)</div>
+      <div class="s"><b>1.</b> \(\dfrac{\varepsilon\sqrt{n}}{\sigma}\ge z_{(1+p)/2}\) ⟹ \(n\ge\!\left(\dfrac{z_{(1+p)/2}\cdot\sigma}{\varepsilon}\right)^2\)</div>
+      <div class="s">Ex. astronome : \(p=0.95,\sigma=2,\varepsilon=0.5\) ⟹ \(n\ge(1.96\times4)^2=62\)</div>
+      <div class="s">Ex. taille (\(n=36\)) : \(\bar X\approx\mathcal{N}(167,27^2/36)\), \(\sigma_{\bar X}=4.5\)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Loi Forte &amp; Faible des Grands Nombres</div>
+      <div class="box">\(\bar X_n=\tfrac{1}{n}\!\sum X_i\;\xrightarrow[n\to\infty]{P}\;\mu\) &nbsp; (loi faible)</div>
+      <p>La moyenne empirique converge vers l'espérance quand \(n\to\infty\).</p>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════ VERSO ══════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <h1>BET – Maths pour l'ingénieur S4</h1>
+    <span class="meta">EPF · 11 mai 2026 · 10h–12h &nbsp;|&nbsp; UE1 Maths : MI + OM4</span>
+    <span class="side-label">Verso ▶</span>
+  </div>
+
+  <!-- ═══ COL 1 : FOURIER ═══ -->
+  <section class="c3">
+    <span class="sec-head">③ Séries &amp; Transformée de Fourier — OM4 Séq. 2</span>
+
+    <div class="sub">
+      <div class="sub-title">Coefficients (T-périodique, \(\omega=2\pi/T\))</div>
+      <div class="box">\(S(f)(x)=a_0+\displaystyle\sum_{n\ge1}(a_n\cos n\omega x+b_n\sin n\omega x)\)</div>
+      <table>
+        <tr><th></th><th>Formule générale</th><th>Cas \(T=2\pi\) (\(\omega=1\))</th></tr>
+        <tr><td>\(a_0\)</td><td>\(\frac{1}{T}\int_a^{a+T}\!f\,dt\)</td><td>\(\frac{1}{2\pi}\int_{-\pi}^{\pi}\!f\,dt\)</td></tr>
+        <tr><td>\(a_n\)</td><td>\(\frac{2}{T}\int_a^{a+T}\!f\cos n\omega t\,dt\)</td><td>\(\frac{1}{\pi}\int_{-\pi}^{\pi}\!f\cos nt\,dt\)</td></tr>
+        <tr><td>\(b_n\)</td><td>\(\frac{2}{T}\int_a^{a+T}\!f\sin n\omega t\,dt\)</td><td>\(\frac{1}{\pi}\int_{-\pi}^{\pi}\!f\sin nt\,dt\)</td></tr>
+      </table>
+      <p>Complexe : \(c_n=\frac{1}{T}\!\int f(t)e^{-in\omega t}dt\) ; \(c_0=a_0\), \(c_n=\frac{a_n-ib_n}{2}\)</p>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Convergence – Dirichlet</div>
+      <div class="key">\(S(f)(x)=\dfrac{f(x^+)+f(x^-)}{2}\) &nbsp;en tout point</div>
+      <p>Si \(f\) continue en \(x_0\) : \(S(f)(x_0)=f(x_0)\). Uniforme sur les intervalles de continuité.</p>
+    </div>
+
+    <!-- ▶ MÉTHODE générale -->
+    <div class="method">
+      <div class="mt">▶ Méthode – Calcul de coefficients de Fourier</div>
+      <div class="s"><b>1.</b> Déterminer \(T\) et \(\omega=2\pi/T\)</div>
+      <div class="s"><b>2.</b> Tester parité : &nbsp;paire ⟹ \(b_n=0\) ; &nbsp;impaire ⟹ \(a_0=a_n=0\)</div>
+      <div class="s"><b>3.</b> Exploiter symétrie : \(\int_{-a}^a f_\text{pair}=2\int_0^a\), &nbsp;\(\int_{-a}^a f_\text{impair}=0\)</div>
+      <div class="s"><b>4.</b> IPP si polynôme×trig : choisir \(u=\text{poly}\), \(v'=\sin/\cos\)</div>
+      <div class="s"><b>5.</b> Discuter selon \(n\) pair/impair via \(\cos(n\pi)=(-1)^n\), \(\sin(n\pi)=0\)</div>
+      <div class="s"><b>6.</b> Écrire \(S(f)\) ; vérifier convergence par Dirichlet</div>
+    </div>
+
+    <!-- ▶ MÉTHODE f paire (corrigé Ex.1 f=x²) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – f paire : \(f(x)=x^2\) sur \(]-\pi;\pi[\) (OM4 corrigé Ex.1)</div>
+      <div class="s"><b>1.</b> Paire ⟹ \(b_n=0\) ; intégrer sur \([0,\pi]\) ×2</div>
+      <div class="s"><b>2.</b> \(a_0=\tfrac{1}{\pi}\!\int_0^\pi t^2\,dt=\tfrac{\pi^2}{3}\)</div>
+      <div class="s"><b>3.</b> \(a_n=\tfrac{2}{\pi}\!\int_0^\pi t^2\cos(nt)\,dt\) — <b>IPP :</b> \(u=t^2,v'=\cos nt\) ⟹ crochet nul car \(\sin n\pi=0\)</div>
+      <div class="s">&nbsp;&nbsp;Reste \(-\tfrac{1}{n}\!\int_0^\pi 2t\sin(nt)\,dt\) — <b>2e IPP :</b> \(u=2t,v'=\sin nt\) ⟹ \(J=-\tfrac{2\pi(-1)^n}{n}\)</div>
+      <div class="s"><b>Résultat :</b> \(a_n=\dfrac{4(-1)^n}{n^2}\) &nbsp;⟹&nbsp; \(S(f)=\dfrac{\pi^2}{3}+4\!\sum_{n\ge1}\dfrac{(-1)^n}{n^2}\cos nx\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE f impaire (cours + corrigé) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – f impaire : \(f=1\) sur \(]0;\pi[\) (OM4 cours + corrigé Ex.)</div>
+      <div class="s"><b>1.</b> Impaire ⟹ \(a_0=a_n=0\) ; calculer seulement \(b_n=\tfrac{2}{\pi}\!\int_0^\pi\!\sin(nt)\,dt\)</div>
+      <div class="s"><b>2.</b> \(b_n=\tfrac{2}{n\pi}(1-(-1)^n)\) ⟹ \(b_n=0\) (pair), \(b_{2p+1}=\tfrac{4}{(2p+1)\pi}\) (impair)</div>
+      <div class="s"><b>Parseval ⟹</b> \(\displaystyle\sum_{n\ge0}\tfrac{1}{(2n+1)^2}=\tfrac{\pi^2}{8}\)</div>
+    </div>
+
+    <!-- ▶ MÉTHODE f exponentielle (corrigé Ex.2) -->
+    <div class="method">
+      <div class="mt">▶ Méthode – f exponentielle \(f(t)=e^t\) (OM4 corrigé Ex.2 – astuce complexe)</div>
+      <div class="s"><b>Astuce :</b> Poser \(K=I+iJ=\!\int_{-\pi}^\pi e^{(1+in)t}\,dt\) pour calculer \(I\) et \(J\) en une fois</div>
+      <div class="box">\(K=\!\left[\tfrac{e^{(1+in)t}}{1+in}\right]_{-\pi}^\pi=\dfrac{1-in}{1+n^2}(e^\pi-e^{-\pi})(-1)^n\)</div>
+      <div class="s">car \(e^{in\pi}=\cos(n\pi)+i\underbrace{\sin(n\pi)}_{=0}=(-1)^n\)</div>
+      <div class="s">\(a_n=\mathrm{Re}(K)/\pi\), &nbsp;\(b_n=\mathrm{Im}(K)/\pi\)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Astuces · Parseval · Transformée · Sommes</div>
+      <table>
+        <tr><th>f paire</th><th>\(b_n=0\) ; intégrer sur \([0,T/2]\) ×2</th></tr>
+        <tr><th>f impaire</th><th>\(a_0=a_n=0\) ; intégrer sur \([0,T/2]\) ×2</th></tr>
+      </table>
+      <p>⚠ \(\sin(n\pi)=0\) · \(\cos(n\pi)=(-1)^n\) · \(\sin\tfrac{(2p+1)\pi}{2}=(-1)^p\)</p>
+      <div class="key">\(\tfrac{1}{T}\!\int[f]^2=a_0^2+\tfrac{1}{2}\!\sum(a_n^2+b_n^2)\) &nbsp;·&nbsp; \(\sum\tfrac{1}{n^2}=\tfrac{\pi^2}{6}\) &nbsp;·&nbsp; \(\sum\tfrac{1}{(2n+1)^2}=\tfrac{\pi^2}{8}\) &nbsp;·&nbsp; \(\sum\tfrac{(-1)^n}{2n+1}=\tfrac{\pi}{4}\)</div>
+      <div class="box">\(\mathcal{F}(f)(s)=\int e^{-2i\pi st}f(t)\,dt\) &nbsp;·&nbsp; \(\mathcal{F}(f')(s)=2i\pi s\,\mathcal{F}(f)(s)\)</div>
+    </div>
+  </section>
+
+  <!-- ═══ COL 2 : MATLAB ═══ -->
+  <section class="c4">
+    <span class="sec-head">④ Matlab — OM4 TPs (UE1)</span>
+    <p style="margin-bottom:1.5mm;font-size:6.5pt;font-style:italic;">TPs couverts : prise en main · fonctions polynomiales &amp; interpolation · matrices &amp; systèmes · EDO</p>
+
+    <div class="sub">
+      <div class="sub-title">Démarrage</div>
+      <div class="cb"><span class="kw">clear</span> all; <span class="kw">close</span> all; <span class="kw">clc</span>   <span class="cm">% nettoyage</span>
+x = 3.14;          <span class="cm">% ; = pas d'affichage</span>
+disp(x);  format long</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Vecteurs &amp; Matrices</div>
+      <div class="cb">v = [1 2 3];             <span class="cm">% vecteur ligne</span>
+v = 0:0.1:1;             <span class="cm">% pas de 0.1</span>
+v = <span class="fn">linspace</span>(0,1,50);    <span class="cm">% 50 pts</span>
+A = [1 2; 3 4];          <span class="cm">% matrice 2×2</span>
+A(2,:)  A(:,1)  A(2,1:3) <span class="cm">% slicing</span>
+<span class="fn">zeros</span>(n,m) <span class="fn">ones</span>(n,m) <span class="fn">eye</span>(n)
+<span class="fn">size</span>(A)  <span class="fn">length</span>(v)  <span class="fn">numel</span>(A)</div>
+    </div>
+
+    <!-- ▶ TP Matrices -->
+    <div class="method">
+      <div class="mt">▶ TP Matrices &amp; Systèmes (OM4 TP2)</div>
+      <div class="cb">A*B      <span class="cm">% produit matriciel</span>
+A.*B     <span class="cm">% élément par élément</span>
+A'       <span class="cm">% transposée</span>
+inv(A)   <span class="cm">% inverse A⁻¹</span>
+A\b      <span class="cm">% résout Ax=b (préférer à inv)</span>
+det(A)   rank(A)
+eig(A)             <span class="cm">% valeurs propres</span>
+[V,D] = eig(A)    <span class="cm">% vecteurs + valeurs propres</span></div>
+    </div>
+
+    <!-- ▶ TP Interpolation polynomiale -->
+    <div class="method">
+      <div class="mt">▶ TP Fonctions &amp; Interpolation polynomiale (OM4 TP1)</div>
+      <div class="cb">x = <span class="fn">linspace</span>(-pi,pi,200);
+y = <span class="fn">sin</span>(x);
+<span class="fn">plot</span>(x,y,<span class="str">'b-'</span>); <span class="fn">hold</span> on
+<span class="fn">fplot</span>(@(x) <span class="fn">exp</span>(x), [-2 2])
+<span class="fn">title</span>(<span class="str">'f(x)'</span>); <span class="fn">xlabel</span>(<span class="str">'x'</span>); <span class="fn">ylabel</span>(<span class="str">'y'</span>)
+<span class="fn">legend</span>(<span class="str">'sin'</span>,<span class="str">'exp'</span>); <span class="fn">grid</span> on
+
+<span class="cm">% Interpolation polynomiale</span>
+p = <span class="fn">polyfit</span>(x, y, n);     <span class="cm">% ajust. degré n</span>
+yp = <span class="fn">polyval</span>(p, x);      <span class="cm">% éval</span>
+<span class="fn">plot</span>(x, yp, <span class="str">'r--'</span>)</div>
+    </div>
+
+    <!-- ▶ TP EDO Euler -->
+    <div class="method">
+      <div class="mt">▶ TP EDO – Méthode d'Euler &amp; ode45 (OM4 TP3)</div>
+      <div class="cb"><span class="cm">% y' = f(t,y), y(t0) = y0</span>
+h = 0.01; t = t0:h:tf;
+y = <span class="fn">zeros</span>(1,length(t));
+y(1) = y0;
+<span class="kw">for</span> k = 1:length(t)-1
+  y(k+1) = y(k) + h*f(t(k), y(k));
+<span class="kw">end</span>
+
+<span class="cm">% Résolution avec ode45</span>
+[t,y] = <span class="fn">ode45</span>(@(t,y) f(t,y), [t0 tf], y0);
+<span class="fn">plot</span>(t, y)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Structures de contrôle</div>
+      <div class="cb"><span class="kw">for</span> k = 1:n; ...; <span class="kw">end</span>
+<span class="kw">while</span>(cond); ...; <span class="kw">end</span>
+<span class="kw">if</span>(x>0); ...; <span class="kw">elseif</span>; ...; <span class="kw">else</span>; ...; <span class="kw">end</span></div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">Fonctions utiles</div>
+      <div class="cb"><span class="fn">sum</span>(v)  <span class="fn">cumsum</span>(v)  <span class="fn">prod</span>(v)  <span class="fn">sort</span>(v)
+<span class="fn">max</span>(v)  <span class="fn">min</span>(v)  <span class="fn">find</span>(v>0)  <span class="fn">abs</span>(x)
+<span class="fn">sqrt</span>(x)  <span class="fn">exp</span>(x)  <span class="fn">log</span>(x)  pi  Inf
+<span class="fn">diag</span>(A)  <span class="fn">trace</span>(A)  <span class="fn">norm</span>(v)
+<span class="fn">disp</span>(x)  error(<span class="str">'msg'</span>)</div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-title">IPP – rappel (utile pour Fourier)</div>
+      <div class="box">\(\int_a^b uv'\,dt=[uv]_a^b-\int_a^b u'v\,dt\)</div>
+      <p>Choisir : \(u=\text{polynôme}\), \(v'=\sin/\cos/e^t\). Si degré \(\ge2\) : répéter (2 IPP). Crochet : utiliser \(\sin n\pi=0\).</p>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de Révision – Droit des Brevets</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+
+  :root {
+    --navy: #0d1b2a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96f;
+    --cream: #f5f0e8;
+    --red: #8b1a1a;
+    --blue: #1a3a5c;
+    --blue-light: #2d5f8a;
+    --gray: #6b7280;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--navy);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 3rem 4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 40px,
+      rgba(201,168,76,.04) 40px, rgba(201,168,76,.04) 41px
+    );
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .3rem .9rem;
+    margin-bottom: 1.2rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--white);
+  }
+  header h1 span { color: var(--gold); }
+  header p {
+    margin-top: .8rem;
+    color: rgba(245,240,232,.65);
+    font-size: .95rem;
+    font-style: italic;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+
+  /* ── PART TITLE ── */
+  .part-title {
+    display: flex; align-items: center; gap: 1.2rem;
+    margin: 3.5rem 0 1.8rem;
+  }
+  .part-num {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    width: 3rem; height: 3rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .part-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: .3rem;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--white);
+    border-left: 4px solid var(--blue);
+    margin-bottom: 1.6rem;
+    padding: 1.5rem 1.8rem;
+    box-shadow: 2px 2px 0 rgba(13,27,42,.06);
+  }
+  .section.accent { border-left-color: var(--gold); }
+  .section.danger  { border-left-color: var(--red); }
+  .section.green   { border-left-color: #2d7a4f; }
+
+  .section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  /* ── ARTICLE BOX ── */
+  .art {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'Source Serif 4', serif;
+    font-size: .82rem;
+    padding: .7rem 1rem;
+    margin: .8rem 0;
+    border-left: 3px solid var(--gold);
+    font-style: italic;
+  }
+  .art strong { color: var(--white); font-style: normal; }
+
+  /* ── GRID 2 cols ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ── KEY POINTS LIST ── */
+  ul.kp { list-style: none; padding: 0; }
+  ul.kp li {
+    padding: .35rem 0 .35rem 1.5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(13,27,42,.06);
+    font-size: .93rem;
+  }
+  ul.kp li:last-child { border-bottom: none; }
+  ul.kp li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--gold);
+    font-size: .8rem;
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .hl {
+    background: linear-gradient(135deg, rgba(201,168,76,.12), rgba(201,168,76,.05));
+    border: 1px solid rgba(201,168,76,.4);
+    padding: .9rem 1.2rem;
+    margin: .8rem 0;
+    font-size: .92rem;
+  }
+  .hl strong { color: var(--red); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: .88rem; margin: .8rem 0;
+  }
+  th {
+    background: var(--navy); color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; text-align: left;
+    padding: .6rem .9rem;
+    letter-spacing: .05em;
+  }
+  td {
+    padding: .55rem .9rem;
+    border-bottom: 1px solid rgba(13,27,42,.1);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(13,27,42,.03); }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: .15rem .55rem;
+    margin-right: .3rem;
+    margin-bottom: .3rem;
+  }
+  .tag.red { background: var(--red); }
+  .tag.gold { background: var(--gold); color: var(--navy); }
+  .tag.green { background: #2d7a4f; }
+
+  /* ── SEPARATOR ── */
+  hr { border: none; border-top: 2px solid var(--gold); margin: 2.5rem 0; opacity: .3; }
+
+  /* ── FOOTNOTE ── */
+  .note {
+    font-size: .82rem;
+    color: var(--gray);
+    font-style: italic;
+    margin-top: .6rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--gold);
+  }
+
+  p { margin-bottom: .6rem; }
+  .mb { margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">EPF · Propriété Intellectuelle</div>
+  <h1>Droit des <span>Brevets</span></h1>
+  <p>Fiche de révision exhaustive — Cours Humblot Benoît · 3 parties · 54 pages analysées</p>
+</header>
+
+<div class="container">
+
+<!-- ════════════════════ PARTIE I ════════════════════ -->
+<div class="part-title">
+  <div class="part-num">I</div>
+  <h2>L'Invention Brevetable</h2>
+</div>
+
+<div class="grid2">
+
+<div class="section">
+  <h3>🔬 Définition de l'invention</h3>
+  <p>Le législateur <strong>ne définit pas</strong> l'invention (art. L.611-10). La doctrine retient :</p>
+  <ul class="kp">
+    <li>L'invention est une <strong>connaissance</strong> (entité immatérielle)</li>
+    <li>Une connaissance <strong>utile</strong> (pas seulement théorique)</li>
+    <li>Une connaissance d'<strong>ordre technique</strong> (sciences dures, applicabilité industrielle)</li>
+    <li>Synthèse : <em>une connaissance technique productive d'un effet technique</em></li>
+  </ul>
+  <div class="art"><strong>Art. L.611-1</strong> : « Toute invention peut faire l'objet d'un titre de propriété industrielle… conférant un droit exclusif d'exploitation. »</div>
+</div>
+
+<div class="section accent">
+  <h3>📦 Les 4 catégories d'inventions</h3>
+  <ul class="kp">
+    <li><strong>Invention de produit</strong> — objet matériel nouveau (ex : nouvelle prothèse)</li>
+    <li><strong>Invention de procédé</strong> — connaissance permettant d'obtenir un produit</li>
+    <li><strong>Invention d'application</strong> — utilisation de moyens connus dans un rapport nouveau</li>
+    <li><strong>Invention de combinaison</strong> — combinaison <em>nouvelle</em> de moyens connus (≠ juxtaposition)</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="section danger">
+  <h3>🚫 Créations NON brevetables (Art. L.611-10, L.611-16, L.611-17)</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>Créations abstraites</strong></p>
+      <ul class="kp">
+        <li>Découvertes scientifiques (révélation d'un phénomène naturel préexistant)</li>
+        <li>Théories scientifiques et méthodes mathématiques</li>
+        <li>Créations esthétiques → relevantes du droit d'auteur</li>
+        <li>Plans, principes, méthodes (commerce, jeux, activités économiques)</li>
+        <li>Présentations d'information</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Logiciels & Vivant</strong></p>
+      <ul class="kp">
+        <li>Programmes d'ordinateur <em>en tant que tels</em> (protégés par droit d'auteur)</li>
+        <li>Obtentions végétales (→ droit des obtentions végétales)</li>
+        <li>Races animales et procédés essentiellement biologiques</li>
+        <li>Méthodes chirurgicales, thérapeutiques et de diagnostic</li>
+        <li>Corps humain et simple découverte d'un gène humain</li>
+      </ul>
+    </div>
+  </div>
+  <div class="hl">
+    ⚠️ <strong>Règle clé (Art. L.611-10 al. 3)</strong> : L'exclusion ne vaut que si la demande <em>ne concerne que</em> cet élément en tant que tel. Un logiciel intégré dans une invention produisant un effet technique peut être brevetable !
+  </div>
+  <div class="note">Découverte vs invention : la découverte révèle un phénomène naturel préexistant ; l'invention produit un effet technique qui n'existerait pas sans intervention humaine.</div>
+</div>
+
+<hr>
+
+<div class="part-title">
+  <div class="part-num" style="background:var(--blue)">▸</div>
+  <h2>Les 4 Conditions de Brevetabilité</h2>
+</div>
+
+<div class="grid2">
+
+<div class="section">
+  <h3>① Nouveauté (Art. L.611-11)</h3>
+  <div class="art"><strong>Art. L.611-11</strong> : « Une invention est nouvelle si elle n'est pas comprise dans l'état de la technique. »</div>
+  <ul class="kp">
+    <li>Nouveauté = condition de <strong>secret</strong> jusqu'à la date de dépôt</li>
+    <li>Appréciée à la <strong>date de dépôt</strong> de la demande</li>
+    <li>Nouveauté <strong>objective</strong> (pas subjective)</li>
+    <li>Nouveauté <strong>absolue</strong> dans le temps ET dans l'espace</li>
+    <li>Divulgation par l'inventeur lui-même = destructrice de nouveauté</li>
+  </ul>
+  <div class="hl">
+    <strong>Attention !</strong> Entre 2 inventeurs déposant la même invention : c'est le <em>premier déposant</em> qui obtient le brevet, pas le premier inventeur.
+  </div>
+  <p><strong>Caractéristiques de l'antériorité pertinente :</strong></p>
+  <ul class="kp">
+    <li><strong>Certaine</strong> — preuve avérée de l'existence et de la date</li>
+    <li><strong>Suffisante</strong> — permet à l'homme du métier de comprendre et exécuter l'invention</li>
+    <li><strong>De toutes pièces</strong> — l'invention doit être retrouvée dans un seul exposé homogène</li>
+  </ul>
+  <div class="note">Exception : divulgation abusive ou faite à l'insu de l'inventeur (art. L.611-13) → ne détruit pas la nouveauté.</div>
+</div>
+
+<div class="section accent">
+  <h3>② Activité Inventive (Art. L.611-14)</h3>
+  <div class="art"><strong>Art. L.611-14</strong> : « Une invention implique une activité inventive si, pour un homme du métier, elle ne découle pas d'une manière évidente de l'état de la technique. »</div>
+  <ul class="kp">
+    <li>= condition de <strong>non-évidence</strong> pour l'homme du métier</li>
+    <li><strong>L'homme du métier</strong> : personnage fictif, praticien de niveau moyen dans le domaine technique de l'invention</li>
+    <li>Appréciée à la date de dépôt</li>
+    <li>Non-évidence ≠ complexité (une solution simple peut être inventive)</li>
+    <li>Vaincre des préjugés ou idées reçues → activité inventive</li>
+    <li>Résultat surprenant pour l'homme du métier → activité inventive</li>
+  </ul>
+</div>
+
+<div class="section green">
+  <h3>③ Applicabilité Industrielle (Art. L.611-15)</h3>
+  <div class="art"><strong>Art. L.611-15</strong> : « …si son objet peut être fabriqué ou utilisé dans tout genre d'industrie, y compris l'agriculture. »</div>
+  <ul class="kp">
+    <li>Notion d'industrie très large = toute activité humaine</li>
+    <li>Condition peu contraignante en pratique</li>
+    <li>Exige la <em>possibilité</em> d'application, pas la certitude</li>
+    <li>Exception : méthodes chirurgicales/thérapeutiques/diagnostic → exclues car sans caractère industriel</li>
+  </ul>
+</div>
+
+<div class="section danger">
+  <h3>④ Description Suffisante (Art. L.612-5)</h3>
+  <div class="art"><strong>Art. L.612-5</strong> : « L'invention doit être exposée de façon suffisamment claire et complète pour qu'un homme du métier puisse l'exécuter. »</div>
+  <ul class="kp">
+    <li>L'homme du métier doit reproduire l'invention à la seule lecture du brevet</li>
+    <li>Sans ajout de connaissances ni d'inventivité de sa part</li>
+    <li>Description insuffisante = <strong>nullité du brevet</strong></li>
+    <li>Dessins admis en complément</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="section" style="margin-top:1rem">
+  <h3>🔑 Droit de Possession Personnelle Antérieure (Art. L.613-7)</h3>
+  <p>Si deux inventeurs réalisent indépendamment la même invention, le second (pris de vitesse) peut malgré tout exploiter l'invention grâce au droit de possession personnelle antérieure. Conditions :</p>
+  <ul class="kp">
+    <li><strong>Bonne foi</strong> (invention non frauduleusement obtenue)</li>
+    <li><strong>Possession secrète</strong> et <strong>antérieure</strong> au dépôt</li>
+    <li>Possession portant sur la <strong>même invention</strong> à l'identique</li>
+    <li>Droit <strong>personnel et incessible</strong> (sauf avec l'entreprise)</li>
+    <li>Ne peut pas accorder de licences</li>
+    <li>Preuve souvent difficile → <em>enveloppe Soleau</em> (INPI, conservée 5 ans)</li>
+  </ul>
+</div>
+
+<!-- ════════════════════ PARTIE II ════════════════════ -->
+<div class="part-title">
+  <div class="part-num">II</div>
+  <h2>L'Obtention du Brevet</h2>
+</div>
+
+<div class="section">
+  <h3>👤 Qui peut déposer ?</h3>
+  <div class="grid2">
+    <div>
+      <ul class="kp">
+        <li>Principe : <strong>l'inventeur ou ses ayants cause</strong> (Art. L.611-6)</li>
+        <li>Entre plusieurs inventeurs indépendants : le <strong>premier déposant</strong></li>
+        <li>Inventeurs conjoints : <strong>copropriété</strong> du brevet (prévoir un règlement de copropriété)</li>
+        <li>Droit transmissible par contrat avant même le dépôt</li>
+        <li>Action en <strong>revendication</strong> (Art. L.611-8) si usurpation : délai 3 ans après publication (ou 3 ans après expiration en cas de mauvaise foi)</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Qualité d'inventeur (Art. L.611-9)</strong></p>
+      <div class="art">L'inventeur est mentionné comme tel dans le brevet — même s'il est salarié. Il peut s'y opposer.</div>
+      <div class="note">La qualité d'inventeur et la qualité de demandeur/propriétaire sont distinctes.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section accent">
+  <h3>👔 Inventions de Salariés (Art. L.611-7)</h3>
+  <table>
+    <thead>
+      <tr><th>Catégorie</th><th>Condition</th><th>Propriété</th><th>Rémunération</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Invention de mission</strong></td>
+        <td>Mission inventive permanente ou occasionnelle explicitement confiée</td>
+        <td>Employeur automatiquement</td>
+        <td>Rémunération supplémentaire obligatoire (fixée par convention ou contrat)</td>
+      </tr>
+      <tr>
+        <td><strong>Invention hors mission attribuable</strong></td>
+        <td>Réalisée dans le cours de la mission OU avec moyens/données de l'entreprise OU dans le domaine d'activité</td>
+        <td>Salarié initialement, mais l'employeur peut <em>s'attribuer</em> la propriété</td>
+        <td>Juste prix obligatoire si attribution par l'employeur</td>
+      </tr>
+      <tr>
+        <td><strong>Invention hors mission non attribuable</strong></td>
+        <td>Aucun lien avec la mission ni les moyens de l'entreprise</td>
+        <td>Salarié</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="hl">Obligation d'information : le salarié doit déclarer toute invention à l'employeur (art. L.611-7 3°). Les deux parties doivent s'abstenir de toute divulgation.</div>
+  <div class="note">Contentieux : Tribunal judiciaire de Paris OU Commission nationale paritaire de conciliation (délai de réponse : 6 mois).</div>
+</div>
+
+<div class="section">
+  <h3>📄 Composition du Fascicule de Brevet</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>1. Le Titre</strong></p>
+      <ul class="kp">
+        <li>Désignation technique courte</li>
+        <li>Pas d'adjectifs approbatifs (nouveau, supérieur…)</li>
+        <li>Pas de marques ou néologismes</li>
+      </ul>
+      <p style="margin-top:.8rem"><strong>2. La Description + Dessins</strong></p>
+      <ul class="kp">
+        <li>Suffisamment claire pour que l'homme du métier puisse l'exécuter</li>
+        <li>Condition de validité du brevet</li>
+        <li>Pas de déclarations dénigrantes ni d'éléments étrangers</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>3. Les Revendications</strong></p>
+      <ul class="kp">
+        <li>Définissent l'objet de la protection (Art. L.612-6)</li>
+        <li>Doivent être fondées sur la description (ne peuvent la dépasser)</li>
+        <li>Autonomes : ne font pas référence directe à la description</li>
+        <li><strong>Revendications indépendantes</strong> (principales) + <strong>dépendantes</strong></li>
+        <li>Un seul concept inventif général par demande</li>
+        <li>Structure : préambule + partie caractérisante ("caractérisé en ce que…")</li>
+      </ul>
+      <p style="margin-top:.8rem"><strong>4. L'Abrégé</strong></p>
+      <ul class="kp">
+        <li>Résumé informatif uniquement</li>
+        <li>Ne sert pas à apprécier la protection</li>
+        <li>L'INPI peut le modifier d'office</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section accent">
+  <h3>🏛️ Procédure de Délivrance</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>À l'INPI (procédure française)</strong></p>
+      <ul class="kp">
+        <li>Examen formel + depuis 2020 : examen des conditions de fond (nouveauté + activité inventive)</li>
+        <li>Rapport de recherche préliminaire établi par l'OEB (La Haye)</li>
+        <li>Délai de réponse du déposant : <strong>3 mois × 2</strong> (6 mois max)</li>
+        <li>Depuis le 1er avril 2020 : <strong>opposition possible</strong> dans les 9 mois suivant la délivrance</li>
+        <li>Action en nullité : <strong>imprescriptible</strong> (Art. L615-8)</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>À l'OEB (brevet européen)</strong></p>
+      <ul class="kp">
+        <li>Rapport de recherche → publication à 18 mois du dépôt</li>
+        <li>Requête en examen à formuler dans les 6 mois après publication du rapport</li>
+        <li>Examinateur désigné → délai de réponse du déposant : <strong>4 mois</strong></li>
+        <li>Division d'examen statuant collectivement</li>
+        <li>Recours devant chambre des recours : <strong>2 mois</strong></li>
+        <li>Opposition : <strong>9 mois</strong> après publication du brevet</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+<div class="section green">
+  <h3>⏱️ Durée du Droit de Brevet</h3>
+  <div class="hl"><strong>20 ans</strong> à compter de la date de <em>dépôt</em> de la demande (Art. L.611-2)</div>
+  <ul class="kp">
+    <li>Effet rétroactif à la date de dépôt (Art. L.613-1)</li>
+    <li>Pas de renouvellement possible</li>
+    <li>Fin anticipée : renonciation, nullité, ou <strong>déchéance</strong> (non-paiement des annuités)</li>
+    <li>Exception : Certificat Complémentaire de Protection pour les médicaments</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>🌍 Droit de Priorité (Convention de Paris, 1883)</h3>
+  <ul class="kp">
+    <li>Permet d'étendre la protection à l'étranger sans destruction de nouveauté</li>
+    <li>Délai : <strong>12 mois</strong> à compter de la 1ère demande</li>
+    <li>173 états signataires</li>
+    <li>Passé 12 mois : extension impossible</li>
+  </ul>
+</div>
+</div>
+
+<!-- ════════════════════ PARTIE III ════════════════════ -->
+<div class="part-title">
+  <div class="part-num">III</div>
+  <h2>Contrats & Contentieux du Brevet</h2>
+</div>
+
+<div class="section accent">
+  <h3>🤝 Contrat de Cession (Vente) de Brevet</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>Conditions de validité</strong></p>
+      <ul class="kp">
+        <li>Nécessite un brevet <em>en vigueur</em> (pas expiré, pas déchu, pas nul)</li>
+        <li>Vérifier le registre INPI : annuités payées ?</li>
+        <li>Nullité du brevet → nullité rétroactive du contrat de vente</li>
+        <li>Le cessionnaire (acheteur) peut lui-même agir en nullité du brevet acquis</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Ce que ne couvre pas la cession</strong></p>
+      <ul class="kp">
+        <li>Savoirs connexes et savoir-faire → contrat de transmission de savoir-faire séparé</li>
+        <li>Perfectionnements postérieurs du cédant → restent au cédant</li>
+        <li>Prix : forfaitaire, proportionnel ou mixte</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📃 Contrat de Licence de Brevet</h3>
+  <p>La licence est un <strong>louage de chose</strong> (≠ transfert de propriété). Le propriétaire reste propriétaire.</p>
+  <div class="grid2">
+    <div>
+      <p><strong>La Redevance (prix de la licence)</strong></p>
+      <table>
+        <thead><tr><th>Type</th><th>Avantage</th><th>Inconvénient</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Forfaitaire</strong></td><td>Prévisibilité</td><td>Inadéquation si échec/succès surprise</td></tr>
+          <tr><td><strong>Proportionnelle</strong> (% CA)</td><td>Adéquation au succès économique</td><td>Dépend des efforts du licencié ; tentation de fraude</td></tr>
+          <tr><td><strong>Mixte</strong></td><td>Combine les avantages</td><td>Complexité contractuelle</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Dégressivité par paliers possible pour inciter le licencié à vendre plus.</div>
+    </div>
+    <div>
+      <p><strong>Exclusivité</strong></p>
+      <ul class="kp">
+        <li><strong>Exclusive</strong> : un seul licencié ; le propriétaire ne peut pas accorder d'autres licences ni exploiter lui-même (si clause en ce sens)</li>
+        <li><strong>Non exclusive</strong> : plusieurs licenciés possibles</li>
+        <li>Division possible par territoire, application, secteur d'activité</li>
+      </ul>
+      <p style="margin-top:.8rem"><strong>Durée</strong></p>
+      <ul class="kp">
+        <li><strong>Indéterminée</strong> : résiliable avec préavis raisonnable ; limitée par l'expiration du brevet</li>
+        <li><strong>Déterminée</strong> : ne peut être résiliée unilatéralement sauf clause ou inexécution</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="part-title">
+  <div class="part-num" style="background:var(--red)">⚖</div>
+  <h2>Contentieux</h2>
+</div>
+
+<div class="section danger">
+  <h3>🗑️ Action en Nullité du Brevet</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>Caractéristiques</strong></p>
+      <ul class="kp">
+        <li>Action ouverte à <strong>toute personne intéressée</strong> (concurrent, licencié, acheteur…)</li>
+        <li>Tribunal : <strong>Tribunal judiciaire de Paris</strong> (1ère instance) → Cour d'appel de Paris</li>
+        <li><strong>Imprescriptible</strong> (art. L.615-8-1) : peut être demandée même après l'expiration du brevet</li>
+        <li>Souvent reconventionnelle (en réponse à une action en contrefaçon)</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Motifs de nullité</strong></p>
+      <ul class="kp">
+        <li>Absence d'invention</li>
+        <li>Défaut de nouveauté</li>
+        <li>Défaut d'activité inventive</li>
+        <li>Absence d'applicabilité industrielle</li>
+        <li>Contraire à l'ordre public / bonnes mœurs</li>
+        <li>Non-reproductibilité (description insuffisante)</li>
+        <li>Extension de l'objet après le dépôt initial</li>
+      </ul>
+    </div>
+  </div>
+  <div class="hl">
+    <strong>Effets de la nullité</strong> : Rétroactive à la date de dépôt + Effet absolu (s'impose à tous) + Nullité totale → brevet réputé n'avoir jamais existé + Nullité partielle → brevet amputé mais maintenu.
+  </div>
+</div>
+
+<div class="section">
+  <h3>⚔️ La Contrefaçon</h3>
+  <div class="grid2">
+    <div>
+      <p><strong>Actes constitutifs (Art. L.613-3)</strong></p>
+      <ul class="kp">
+        <li>Fabrication, offre, mise dans le commerce, utilisation, importation, exportation, transbordement, détention</li>
+        <li>Sur tout le territoire de validité du brevet</li>
+      </ul>
+      <p style="margin-top:.8rem"><strong>Actes NON constitutifs</strong></p>
+      <ul class="kp">
+        <li>Actes privés non commerciaux (Art. L.613-5a)</li>
+        <li>Actes à titre expérimental (Art. L.613-5b)</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Qui peut agir ? (Art. L.615-2)</strong></p>
+      <ul class="kp">
+        <li><strong>Propriétaire</strong> du brevet</li>
+        <li><strong>Licencié exclusif</strong> si le propriétaire n'agit pas après mise en demeure</li>
+        <li>Licencié non exclusif : doit informer le propriétaire, ne peut agir lui-même</li>
+      </ul>
+      <p style="margin-top:.8rem"><strong>Prescription de l'action civile</strong></p>
+      <div class="hl"><strong>5 ans</strong> à compter de la connaissance des faits (Art. L.615-8)</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+<div class="section accent">
+  <h3>🔍 Saisie-Contrefaçon (Art. L.615-5)</h3>
+  <ul class="kp">
+    <li>Ordonnance du Président du Tribunal judiciaire de Paris requise</li>
+    <li>Réalisée par <strong>huissier de justice</strong> ± experts</li>
+    <li><strong>Saisie réelle</strong> : immobilisation/saisie de la marchandise (cautionnement possible)</li>
+    <li><strong>Description</strong> : constat sans saisie (moins contraignant)</li>
+    <li>Action en contrefaçon doit suivre dans les <strong>15 jours</strong> → sinon nullité de la saisie</li>
+  </ul>
+</div>
+
+<div class="section danger">
+  <h3>⚖️ Sanctions</h3>
+  <p><strong>Civiles :</strong></p>
+  <ul class="kp">
+    <li>Interdiction sous astreinte</li>
+    <li>Dommages-intérêts = gain manqué + perte subie</li>
+    <li>Confiscation de la marchandise et des outils de production</li>
+  </ul>
+  <p style="margin-top:.6rem"><strong>Pénales (Art. L.615-14) :</strong></p>
+  <div class="hl"><strong>2 ans d'emprisonnement + 150 000 € d'amende</strong> (doublé en cas de récidive). Prescription : 3 ans.</div>
+  <div class="note">Tribunal correctionnel compétent pour le pénal. L'amende va au Trésor public.</div>
+</div>
+</div>
+
+<hr>
+
+<!-- ════════════════════ TABLEAU RÉCAP ════════════════════ -->
+<div class="part-title">
+  <div class="part-num" style="background: var(--gold); color:var(--navy)">★</div>
+  <h2>Tableau Récapitulatif des Délais & Chiffres Clés</h2>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Notion</th><th>Délai / Chiffre</th><th>Référence</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Durée du brevet</td><td><strong>20 ans</strong> à compter du dépôt</td><td>Art. L.611-2</td></tr>
+    <tr><td>Effet rétroactif du droit</td><td>À la date de dépôt de la demande</td><td>Art. L.613-1</td></tr>
+    <tr><td>Droit de priorité international</td><td><strong>12 mois</strong></td><td>Convention de Paris 1883</td></tr>
+    <tr><td>Publication de la demande OEB</td><td>18 mois après dépôt</td><td>Art. 93 CBE</td></tr>
+    <tr><td>Requête en examen (OEB)</td><td><strong>6 mois</strong> après publication du rapport</td><td>CBE</td></tr>
+    <tr><td>Délai de réponse au rapport de recherche (INPI)</td><td><strong>3 mois × 2</strong> (6 mois max)</td><td>Art. R.612-59</td></tr>
+    <tr><td>Opposition OEB après délivrance</td><td><strong>9 mois</strong></td><td>CBE</td></tr>
+    <tr><td>Opposition INPI après délivrance</td><td><strong>9 mois</strong> (depuis 2020)</td><td>Art. L615-…</td></tr>
+    <tr><td>Action en revendication</td><td><strong>3 ans</strong> après publication (ou 3 ans après expiration si MF)</td><td>Art. L.611-8</td></tr>
+    <tr><td>Action en nullité</td><td><strong>Imprescriptible</strong></td><td>Art. L.615-8-1</td></tr>
+    <tr><td>Prescription de l'action en contrefaçon (civile)</td><td><strong>5 ans</strong></td><td>Art. L.615-8</td></tr>
+    <tr><td>Prescription de l'action en contrefaçon (pénale)</td><td><strong>3 ans</strong></td><td>Droit pénal commun</td></tr>
+    <tr><td>Suite à saisie-contrefaçon : délai pour assigner</td><td><strong>15 jours</strong></td><td>Art. L.615-5</td></tr>
+    <tr><td>Sanction pénale de la contrefaçon</td><td><strong>2 ans + 150 000 €</strong></td><td>Art. L.615-14</td></tr>
+    <tr><td>Commission nationale inventions salariés</td><td>6 mois pour formuler proposition</td><td>Art. L.615-21</td></tr>
+    <tr><td>Enveloppe Soleau (INPI)</td><td>Conservée 5 ans (prorogeable 5 ans)</td><td>—</td></tr>
+    <tr><td>Droit d'auteur : durée</td><td>Vie de l'auteur + 70 ans</td><td>—</td></tr>
+    <tr><td>Droit des marques : durée</td><td>10 ans renouvelables sans limite</td><td>—</td></tr>
+    <tr><td>Droit des dessins et modèles : durée</td><td>25 ans</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ════════════ POINTS PIÈGES / À RETENIR ════════════ -->
+<div class="part-title">
+  <div class="part-num" style="background: var(--red)">!</div>
+  <h2>Points Pièges & Remarques Essentielles</h2>
+</div>
+
+<div class="grid2">
+<div class="section danger">
+  <h3>⚡ Pièges classiques QCM</h3>
+  <ul class="kp">
+    <li>La nouveauté s'apprécie à la <strong>date de dépôt</strong>, pas à la date de l'invention</li>
+    <li>Le brevet est accordé au <strong>premier déposant</strong>, pas au premier inventeur</li>
+    <li>Un logiciel <em>en tant que tel</em> n'est pas brevetable, mais s'il est intégré dans une invention produisant un effet technique, il peut l'être</li>
+    <li>La description et les revendications sont <strong>deux parties distinctes</strong> : les revendications définissent l'étendue de la protection</li>
+    <li>L'abrégé n'a qu'une valeur <strong>informative</strong> : ne sert pas à délimiter la protection</li>
+    <li>La découverte d'une substance naturelle n'est pas brevetable, mais le procédé d'isolement de cette substance peut l'être</li>
+    <li>Le licencié <strong>non exclusif</strong> ne peut pas agir lui-même en contrefaçon</li>
+    <li>La nullité du brevet est <strong>imprescriptible</strong> mais la contrefaçon se prescrit en 5 ans (civil) et 3 ans (pénal)</li>
+    <li>L'INPI (brevet national) ne prévoit <em>pas</em> d'opposition à l'enregistrement dans la procédure ancienne, contrairement à l'OEB (mais depuis 2020 c'est possible pour l'INPI)</li>
+  </ul>
+</div>
+
+<div class="section accent">
+  <h3>📌 Distinctions essentielles</h3>
+  <ul class="kp">
+    <li><strong>Cession</strong> = transfert de propriété (vente) vs <strong>Licence</strong> = location (pas de transfert de propriété)</li>
+    <li><strong>Nouveauté</strong> (condition objective et absolue) vs <strong>Activité inventive</strong> (non-évidence pour l'homme du métier)</li>
+    <li><strong>Invention de mission</strong> (propriété automatique à l'employeur) vs <strong>Hors mission attribuable</strong> (employeur peut s'attribuer le droit)</li>
+    <li><strong>INPI</strong> (office français) vs <strong>OEB</strong> (office européen, ≠ UE)</li>
+    <li><strong>Nullité partielle</strong> (brevet amputé mais maintenu) vs <strong>nullité totale</strong> (brevet réputé n'avoir jamais existé)</li>
+    <li><strong>Saisie réelle</strong> (immobilisation marchandise, cautionnement possible) vs <strong>Description</strong> (simple constat)</li>
+    <li><strong>Droit pénal</strong> (amende → Trésor public, 3 ans de prescription) vs <strong>droit civil</strong> (réparation → victime, 5 ans)</li>
+    <li>Propriété intellectuelle : <strong>caractère temporaire</strong> (contrairement à la propriété corporelle qui est perpétuelle)</li>
+  </ul>
+</div>
+</div>
+
+<div class="section" style="border-left: 4px solid var(--navy)">
+  <h3>🏛️ Compétences juridictionnelles</h3>
+  <table>
+    <thead><tr><th>Affaire</th><th>Juridiction</th></tr></thead>
+    <tbody>
+      <tr><td>Action en nullité de brevet / en contrefaçon (civile)</td><td>Tribunal judiciaire de Paris (1ère inst.) → CA Paris</td></tr>
+      <tr><td>Contentieux des inventions de salariés</td><td>Tribunal judiciaire de Paris (ou Commission de conciliation)</td></tr>
+      <tr><td>Contrefaçon pénale</td><td>Tribunal correctionnel</td></tr>
+      <tr><td>Référé (mesures d'urgence)</td><td>Président du Tribunal judiciaire</td></tr>
+      <tr><td>Opposition à un brevet européen</td><td>Division d'opposition de l'OEB → Chambre des recours</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de revision — CC Electronique Appliquee</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{--purple:#534AB7;--purple-l:#EEEDFE;--purple-m:#7F77DD;--teal:#0F6E56;--teal-l:#E1F5EE;--coral:#993C1D;--coral-l:#FAECE7;--amber:#854F0B;--amber-l:#FAEEDA;--gray:#444441;--gray-l:#F1EFE8;--text:#1a1a1a;--muted:#555;--border:#ddd;--bg:#fff;--page:#f8f7f4}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);font-size:15px;line-height:1.7}
+  .cover{background:linear-gradient(135deg,#534AB7 0%,#3C3489 60%,#26215C 100%);color:white;padding:60px 48px 48px;margin-bottom:0}
+  .cover .label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:16px}
+  .cover h1{font-size:36px;font-weight:700;line-height:1.2;margin-bottom:12px}
+  .cover .sub{font-size:16px;opacity:.8;margin-bottom:32px}
+  .cover .toc{display:flex;gap:12px;flex-wrap:wrap}
+  .toc-item{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:10px 18px;font-size:14px;font-weight:500}
+  .toc-item span{display:block;font-size:11px;opacity:.65;font-weight:400}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 32px}
+  .sec-hd{display:flex;align-items:center;gap:16px;padding:20px 28px;border-radius:12px;margin-bottom:28px;margin-top:48px}
+  .sec-hd.p{background:var(--purple-l);border-left:4px solid var(--purple)}
+  .sec-hd.t{background:var(--teal-l);border-left:4px solid var(--teal)}
+  .sec-hd.c{background:var(--coral-l);border-left:4px solid var(--coral)}
+  .sec-num{font-size:32px;font-weight:700;opacity:.25}
+  .sec-hd.p .sec-num{color:var(--purple)}
+  .sec-hd.t .sec-num{color:var(--teal)}
+  .sec-hd.c .sec-num{color:var(--coral)}
+  .sec-ti{font-size:22px;font-weight:700}
+  .sec-hd.p .sec-ti{color:#3C3489}
+  .sec-hd.t .sec-ti{color:#085041}
+  .sec-hd.c .sec-ti{color:#712B13}
+  h2{font-size:18px;font-weight:600;margin:32px 0 14px;padding-bottom:8px;border-bottom:1.5px solid var(--border)}
+  h3{font-size:15px;font-weight:600;margin:22px 0 10px}
+  p{margin-bottom:12px}
+  .card{background:white;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:18px}
+  .fx{background:var(--purple-l);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#3C3489;margin:10px 0;line-height:1.9;white-space:pre-wrap}
+  .fx.t{background:var(--teal-l);border-color:var(--teal);color:#085041}
+  .fx.c{background:var(--coral-l);border-color:var(--coral);color:#712B13}
+  .fx.a{background:var(--amber-l);border-color:var(--amber);color:#633806}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+  th{background:var(--gray-l);padding:9px 14px;text-align:center;font-weight:600;border:1px solid var(--border)}
+  td{padding:7px 14px;text-align:center;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:13px}
+  tr:nth-child(even) td{background:#fafafa}
+  td.hl{background:#EEEDFE;color:#3C3489;font-weight:600}
+  td.one{background:#E1F5EE;color:#085041;font-weight:700}
+  td.zero{background:#FAECE7;color:#712B13;font-weight:700}
+  .al{display:flex;gap:14px;padding:14px 18px;border-radius:8px;margin:16px 0;font-size:14px}
+  .al.w{background:var(--amber-l);border-left:3px solid var(--amber);color:#633806}
+  .al.i{background:var(--teal-l);border-left:3px solid var(--teal);color:#085041}
+  .al.tip{background:var(--purple-l);border-left:3px solid var(--purple);color:#3C3489}
+  .al-ic{font-size:18px;flex-shrink:0}
+  ol.steps{counter-reset:st;list-style:none;padding:0}
+  ol.steps li{counter-increment:st;display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+  ol.steps li::before{content:counter(st);background:var(--purple);color:white;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px}
+  ol.steps.t li::before{background:var(--teal)}
+  ol.steps.c li::before{background:var(--coral)}
+  .kmap{display:inline-grid;grid-template-columns:80px repeat(4,68px);gap:2px;font-family:'JetBrains Mono',monospace;font-size:13px}
+  .kh{background:var(--gray-l);padding:8px;text-align:center;font-weight:600;border-radius:4px;font-size:12px;font-family:'Inter',sans-serif}
+  .kc{background:white;border:1px solid var(--border);padding:10px;text-align:center;border-radius:4px;font-size:15px}
+  .kc.k1{background:var(--purple-l);color:#3C3489;font-weight:700}
+  .kc.k0{color:#bbb}
+  .gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:16px 0}
+  .gc{background:white;border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+  .gc .gn{font-weight:700;font-size:15px;margin-bottom:4px;color:#3C3489}
+  .gc .ge{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:10px}
+  .gc table{margin:0}
+  .ex{background:white;border:1px solid var(--border);border-radius:10px;margin:16px 0;overflow:hidden}
+  .exh{padding:10px 18px;font-weight:600;font-size:14px;color:white}
+  .exh.p{background:var(--purple)}
+  .exh.t{background:var(--teal)}
+  .exh.c{background:var(--coral)}
+  .exb{padding:16px 18px;font-size:14px}
+  .recap{background:linear-gradient(135deg,#534AB7 0%,#3C3489 100%);color:white;border-radius:12px;padding:24px 28px;margin:32px 0}
+  .recap h3{color:rgba(255,255,255,.9);margin:18px 0 8px}
+  .recap h3:first-child{margin-top:0}
+  .recap ul{padding-left:20px}
+  .recap li{margin-bottom:6px;font-size:14px;opacity:.9}
+  .recap code{background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px}
+  code{background:var(--gray-l);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px}
+  ul.bl{padding-left:22px}
+  ul.bl li{margin-bottom:6px}
+  .eg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:20px 0}
+  .ec{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .ech{padding:14px 18px;font-weight:700;font-size:14px}
+  .ecb{padding:14px 18px;font-size:13px;color:var(--muted)}
+  .badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:8px}
+  .easy{background:var(--teal-l);color:var(--teal)}
+  .med{background:var(--amber-l);color:var(--amber)}
+  .hard{background:var(--coral-l);color:var(--coral)}
+  @media print{body{background:white}.cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}.sec-hd{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="label">EPF Engineering School · Electronique Appliquee &amp; Pilotage S4</div>
+  <h1>Fiche de revision<br>Controle Continu</h1>
+  <div class="sub">Tout ce que vous devez savoir — de zero a l'examen</div>
+  <div class="toc">
+    <div class="toc-item">01 Conversions numeriques <span>Binaire · Decimal · Hexadecimal</span></div>
+    <div class="toc-item">02 Fonctions logiques <span>Portes · Karnaugh · Circuits</span></div>
+    <div class="toc-item">03 Convertisseur CNA <span>R-2R · Formules · Quantum</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ======================================================= -->
+<!-- PARTIE 1 : CONVERSIONS                                  -->
+<!-- ======================================================= -->
+
+<div class="sec-hd p">
+  <div class="sec-num">01</div>
+  <div>
+    <div class="sec-ti">Conversion entre systemes numeriques</div>
+    <div style="font-size:14px;color:#534AB7;margin-top:4px">Binaire · Decimal · Hexadecimal</div>
+  </div>
+</div>
+
+<h2>1.1 — Pourquoi plusieurs bases ?</h2>
+<p>Dans la vie quotidienne, on utilise le systeme <strong>decimal</strong> (base 10, chiffres 0 a 9). Les ordinateurs et microcontroleurs ne comprennent que deux etats electriques : tension haute (~5V) = <strong>1</strong>, tension basse (0V) = <strong>0</strong>. C'est le systeme <strong>binaire</strong> (base 2). Pour ecrire le binaire de facon plus compacte, on utilise le systeme <strong>hexadecimal</strong> (base 16).</p>
+
+<div class="card" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center">
+  <div><div style="font-size:28px;font-weight:700;color:#534AB7">10</div><div style="font-size:13px;color:#555;margin-top:4px">Decimal — base 10<br>Symboles : 0 a 9</div></div>
+  <div><div style="font-size:28px;font-weight:700;color:#0F6E56">2</div><div style="font-size:13px;color:#555;margin-top:4px">Binaire — base 2<br>Symboles : 0, 1</div></div>
+  <div><div style="font-size:28px;font-weight:700;color:#993C1D">16</div><div style="font-size:13px;color:#555;margin-top:4px">Hexadecimal — base 16<br>Symboles : 0-9, A-F</div></div>
+</div>
+
+<h2>1.2 — Le principe fondamental : position = puissance de la base</h2>
+<div class="fx">Decimal :      345 = 3x10² + 4x10¹ + 5x10°  = 300+40+5 = 345
+Binaire :   0b1101 = 1x2³  + 1x2²  + 0x2¹ + 1x2°  = 8+4+0+1  = 13
+Hex :        0x2F  = 2x16¹ + 15x16°                = 32+15    = 47</div>
+
+<h2>1.3 — Tableau des puissances de 2 (a memoriser)</h2>
+<table>
+  <tr><th>Position (bit)</th><th>b7</th><th>b6</th><th>b5</th><th>b4</th><th>b3</th><th>b2</th><th>b1</th><th>b0</th></tr>
+  <tr><td style="font-weight:600;background:#f5f5f5">Puissance de 2</td><td>2&#x2077;</td><td>2&#x2076;</td><td>2&#x2075;</td><td>2&#x2074;</td><td>2&#x00B3;</td><td>2&#x00B2;</td><td>2&#x00B9;</td><td>2&#x2070;</td></tr>
+  <tr><td style="font-weight:600;background:#f5f5f5">Valeur</td><td class="hl">128</td><td class="hl">64</td><td class="hl">32</td><td class="hl">16</td><td class="hl">8</td><td class="hl">4</td><td class="hl">2</td><td class="hl">1</td></tr>
+</table>
+<div class="al tip"><div class="al-ic">&#x1F4A1;</div><div><strong>MSB vs LSB :</strong> b7 est le bit de poids fort (MSB = Most Significant Bit, le plus a gauche). b0 est le bit de poids faible (LSB = Least Significant Bit, le plus a droite). Pour lire un mot binaire : on part de la droite, les poids doublent a chaque pas vers la gauche.</div></div>
+
+<h2>1.4 — Conversion Decimal vers Binaire : divisions successives par 2</h2>
+<p>On divise le nombre par 2, on note le reste (0 ou 1), on recommence avec le quotient. On s'arrete quand le quotient est 0. On lit les restes <strong>de bas en haut</strong>.</p>
+
+<div class="ex">
+  <div class="exh p">Exemple : 42 en decimal → binaire 8 bits</div>
+  <div class="exb">
+    <table style="width:auto;margin:0 0 12px">
+      <tr><th>Division</th><th>Quotient</th><th>Reste (bit)</th></tr>
+      <tr><td>42 ÷ 2</td><td>21</td><td class="one">0 ← b0</td></tr>
+      <tr><td>21 ÷ 2</td><td>10</td><td class="one">1 ← b1</td></tr>
+      <tr><td>10 ÷ 2</td><td>5</td><td class="one">0 ← b2</td></tr>
+      <tr><td>5 ÷ 2</td><td>2</td><td class="one">1 ← b3</td></tr>
+      <tr><td>2 ÷ 2</td><td>1</td><td class="one">0 ← b4</td></tr>
+      <tr><td>1 ÷ 2</td><td>0</td><td class="one">1 ← b5</td></tr>
+    </table>
+    Lecture de bas en haut : <strong>101010</strong>. En 8 bits (completer avec des 0 a gauche) : <strong>0b00101010</strong><br>
+    Verification : 32+8+2 = 42 ✓
+  </div>
+</div>
+
+<h2>1.5 — Conversion Binaire vers Decimal : sommer les poids</h2>
+<div class="ex">
+  <div class="exh p">Exemple : 0b10010110 → decimal</div>
+  <div class="exb">
+    <div class="fx" style="margin:0">= 1x128 + 0x64 + 0x32 + 1x16 + 0x8 + 1x4 + 1x2 + 0x1
+= 128 + 16 + 4 + 2 = <strong>150</strong></div>
+  </div>
+</div>
+
+<h2>1.6 — Le systeme hexadecimal : 1 chiffre hex = 4 bits</h2>
+<table>
+  <tr><th>Decimal</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+  <tr><th>Hex</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td class="hl">A</td><td class="hl">B</td><td class="hl">C</td><td class="hl">D</td><td class="hl">E</td><td class="hl">F</td></tr>
+  <tr><th>Binaire</th><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td><td>1000</td><td>1001</td><td class="hl">1010</td><td class="hl">1011</td><td class="hl">1100</td><td class="hl">1101</td><td class="hl">1110</td><td class="hl">1111</td></tr>
+</table>
+
+<p>La propriete cle : comme 16 = 2^4, chaque chiffre hex correspond exactement a un groupe de <strong>4 bits</strong>.</p>
+
+<div class="ex">
+  <div class="exh p">Exemple : 0b00101010 → hexadecimal</div>
+  <div class="exb">
+    Separer en groupes de 4 bits (depuis la droite) : <code>0010 | 1010</code><br>
+    <code>0010</code> = 2 → <strong>2</strong><br>
+    <code>1010</code> = 8+2 = 10 → <strong>A</strong><br>
+    Resultat : <strong>0x2A</strong> — Verification : 2x16+10 = 42 ✓
+  </div>
+</div>
+
+<div class="al w"><div class="al-ic">⚠️</div><div><strong>Pieges frequents :</strong> (1) Oublier de completer a 8 bits avec des zeros a gauche. (2) Confondre A=10, B=11, C=12, D=13, E=14, F=15. (3) Grouper les bits par 4 en partant de la gauche au lieu de la droite (toujours partir de la droite).</div></div>
+
+<h2>1.7 — Table de conversion complete 0-15</h2>
+<table>
+  <tr><th>Dec</th><th>Binaire 4 bits</th><th>Hex</th><th>Dec</th><th>Binaire 4 bits</th><th>Hex</th></tr>
+  <tr><td>0</td><td>0000</td><td>0x0</td><td>8</td><td>1000</td><td>0x8</td></tr>
+  <tr><td>1</td><td>0001</td><td>0x1</td><td>9</td><td>1001</td><td>0x9</td></tr>
+  <tr><td>2</td><td>0010</td><td>0x2</td><td>10</td><td class="hl">1010</td><td class="hl">0xA</td></tr>
+  <tr><td>3</td><td>0011</td><td>0x3</td><td>11</td><td class="hl">1011</td><td class="hl">0xB</td></tr>
+  <tr><td>4</td><td>0100</td><td>0x4</td><td>12</td><td class="hl">1100</td><td class="hl">0xC</td></tr>
+  <tr><td>5</td><td>0101</td><td>0x5</td><td>13</td><td class="hl">1101</td><td class="hl">0xD</td></tr>
+  <tr><td>6</td><td>0110</td><td>0x6</td><td>14</td><td class="hl">1110</td><td class="hl">0xE</td></tr>
+  <tr><td>7</td><td>0111</td><td>0x7</td><td>15</td><td class="hl">1111</td><td class="hl">0xF</td></tr>
+</table>
+
+<h2>1.8 — Methode universelle resumee</h2>
+<ol class="steps">
+  <li><strong>Dec → Bin :</strong> Divisions successives par 2, noter les restes, lire de bas en haut. Completer a gauche avec des 0 pour atteindre 4 ou 8 bits.</li>
+  <li><strong>Bin → Dec :</strong> Multiplier chaque bit par sa puissance de 2, sommer. Utiliser la table : 128, 64, 32, 16, 8, 4, 2, 1.</li>
+  <li><strong>Bin → Hex :</strong> Grouper les bits par 4 en partant de la droite. Convertir chaque groupe avec la table.</li>
+  <li><strong>Hex → Bin :</strong> Remplacer chaque chiffre hex par ses 4 bits equivalents (utiliser la table).</li>
+  <li><strong>Dec → Hex :</strong> Passer par le binaire puis grouper par 4 (ou diviser par 16 avec la meme methode que par 2).</li>
+</ol>
+
+
+<!-- ======================================================= -->
+<!-- PARTIE 2 : FONCTIONS LOGIQUES                           -->
+<!-- ======================================================= -->
+
+<div class="sec-hd t" style="margin-top:56px">
+  <div class="sec-num">02</div>
+  <div>
+    <div class="sec-ti">Fonctions logiques et Karnaugh</div>
+    <div style="font-size:14px;color:#0F6E56;margin-top:4px">Portes elementaires · Tables de verite · Simplification · Circuits</div>
+  </div>
+</div>
+
+<h2>2.1 — Qu'est-ce qu'une fonction logique ?</h2>
+<p>Une fonction logique prend des entrees binaires (0 ou 1) et produit une sortie binaire (0 ou 1). C'est la brique fondamentale de tout circuit numerique.</p>
+<div class="card" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div><div style="font-weight:700;color:#085041;margin-bottom:8px">Fonctions combinatoires</div><div style="font-size:14px">La sortie depend <strong>uniquement des entrees actuelles</strong>. Pas de memoire. Exemples : AND, OR, additionneur.</div></div>
+  <div><div style="font-weight:700;color:#085041;margin-bottom:8px">Fonctions sequentielles</div><div style="font-size:14px">La sortie depend des entrees <strong>ET de l'etat precedent</strong> (memoire). Exemples : bascule D, compteur.</div></div>
+</div>
+<p>Le CC porte principalement sur les fonctions <strong>combinatoires</strong>.</p>
+
+<h2>2.2 — Les 6 fonctions logiques fondamentales</h2>
+
+<div class="gg">
+  <div class="gc">
+    <div class="gn">NON — NOT</div>
+    <div class="ge">S = A-barre | inverse l'entree</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Fonction unaire (1 seule entree). 0 devient 1, 1 devient 0.</p>
+    <table><tr><th>A</th><th>S = NON A</th></tr><tr><td class="zero">0</td><td class="one">1</td></tr><tr><td class="one">1</td><td class="zero">0</td></tr></table>
+  </div>
+  <div class="gc">
+    <div class="gn">ET — AND</div>
+    <div class="ge">S = A . B</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Sortie 1 seulement si <strong>toutes les entrees sont a 1</strong>.</p>
+    <table><tr><th>A</th><th>B</th><th>A.B</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="zero">0</td></tr><tr><td>1</td><td>0</td><td class="zero">0</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+  </div>
+  <div class="gc">
+    <div class="gn">OU — OR</div>
+    <div class="ge">S = A + B</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Sortie 1 si <strong>au moins une entree est a 1</strong>.</p>
+    <table><tr><th>A</th><th>B</th><th>A+B</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="one">1</td></tr><tr><td>1</td><td>1</td><td class="one">1</td></tr></table>
+  </div>
+  <div class="gc">
+    <div class="gn">NON-ET — NAND</div>
+    <div class="ge">S = (A.B)-barre = NOT(AND)</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Inverse du AND. Sortie 0 seulement si les deux sont a 1.</p>
+    <table><tr><th>A</th><th>B</th><th>NAND</th></tr><tr><td>0</td><td>0</td><td class="one">1</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="one">1</td></tr><tr><td>1</td><td>1</td><td class="zero">0</td></tr></table>
+  </div>
+  <div class="gc">
+    <div class="gn">NON-OU — NOR</div>
+    <div class="ge">S = (A+B)-barre = NOT(OR)</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Inverse du OR. Sortie 1 seulement si toutes les entrees sont a 0.</p>
+    <table><tr><th>A</th><th>B</th><th>NOR</th></tr><tr><td>0</td><td>0</td><td class="one">1</td></tr><tr><td>0</td><td>1</td><td class="zero">0</td></tr><tr><td>1</td><td>0</td><td class="zero">0</td></tr><tr><td>1</td><td>1</td><td class="zero">0</td></tr></table>
+  </div>
+  <div class="gc">
+    <div class="gn">OU-EXCLUSIF — XOR</div>
+    <div class="ge">S = A XOR B</div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px">Sortie 1 si les entrees sont <strong>differentes</strong>. Sortie 0 si elles sont identiques.</p>
+    <table><tr><th>A</th><th>B</th><th>XOR</th></tr><tr><td>0</td><td>0</td><td class="zero">0</td></tr><tr><td>0</td><td>1</td><td class="one">1</td></tr><tr><td>1</td><td>0</td><td class="one">1</td></tr><tr><td>1</td><td>1</td><td class="zero">0</td></tr></table>
+  </div>
+</div>
+
+<div class="al tip"><div class="al-ic">&#x1F9E0;</div><div><strong>Memo-technique :</strong> AND = "LES DEUX" | OR = "AU MOINS UN" | NOT = "INVERSE" | NAND = "PAS LES DEUX" | NOR = "AUCUN" | XOR = "DIFFERENTS"</div></div>
+
+<h2>2.3 — Construire une table de verite</h2>
+<p>Pour n variables d'entree : <strong>2^n lignes</strong>. On enumere toutes les combinaisons (comme compter en binaire de 0 a 2^n-1), puis on calcule la sortie pour chaque ligne.</p>
+
+<div class="ex">
+  <div class="exh t">Exemple complet : S = A.B + C-barre (3 variables, 8 lignes)</div>
+  <div class="exb">
+    <table>
+      <tr><th>A</th><th>B</th><th>C</th><th>A.B</th><th>C-barre</th><th>S = A.B + C-barre</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td class="one">1</td></tr>
+      <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td class="one">1</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td class="one">1</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="zero">0</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="one">1</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td class="one">1</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>2.4 — De la table de verite a l'equation brute (somme de mintermes)</h2>
+<ol class="steps t">
+  <li>Reperer toutes les lignes ou la sortie S = 1.</li>
+  <li>Pour chaque ligne S=1 : ecrire le produit (AND) de toutes les variables. Variable = 1 dans cette ligne → on l'ecrit normale (A). Variable = 0 dans cette ligne → on l'ecrit complementee (A-barre).</li>
+  <li>Faire la somme (OR) de tous ces produits → equation brute.</li>
+</ol>
+<p>Cette equation est correcte mais souvent longue. On la simplifie avec Karnaugh.</p>
+
+<h2>2.5 — La simplification de Karnaugh</h2>
+<p>Le tableau de Karnaugh exploite la propriete booleenne fondamentale :</p>
+<div class="fx t">A.B + A.B-barre = A.(B+B-barre) = A.1 = A
+→ Si deux cas donnent S=1 et ne different QUE par une variable, cette variable est eliminee.</div>
+
+<h3>Structure du tableau 3 variables (A, B, C)</h3>
+<div class="al w"><div class="al-ic">⚠️</div><div><strong>Code Gray OBLIGATOIRE :</strong> Les colonnes ne suivent pas l'ordre binaire naturel (00,01,10,11) mais l'ordre de Gray (00,01,<u>11</u>,10). L'ordre est toujours : 00 → 01 → 11 → 10. C'est ce qui garantit que deux cases adjacentes ne different que d'un seul bit.</div></div>
+
+<div style="overflow-x:auto;margin:18px 0">
+  <div class="kmap">
+    <div class="kh" style="background:transparent"></div>
+    <div class="kh">BC=00</div><div class="kh">BC=01</div><div class="kh">BC=11</div><div class="kh">BC=10</div>
+    <div class="kh">A=0</div>
+    <div class="kc">m0<br><small style="color:#bbb">ABC=000</small></div>
+    <div class="kc">m1<br><small style="color:#bbb">ABC=001</small></div>
+    <div class="kc">m3<br><small style="color:#bbb">ABC=011</small></div>
+    <div class="kc">m2<br><small style="color:#bbb">ABC=010</small></div>
+    <div class="kh">A=1</div>
+    <div class="kc">m4<br><small style="color:#bbb">ABC=100</small></div>
+    <div class="kc">m5<br><small style="color:#bbb">ABC=101</small></div>
+    <div class="kc">m7<br><small style="color:#bbb">ABC=111</small></div>
+    <div class="kc">m6<br><small style="color:#bbb">ABC=110</small></div>
+  </div>
+</div>
+
+<h3>Les regles d'or des regroupements</h3>
+<div class="card">
+  <ul class="bl">
+    <li>✅ Tailles autorisees : <strong>1, 2, 4 ou 8 cases uniquement</strong> (puissances de 2). Jamais 3, 5, 6, 7.</li>
+    <li>✅ Formes : <strong>rectangles ou carres uniquement</strong>. Pas de diagonales, pas de L.</li>
+    <li>✅ Le tableau est <strong>torique ("monde rond")</strong> : la colonne BC=10 (droite) est adjacente a BC=00 (gauche). La ligne A=1 (bas) est adjacente a A=0 (haut). On peut grouper les bords opposes.</li>
+    <li>✅ Faire les <strong>groupes les plus grands possible</strong>. Un groupe de 4 simplifie plus qu'un groupe de 2.</li>
+    <li>✅ Un "1" peut appartenir a <strong>plusieurs groupes</strong> si cela permet d'agrandir d'autres groupes.</li>
+    <li>❌ Tout "1" doit etre couvert par au moins un groupe.</li>
+  </ul>
+</div>
+
+<h3>Lire un groupe : trouver le terme simplifie</h3>
+<p>Pour chaque groupe forme, on examine variable par variable :</p>
+<table>
+  <tr><th>Comportement de la variable dans le groupe</th><th>Action</th><th>Exemple</th></tr>
+  <tr><td>Variable <strong>constante a 1</strong></td><td>On la garde telle quelle</td><td>A reste a 1 → on ecrit A</td></tr>
+  <tr><td>Variable <strong>constante a 0</strong></td><td>On l'ecrit complementee</td><td>B reste a 0 → on ecrit B-barre</td></tr>
+  <tr><td>Variable <strong>change (0 et 1)</strong></td><td>On l'elimine completement</td><td>C passe de 0 a 1 → C disparait</td></tr>
+</table>
+<div class="fx t">Taille du groupe   → variables eliminees → simplification
+Groupe de 2 cases → elimine 1 variable  → terme a (n-1) variables
+Groupe de 4 cases → elimine 2 variables → terme a (n-2) variables
+Groupe de 8 cases → elimine 3 variables → S = 1 (cas ideal !)</div>
+
+<h3>Exemple complet pas a pas : le vote a la majorite</h3>
+<div class="ex">
+  <div class="exh t">3 juges A, B, C — S = 1 si au moins 2 votes "Oui" (=1)</div>
+  <div class="exb">
+    <p style="margin-bottom:10px"><strong>Etape 1 : Table de verite</strong></p>
+    <table style="width:auto;margin:0 0 16px">
+      <tr><th>A</th><th>B</th><th>C</th><th>S</th><th>Lecture</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td class="zero">0</td><td>0 vote Oui</td></tr>
+      <tr><td>0</td><td>0</td><td>1</td><td class="zero">0</td><td>1 vote Oui</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td class="zero">0</td><td>1 vote Oui</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td class="one">1</td><td>2 votes Oui → minterme m3 = A-barre.B.C</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td class="zero">0</td><td>1 vote Oui</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td class="one">1</td><td>2 votes Oui → minterme m5 = A.B-barre.C</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td class="one">1</td><td>2 votes Oui → minterme m6 = A.B.C-barre</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td class="one">1</td><td>3 votes Oui → minterme m7 = A.B.C</td></tr>
+    </table>
+    <p style="margin-bottom:8px"><strong>Equation brute :</strong> S = A-barre.B.C + A.B-barre.C + A.B.C-barre + A.B.C</p>
+    <p style="margin-bottom:12px"><strong>Etape 2 : Karnaugh</strong></p>
+    <div style="overflow-x:auto;margin-bottom:16px">
+      <div class="kmap">
+        <div class="kh" style="background:transparent"></div>
+        <div class="kh">BC=00</div><div class="kh">BC=01</div><div class="kh">BC=11</div><div class="kh">BC=10</div>
+        <div class="kh">A=0</div>
+        <div class="kc k0">0</div><div class="kc k0">0</div><div class="kc k1">1(m3)</div><div class="kc k0">0</div>
+        <div class="kh">A=1</div>
+        <div class="kc k0">0</div><div class="kc k1">1(m5)</div><div class="kc k1">1(m7)</div><div class="kc k1">1(m6)</div>
+      </div>
+    </div>
+    <p style="margin-bottom:8px"><strong>Etape 3 : Identifier les groupes</strong></p>
+    <ul class="bl" style="font-size:14px;margin-bottom:12px">
+      <li>&#x1F534; <strong>Groupe 1 (taille 2) :</strong> m7 + m6 (A=1, colonnes BC=11 et BC=10). A=1(constant), B=1(constant), C change → terme = <strong>A.B</strong></li>
+      <li>&#x1F535; <strong>Groupe 2 (taille 2) :</strong> m7 + m5 (A=1, colonnes BC=11 et BC=01). A=1(constant), C=1(constant), B change → terme = <strong>A.C</strong></li>
+      <li>&#x1F7E2; <strong>Groupe 3 (taille 2) :</strong> m7 + m3 (colonne BC=11, lignes A=0 et A=1). B=1(constant), C=1(constant), A change → terme = <strong>B.C</strong></li>
+    </ul>
+    <p><strong>Etape 4 : Equation finale simplifiee</strong></p>
+    <div class="fx t" style="margin:8px 0">S = A.B + A.C + B.C</div>
+    <p style="font-size:13px;color:#555">5 mintermes → 3 termes de 2 variables. On est passe de 4 portes AND a 3 termes courtes. Circuit : 3 portes AND a 2 entrees + 1 porte OR a 3 entrees.</p>
+  </div>
+</div>
+
+<h2>2.6 — Du Karnaugh au circuit logique</h2>
+<p>La traduction est directe et mecanique :</p>
+<table>
+  <tr><th>Element de l'equation</th><th>Porte logique</th></tr>
+  <tr><td>A.B (produit)</td><td>Porte AND a 2 entrees</td></tr>
+  <tr><td>A+B (somme)</td><td>Porte OR</td></tr>
+  <tr><td>A-barre (variable complementee)</td><td>Porte NOT suivie de l'entree</td></tr>
+  <tr><td>S = X + Y + Z</td><td>OR a 3 entrees (ou 2 OR a 2 entrees en cascade)</td></tr>
+</table>
+<div class="al tip"><div class="al-ic">&#x1F4A1;</div><div>Pour S = A.B + A.C + B.C : on a besoin de 3 portes AND a 2 entrees et 1 porte OR a 3 entrees (minimum 4 portes). Sans simplification on aurait eu beaucoup plus de portes.</div></div>
+
+<h2>2.7 — Lois de Boole a connaitre</h2>
+<table>
+  <tr><th>Loi</th><th>Forme produit (AND)</th><th>Forme somme (OR)</th></tr>
+  <tr><td>Element neutre</td><td>A . 1 = A</td><td>A + 0 = A</td></tr>
+  <tr><td>Element absorbant</td><td>A . 0 = 0</td><td>A + 1 = 1</td></tr>
+  <tr><td>Complement</td><td>A . A-barre = 0</td><td>A + A-barre = 1</td></tr>
+  <tr><td>Idempotence</td><td>A . A = A</td><td>A + A = A</td></tr>
+  <tr><td>De Morgan</td><td class="hl">(A.B)-barre = A-barre + B-barre</td><td class="hl">(A+B)-barre = A-barre . B-barre</td></tr>
+  <tr><td>Cle Karnaugh</td><td class="hl" colspan="2">A.B + A.B-barre = A (la variable qui change s'elimine)</td></tr>
+</table>
+
+<h2>2.8 — Resume de la methode Karnaugh en 5 etapes</h2>
+<ol class="steps t">
+  <li>Ecrire la <strong>table de verite complete</strong> (2^n lignes pour n variables). Calculer S pour chaque combinaison.</li>
+  <li>Tracer la <strong>grille de Karnaugh</strong> avec le code Gray (colonnes : 00, 01, 11, 10). Remplir chaque case avec le 0 ou 1 de S.</li>
+  <li>Identifier les <strong>groupes de 1</strong> les plus grands possibles : taille = puissance de 2, formes rectangulaires/carrees, bords toriques. Tout 1 doit etre couvert.</li>
+  <li>Pour chaque groupe, <strong>lire le terme simplifie</strong> : garder les variables constantes, eliminer celles qui changent.</li>
+  <li>Faire la somme (OR) de tous les termes → <strong>equation simplifiee finale</strong>. Traduire en circuit logique.</li>
+</ol>
+
+
+<!-- ======================================================= -->
+<!-- PARTIE 3 : CNA                                          -->
+<!-- ======================================================= -->
+
+<div class="sec-hd c" style="margin-top:56px">
+  <div class="sec-num">03</div>
+  <div>
+    <div class="sec-ti">Convertisseur Numerique-Analogique (CNA)</div>
+    <div style="font-size:14px;color:#993C1D;margin-top:4px">Principe · Formules · Reseau R-2R · Quantum</div>
+  </div>
+</div>
+
+<h2>3.1 — Le probleme : passer du numerique a l'analogique</h2>
+<p>Un microcontroleur ne produit que des niveaux numeriques : 0 V ou 5 V. Or le monde reel est analogique : un moteur a besoin d'une tension variable, un amplificateur audio d'un signal continu... Le <strong>Convertisseur Numerique-Analogique (CNA)</strong> transforme un mot binaire en une tension analogique proportionnelle.</p>
+<div class="card" style="text-align:center;font-size:16px;padding:24px">
+  <span style="font-family:monospace;background:#EEEDFE;padding:8px 16px;border-radius:8px;color:#3C3489;font-size:18px">1011</span>
+  &nbsp;&nbsp;⟶&nbsp;&nbsp;
+  <span style="background:#712B13;color:white;padding:10px 22px;border-radius:8px;font-weight:700">CNA</span>
+  &nbsp;&nbsp;⟶&nbsp;&nbsp;
+  <span style="font-family:monospace;background:#FAECE7;padding:8px 16px;border-radius:8px;color:#712B13;font-size:18px">3.4375 V</span>
+</div>
+
+<h2>3.2 — Les formules fondamentales (a savoir par coeur)</h2>
+<div class="fx c">Quantum (pas) :      q = Vref / 2^n
+
+Tension de sortie :  Vs = q x N = (Vref / 2^n) x N
+
+  ou :
+    n    = nombre de bits du CNA
+    N    = valeur DECIMALE du mot binaire (entre 0 et 2^n - 1)
+    Vref = tension de reference
+    q    = le "pas" entre deux niveaux consecutifs (plus petite variation possible)</div>
+
+<h3>Comprendre ces formules</h3>
+<ul class="bl">
+  <li>Un CNA n bits cree <strong>2^n niveaux de tension</strong> distincts, numerotes de 0 a 2^n-1.</li>
+  <li>N = 0 → Vs = 0 V. N = 2^n-1 (tous bits a 1) → Vs = Vref x (1 - 2^-n) ≈ Vref mais jamais egal a Vref exactement.</li>
+  <li>Plus n est grand → q plus petit → signal plus "lisse" → meilleure precision.</li>
+  <li><strong>Etape cle avant d'appliquer la formule : convertir le mot binaire en decimal pour obtenir N !</strong></li>
+</ul>
+
+<h3>Application numerique : CNA 4 bits, Vref = 5 V</h3>
+<div class="fx c">n = 4 bits → 2^4 = 16 niveaux (de 0 a 15)
+
+q = 5 / 16 = 0.3125 V  (le "pas" ou quantum)
+
+Tension max = 15 x 0.3125 = 4.6875 V  (et NON 5 V exactement !)</div>
+
+<h2>3.3 — Tableau complet : CNA 4 bits, Vref = 5 V</h2>
+<table>
+  <tr><th>b3 (MSB)</th><th>b2</th><th>b1</th><th>b0 (LSB)</th><th>N decimal</th><th>Vs = N x 0.3125 V</th></tr>
+  <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.0000 V</td></tr>
+  <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0.3125 V</td></tr>
+  <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>2</td><td>0.6250 V</td></tr>
+  <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>3</td><td>0.9375 V</td></tr>
+  <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>4</td><td>1.2500 V</td></tr>
+  <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>5</td><td>1.5625 V</td></tr>
+  <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>6</td><td>1.8750 V</td></tr>
+  <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td><td>2.1875 V</td></tr>
+  <tr><td class="hl">1</td><td class="hl">0</td><td class="hl">0</td><td class="hl">0</td><td class="hl">8</td><td class="hl">2.5000 V ← MSB seul = Vref/2</td></tr>
+  <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>9</td><td>2.8125 V</td></tr>
+  <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>10</td><td>3.1250 V</td></tr>
+  <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>11</td><td>3.4375 V</td></tr>
+  <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>12</td><td>3.7500 V</td></tr>
+  <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>13</td><td>4.0625 V</td></tr>
+  <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>14</td><td>4.3750 V</td></tr>
+  <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>15</td><td>4.6875 V ← valeur max ≠ Vref</td></tr>
+</table>
+
+<div class="al i"><div class="al-ic">&#x1F4A1;</div><div><strong>Les poids se divisent par 2 a chaque bit :</strong> MSB (b3) seul → Vref/2 = 2.5 V. b2 seul → Vref/4 = 1.25 V. b1 seul → Vref/8 = 0.625 V. LSB (b0) seul → Vref/16 = 0.3125 V. Ce principe est exactement le meme que la conversion binaire !</div></div>
+
+<h2>3.4 — Le reseau R-2R : le circuit physique qui realise le CNA</h2>
+<p>Le circuit le plus elegant pour construire un CNA est le <strong>reseau en echelle R-2R</strong>. Il n'utilise que <strong>deux valeurs de resistances : R et 2R</strong>. Pour un CNA 4 bits avec R = 1 kΩ, on n'utilise que des resistances de 1 kΩ et de 2 kΩ.</p>
+
+<div class="card" style="font-size:14px">
+  <p style="margin-bottom:12px"><strong>Principe de cablage :</strong></p>
+  <ul class="bl">
+    <li>Chaque bit b_i est connecte a une resistance de valeur <strong>2R</strong></li>
+    <li>Le bit vaut "1" → on connecte a Vref (5V). Le bit vaut "0" → on connecte a GND (0V)</li>
+    <li>Les noeuds entre les bits sont relies par des resistances de valeur <strong>R</strong></li>
+    <li>Une resistance de terminaison 2R est placee au bout du reseau</li>
+    <li>La tension de sortie Vs est mesuree au dernier noeud</li>
+  </ul>
+  <div class="fx c" style="margin-top:12px">Chaque bit contribue independamment :
+  MSB (b3) → Vs_contribution = Vref/2    = 2.5 V si b3=1
+  b2        → Vs_contribution = Vref/4    = 1.25 V si b2=1
+  b1        → Vs_contribution = Vref/8    = 0.625 V si b1=1
+  LSB (b0)  → Vs_contribution = Vref/16   = 0.3125 V si b0=1
+
+  Vs totale = somme des contributions des bits a 1</div>
+</div>
+
+<div class="al tip"><div class="al-ic">✅</div><div><strong>Pourquoi R-2R est superieur aux resistances ponderees :</strong> Un CNA a resistances ponderees classique aurait besoin de R, 2R, 4R, 8R... des valeurs qui doublent a chaque bit. Pour 8 bits : R a 128R ! Impossible a fabriquer precisement. Le reseau R-2R n'utilise QUE 2 valeurs, quelle que soit la resolution. C'est pourquoi c'est le circuit le plus utilise en pratique.</div></div>
+
+<h2>3.5 — Exercice type d'examen : calculs CNA</h2>
+<div class="ex">
+  <div class="exh c">Enonce type</div>
+  <div class="exb">
+    <p><em>On dispose d'un CNA 8 bits avec Vref = 3.3 V.</em></p>
+    <br>
+    <p><strong>Q1. Calculer le quantum q.</strong></p>
+    <div class="fx c" style="margin:8px 0">q = Vref / 2^n = 3.3 / 2^8 = 3.3 / 256 ≈ 0.01289 V ≈ 12.89 mV</div>
+    <p><strong>Q2. Quelle tension de sortie pour le mot binaire 0b10110100 ?</strong></p>
+    <div class="fx c" style="margin:8px 0">Etape 1 — Convertir en decimal :
+0b10110100 = 128+32+16+4 = 180
+
+Etape 2 — Appliquer la formule :
+Vs = q x N = (3.3/256) x 180 ≈ 2.320 V</div>
+    <p><strong>Q3. Quel mot binaire produit environ 1.65 V ?</strong></p>
+    <div class="fx c" style="margin:8px 0">N = Vs / q = 1.65 / 0.01289 ≈ 128 (arrondir a l'entier)
+128 en binaire 8 bits = 0b10000000</div>
+    <p><strong>Q4. Combien de niveaux de tension distincts peut-il produire ?</strong></p>
+    <div class="fx c" style="margin:8px 0">Niveaux = 2^n = 2^8 = 256 niveaux (de 0 a 255 x q)</div>
+  </div>
+</div>
+
+<h2>3.6 — Tableau comparatif des resolutions</h2>
+<table>
+  <tr><th>Resolution (bits)</th><th>Niveaux (2^n)</th><th>Quantum (Vref=5V)</th><th>Usage typique</th></tr>
+  <tr><td>4 bits</td><td>16</td><td>312.5 mV</td><td>Cours / TP pedagogique</td></tr>
+  <tr><td>8 bits</td><td>256</td><td>19.5 mV</td><td>Commande moteur simple</td></tr>
+  <tr><td>10 bits</td><td>1024</td><td>4.88 mV</td><td>Arduino (via PWM)</td></tr>
+  <tr><td>12 bits</td><td>4096</td><td>1.22 mV</td><td>Audio, instrumentation</td></tr>
+</table>
+
+
+<!-- ======================================================= -->
+<!-- RECAPITULATIF GLOBAL                                     -->
+<!-- ======================================================= -->
+
+<div class="recap">
+  <h3>① Conversions — les points-cles</h3>
+  <ul>
+    <li>Binaire = base 2, positions = puissances de 2 (128, 64, 32, 16, 8, 4, 2, 1)</li>
+    <li>Dec → Bin : divisions par 2, lire les restes de bas en haut, completer a 8 bits</li>
+    <li>Bin → Dec : sommer les puissances de 2 la ou il y a un 1</li>
+    <li>Bin ↔ Hex : 1 chiffre hex = 4 bits (grouper depuis la droite)</li>
+    <li>A=10, B=11, C=12, D=13, E=14, F=15</li>
+    <li>Prefixes : <code>0b</code> = binaire, <code>0x</code> = hexadecimal</li>
+  </ul>
+  <h3>② Fonctions logiques — les points-cles</h3>
+  <ul>
+    <li>6 portes : NOT, AND, OR, NAND, NOR, XOR → connaitre les tables de verite de memoire</li>
+    <li>Table de verite : 2^n lignes, enumerer toutes les combinaisons, calculer S</li>
+    <li>Equation brute : pour chaque ligne S=1, ecrire le produit de toutes les variables</li>
+    <li>Karnaugh : code Gray (00,01,11,10), groupes en puissances de 2, tableau torique</li>
+    <li>Lire un groupe : constante a 1 → garde, constante a 0 → complementee, change → eliminee</li>
+    <li>Equaton finale = OR de tous les termes → traduction directe en circuit logique</li>
+  </ul>
+  <h3>③ CNA — les points-cles</h3>
+  <ul>
+    <li>Formule unique : <code>Vs = (Vref / 2^n) x N</code></li>
+    <li>Quantum : <code>q = Vref / 2^n</code> (la plus petite variation possible)</li>
+    <li>N = valeur DECIMALE du mot binaire (convertir le binaire en decimal d'abord !)</li>
+    <li>Reseau R-2R : seulement 2 valeurs de resistances, tres precis a fabriquer</li>
+    <li>MSB contribue Vref/2, bit suivant Vref/4, ..., LSB contribue Vref/2^n</li>
+    <li>Plus n augmente → plus de niveaux → meilleure resolution → signal plus lisse</li>
+  </ul>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- EXERCICES RECOMMANDES                                    -->
+<!-- ======================================================= -->
+
+<div style="margin-top:48px">
+  <div style="font-size:22px;font-weight:700;margin-bottom:8px">Exercices a faire</div>
+  <div style="font-size:14px;color:#555;margin-bottom:24px">Faire dans l'ordre. Les exercices 1-3 et 6 sont indispensables avant le CC.</div>
+</div>
+
+<div class="eg">
+
+  <div class="ec">
+    <div class="ech" style="background:var(--teal-l);color:#085041">Conversion — Exercice 1</div>
+    <div class="ecb">
+      <span class="badge easy">Facile — indispensable</span>
+      <p>Convertir en binaire 8 bits ET en hexadecimal :</p>
+      <ul style="padding-left:16px">
+        <li>Decimal 7</li><li>Decimal 23</li><li>Decimal 45</li>
+        <li>Decimal 150</li><li>Decimal 200</li>
+      </ul>
+      <p style="margin-top:8px;font-size:12px;color:#0F6E56">Source : CM2 — exercices de conversion</p>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--teal-l);color:#085041">Conversion — Exercice 2</div>
+    <div class="ecb">
+      <span class="badge easy">Facile</span>
+      <p>Convertir en decimal et en hexadecimal :</p>
+      <ul style="padding-left:16px">
+        <li>0b01001101</li><li>0b11001010</li>
+        <li>0b00011111</li><li>0xFF</li><li>0x3A</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--purple-l);color:#3C3489">Logique — Exercice 3</div>
+    <div class="ecb">
+      <span class="badge easy">Facile — indispensable</span>
+      <p>Ecrire de memoire les tables de verite completes des 6 portes logiques (NOT, AND, OR, NAND, NOR, XOR). Ecrire l'expression booleenne de chacune.</p>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--purple-l);color:#3C3489">Logique — Exercice 4</div>
+    <div class="ecb">
+      <span class="badge med">Moyen — typique examen</span>
+      <p><em>Vote a la majorite :</em> 3 juges A, B, C. S=1 si 2 votes ou plus.</p>
+      <ol style="padding-left:16px;font-size:13px">
+        <li>Ecrire la table de verite (8 lignes)</li>
+        <li>Donner l'equation brute</li>
+        <li>Simplifier avec Karnaugh</li>
+        <li>Dessiner le circuit logique</li>
+      </ol>
+      <p style="font-size:12px;color:#534AB7;margin-top:8px">Source : TDAO logiques combinatoires</p>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--purple-l);color:#3C3489">Logique — Exercice 5</div>
+    <div class="ecb">
+      <span class="badge med">Moyen</span>
+      <p>Simplifier F(A,B,C) ou les mintermes sont :</p>
+      <p style="font-family:monospace;font-size:13px;margin:6px 0">F = m(0,1,2,4,6)</p>
+      <ol style="padding-left:16px;font-size:13px">
+        <li>Remplir le tableau de Karnaugh</li>
+        <li>Identifier tous les groupes</li>
+        <li>Ecrire l'equation simplifiee</li>
+        <li>Dessiner le circuit</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--coral-l);color:#712B13">CNA — Exercice 6</div>
+    <div class="ecb">
+      <span class="badge easy">Facile — indispensable</span>
+      <p>CNA 4 bits, Vref = 5V. Calculer :</p>
+      <ul style="padding-left:16px;font-size:13px">
+        <li>Le quantum q</li>
+        <li>Vs pour le mot 0b0101</li>
+        <li>Vs pour le mot 0b1010</li>
+        <li>Vs pour le mot 0b1111</li>
+        <li>Quel mot pour obtenir ≈ 2.5 V ?</li>
+      </ul>
+      <p style="font-size:12px;color:#993C1D;margin-top:8px">Source : exercice CAN/CNA seance 8</p>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--coral-l);color:#712B13">CNA — Exercice 7</div>
+    <div class="ecb">
+      <span class="badge med">Moyen</span>
+      <p>CNA 8 bits, Vref = 3.3V.</p>
+      <ul style="padding-left:16px;font-size:13px">
+        <li>Calculer le quantum q (en mV)</li>
+        <li>Nombre total de niveaux</li>
+        <li>Vs pour N=128 et N=255</li>
+        <li>Quel N correspond a 1.0 V ?</li>
+        <li>Quelle est l'erreur maximale possible ?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ec">
+    <div class="ech" style="background:var(--coral-l);color:#712B13">CNA — Exercice 8 : reseau R-2R</div>
+    <div class="ecb">
+      <span class="badge med">Moyen</span>
+      <p>CNA R-2R 4 bits, R=1kΩ, Vref=5V.</p>
+      <ol style="padding-left:16px;font-size:13px">
+        <li>Tension si seul le MSB est a 1 ?</li>
+        <li>Tension si seul b2 est a 1 ?</li>
+        <li>Tension si seul le LSB est a 1 ?</li>
+        <li>Expliquer le principe des poids divises par 2.</li>
+        <li>Tableau complet N=0 a 7.</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<div class="al w" style="margin-top:0">
+  <div class="al-ic">📝</div>
+  <div><strong>Ordre recommande :</strong> Exercice 1 → 2 (conversions fluides) → 3 (portes par coeur) → 6 (CNA formule) → 4 et 5 (Karnaugh en conditions d'examen) → 7 et 8 (CNA complet). Compter 15-20 min par exercice en premiere session.</div>
+</div>
+
+<div style="margin-top:48px;padding:24px;background:#f1efe8;border-radius:12px;text-align:center;font-size:13px;color:#777">
+  Fiche realisee d'apres les cours CM2, TDAO1, exercices CAN/CNA · EPF Engineering School · S4 Electronique Appliquee &amp; Pilotage 2025-2026
+</div>
+
+</div><!-- /wrap -->
+</body>
+</html>
